@@ -23,6 +23,6 @@ pnpm dev
 餅餅踏踏使用 SQLite 作為資料庫，因此需要將資料庫檔案掛載到容器中。
 
 ```bash
-torch stepstep.db
-docker run -d -p 3000:3000 -v $(pwd)/stepstep.db:/app/stepstep.db --name stepstep ghcr.io/gnehs/stepstep
+touch stepstep.db
+docker run -d -p 3000:3000 -v $(pwd)/stepstep.db:/app/prisma/dev.db --name stepstep ghcr.io/gnehs/stepstep
 ```
