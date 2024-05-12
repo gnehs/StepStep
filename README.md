@@ -30,5 +30,9 @@ pnpm dev
 
 ```bash
 touch stepstep.db
-docker run -d -p 3000:3000 -v $(pwd)/stepstep.db:/app/prisma/dev.db --name stepstep ghcr.io/gnehs/stepstep
+docker run -d -p 3000:3000 \
+  -v $(pwd)/stepstep.db:/app/prisma/dev.db \
+  -e JWT_SECRET=YOUR_SECRET \
+  --name stepstep \
+  ghcr.io/gnehs/stepstep
 ```
