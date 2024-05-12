@@ -2,6 +2,8 @@
 
 基於 [Next.js](https://nextjs.org/) 的步步紀錄排行榜工具。
 
+## 開發
+
 ```bash
 pnpm install
 pnpm dlx prisma migrate deploy
