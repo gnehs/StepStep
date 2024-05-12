@@ -39,13 +39,14 @@ export default function Settings() {
       <p>{lastsyncStatus}</p>
       <SectionTitle className="mt-2">同步 API 網址</SectionTitle>
       <button
-        className="border-2 border-transparent bg-white rounded-lg px-4 py-2 w-full outline-none focus:border-blue-500 truncate mt-1"
+        className="border-2 border-transparent bg-white rounded-lg px-4 py-2 w-full outline-none focus:border-blue-500  mt-1 flex justify-between items-center gap-2"
         onClick={async () => {
           await navigator.clipboard.writeText(syncToken);
           alert("已複製至剪貼簿");
         }}
       >
-        {syncToken}
+        <span className="truncate">{syncToken}</span>
+        <span className="shrink-0 text-blue-500">複製</span>
       </button>
       <a
         href="https://www.icloud.com/shortcuts/93567aa7d9ef411099f9c794ec2ed3e1"
