@@ -37,7 +37,7 @@ export default async function Rank() {
                       </div>
                     </div>
                   </div>
-                  <div>
+                  <div className="bg-gray-100 p-0.5 px-2 text-sm text-gray-600 rounded-full empty:hidden">
                     {index === 0 && "步步冠軍"}
                     {index === 1 && "步步亞軍"}
                     {index === 2 && "步步季軍"}
