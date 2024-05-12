@@ -30,6 +30,8 @@ export default function RootLayout({
         {/* icon */}
         <link rel="icon" href="/logo-favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/logo.png" type="image/png" />
+        {/* pwa */}
+        <meta name="theme-color" content="#f2f2f2" />
       </head>
       <body className="bg-[#f2f2f2] text-[#111]">
         {children}
