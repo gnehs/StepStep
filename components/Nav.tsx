@@ -36,9 +36,9 @@ export default function Nav() {
           <NavButton href="/" Icon={Cookie}>
             首頁
           </NavButton>
-          <NavButton href="/me" Icon={User}>
+          {/* <NavButton href="/me" Icon={User}>
             我的
-          </NavButton>
+          </NavButton> */}
           <NavButton href="/rank" Icon={BarChart2}>
             排行榜
           </NavButton>
