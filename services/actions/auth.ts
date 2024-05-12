@@ -64,3 +64,15 @@ export async function getUserBySyncToken(token: string) {
     return null;
   }
 }
+export async function getUserById(id: string) {
+  try {
+    let user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    return user;
+  } catch (error) {
+    return null;
+  }
+}

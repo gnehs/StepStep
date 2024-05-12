@@ -1,6 +1,5 @@
 "use server";
 import prisma from "@/services/prisma";
-import crypto from "crypto";
 export async function getRank() {
   // +0800 is the timezone offset for Taipei
   // get today 00:00:00 in Taipei timezone
@@ -39,20 +38,11 @@ export async function getRank() {
           select: {
             id: true,
             name: true,
-            email: true,
           },
         });
-        let emailSha1 = crypto
-          .createHash("sha1")
-          .update(user?.email.trim().toLowerCase() ?? "")
-          .digest("hex");
         return {
           ...record._sum,
-          user: {
-            id: user?.id,
-            name: user?.name,
-            email: emailSha1,
-          },
+          user,
         };
       })
     );
