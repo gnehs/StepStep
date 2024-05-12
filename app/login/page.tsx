@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Container from "@/components/Container";
 import PageTitle from "@/components/PageTitle";
 import SectionTitle from "@/components/SectionTitle";
@@ -8,6 +9,7 @@ import Button from "@/components/Button";
 import { login } from "@/services/actions/auth";
 import { useLocalStorage } from "usehooks-ts";
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useLocalStorage("token", "");
@@ -20,7 +22,7 @@ export default function LoginPage() {
         return;
       }
       setToken(res.token!);
-      window.location.href = "/";
+      router.push("/");
     } catch (error) {}
   }
 

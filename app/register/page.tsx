@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Container from "@/components/Container";
 import PageTitle from "@/components/PageTitle";
 import SectionTitle from "@/components/SectionTitle";
@@ -7,6 +8,8 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { createUser } from "@/services/actions/createUser";
 export default function Register() {
+  const router = useRouter();
+
   const [inviteCode, setInviteCode] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -32,8 +35,7 @@ export default function Register() {
         alert(res.message);
         return;
       }
-
-      window.location.href = "/login";
+      router.push("/login");
     } catch (error) {}
   }
   return (
