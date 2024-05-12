@@ -69,7 +69,7 @@ export default function RootLayout({
         />
         {/* icon */}
         <link rel="icon" href="/logo-favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="icon" href="/maskable_icon.png" type="image/png" />
       </head>
       <body className="bg-[#f2f2f2] text-[#111]">
         {children}
