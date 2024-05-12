@@ -38,11 +38,19 @@ export default function Settings() {
       <SectionTitle>同步狀態</SectionTitle>
       <p>{lastsyncStatus}</p>
       <SectionTitle className="mt-2">同步 API 網址</SectionTitle>
-      <Input defaultValue={syncToken} readOnly />
+      <button
+        className="border-2 border-transparent bg-white rounded-lg px-4 py-2 w-full outline-none focus:border-blue-500 truncate"
+        onClick={async () => {
+          await navigator.clipboard.writeText(syncToken);
+          alert("已複製至剪貼簿");
+        }}
+      >
+        {syncToken}
+      </button>
       <a
         href="https://www.icloud.com/shortcuts/5f6a00deed514c63bc1498f9e4c3166f"
         target="_blank"
-        className="block mt-2 text-blue-500 bg-white p-2 rounded-md text-center"
+        className="block mt-2 text-blue-500 bg-white p-2 rounded-lg text-center"
       >
         安裝同步 iOS 捷徑
       </a>
