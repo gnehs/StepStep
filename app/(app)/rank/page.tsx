@@ -3,6 +3,7 @@ import PageTitle from "@/components/PageTitle";
 import SectionTitle from "@/components/SectionTitle";
 import { getRank } from "@/services/actions/rank";
 import { twMerge } from "tailwind-merge";
+export const dynamic = "force-dynamic";
 export default async function Rank() {
   const rank = await getRank();
   return (
