@@ -38,8 +38,16 @@ export async function POST(request: Request) {
       },
     });
   }
-
-  return new Response(`${user.name}，同步成功囉！`, {
-    headers: { "Content-Type": "application/json" },
-  });
+  if (data.time.length > 0) {
+    return new Response(`${user.name}，已同步 ${data.time.length} 筆資料`, {
+      headers: { "Content-Type": "application/json" },
+    });
+  } else {
+    return new Response(
+      `${user.name}，沒有接受到任何健康資料，請檢查來源是否正確`,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
 }
