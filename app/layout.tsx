@@ -3,10 +3,10 @@ import "./globals.css";
 import DevBadge from "@/components/DevBadge";
 
 const APP_NAME = "餅餅踏踏";
-const APP_DEFAULT_TITLE = "餅餅踏踏";
 const APP_TITLE_TEMPLATE = "%s - 餅餅踏踏";
 const APP_DESCRIPTION =
   "來餅餅踏踏紀錄你的步步資料，和親朋好友一起步步大車拼！";
+const PREVIEW_IMAGE = "/cover.jpg";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: APP_DEFAULT_TITLE,
+    title: APP_NAME,
     // startUpImage: [],
   },
   formatDetection: {
@@ -28,18 +28,25 @@ export const metadata: Metadata = {
     type: "website",
     siteName: APP_NAME,
     title: {
-      default: APP_DEFAULT_TITLE,
+      default: APP_NAME,
       template: APP_TITLE_TEMPLATE,
     },
     description: APP_DESCRIPTION,
+    images: [
+      {
+        url: PREVIEW_IMAGE,
+        alt: APP_NAME,
+      },
+    ],
   },
   twitter: {
     card: "summary",
     title: {
-      default: APP_DEFAULT_TITLE,
+      default: APP_NAME,
       template: APP_TITLE_TEMPLATE,
     },
     description: APP_DESCRIPTION,
+    images: PREVIEW_IMAGE,
   },
 };
 
