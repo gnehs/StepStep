@@ -6,7 +6,7 @@ import PageTitle from "@/components/PageTitle";
 import SectionTitle from "@/components/SectionTitle";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
-import { createUser } from "@/services/actions/createUser";
+import { createUser } from "@/services/actions/user";
 export default function Register() {
   const router = useRouter();
 
