@@ -1,7 +1,8 @@
 # 餅餅踏踏
 
-![](/public/cover.jpg)
 基於 [Next.js](https://nextjs.org/) 的步步紀錄排行榜工具。
+
+![](/public/cover.jpg)
 
 ## 開發
 
