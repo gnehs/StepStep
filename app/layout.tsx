@@ -45,6 +45,9 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#f2f2f2",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 export default function RootLayout({
   children,
@@ -71,7 +74,7 @@ export default function RootLayout({
         <link rel="icon" href="/logo-favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/maskable_icon.png" type="image/png" />
       </head>
-      <body className="bg-[#f2f2f2] text-[#111]">
+      <body className="bg-[#f2f2f2] text-[#111] pt-[env(safe-area-inset-top)]">
         {children}
         <DevBadge />
       </body>
