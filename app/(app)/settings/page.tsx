@@ -56,6 +56,15 @@ export default function Settings() {
       </a>
       <SectionTitle className="mt-2">如何設定同步捷徑？</SectionTitle>
       <SyncGuide />
+      <SectionTitle className="mt-2">帳號管理</SectionTitle>
+      <button
+        className="border-2 border-transparent bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center mt-1"
+        onClick={() => {
+          setToken("");
+        }}
+      >
+        登出
+      </button>
     </Container>
   );
 }
