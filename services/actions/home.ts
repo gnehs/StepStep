@@ -20,7 +20,7 @@ export async function getHomeData(token: string) {
   today.setHours(0, 0, 0, 0);
   let tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
-  let records = await prisma.record.findMany({
+  let todayRecords = await prisma.record.findMany({
     where: {
       userId: user.id,
       timestamp: {
@@ -29,10 +29,39 @@ export async function getHomeData(token: string) {
       },
     },
   });
+  let historyRecords = [];
+
+  for (let i = 0; i < 7; i++) {
+    let date = new Date(today);
+    date.setDate(date.getDate() - i);
+    let nextDate = new Date(date);
+    nextDate.setDate(nextDate.getDate() + 1);
+    let records = await prisma.record.groupBy({
+      by: ["userId"],
+      _sum: {
+        steps: true,
+        distance: true,
+        energy: true,
+      },
+      where: {
+        userId: user.id,
+        timestamp: {
+          gte: date,
+          lt: nextDate,
+        },
+      },
+    });
+    if (records[0]?._sum)
+      historyRecords.push({
+        date: date,
+        ...records[0]?._sum,
+      });
+  }
   return {
     success: true,
     user,
     lastSync: lastSync?.timestamp || null,
-    records,
+    todayRecords,
+    historyRecords,
   };
 }
