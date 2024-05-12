@@ -1,38 +1,49 @@
+"use client";
 import Container from "@/components/Container";
+import { usePathname } from "next/navigation";
 import { Cog, User, Cookie, BarChart2 } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { twMerge } from "tailwind-merge";
 function NavButton({
   children,
   href,
+  Icon,
 }: {
   children: React.ReactNode;
   href: string;
+  Icon: LucideIcon;
 }) {
+  const active = usePathname() === href;
   return (
     <Link
-      className="flex items-center gap-1 p-2 text-gray-600 hover:text-gray-800 flex-col text-sm"
+      className={twMerge(
+        "flex items-center gap-1 p-2 flex-col text-xs",
+        active ? "text-blue-500 font-bold" : "text-gray-500 hover:text-gray-700"
+      )}
       href={href}
     >
+      <Icon size={28} strokeWidth={active ? 2 : 1.5} />
       {children}
     </Link>
   );
 }
 export default function Nav() {
   return (
-    <div className="border-t border-gray-50 bg-white shadow-2xl">
+    <div className="bg-white shadow-2xl">
       <Container>
         <div className="flex justify-around gap-2 w-full">
-          <NavButton href="/">
-            <Cookie size={28} /> 首頁
+          <NavButton href="/" Icon={Cookie}>
+            首頁
           </NavButton>
-          <NavButton href="/me">
-            <User size={28} /> 我的
+          <NavButton href="/me" Icon={User}>
+            我的
           </NavButton>
-          <NavButton href="/rank">
-            <BarChart2 size={28} /> 排行榜
+          <NavButton href="/rank" Icon={BarChart2}>
+            排行榜
           </NavButton>
-          <NavButton href="/settings">
-            <Cog size={28} /> 設定
+          <NavButton href="/settings" Icon={Cog}>
+            設定
           </NavButton>
         </div>
       </Container>
