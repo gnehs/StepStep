@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import DevBadge from "@/components/DevBadge";
 export const metadata: Metadata = {
   title: "餅餅踏踏",
   description: "來餅餅踏踏紀錄你的步步資料，和親朋好友一起步步大車拼！",
@@ -30,7 +31,10 @@ export default function RootLayout({
         <link rel="icon" href="/logo-favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/logo.png" type="image/png" />
       </head>
-      <body className="bg-[#f2f2f2] text-[#111]">{children}</body>
+      <body className="bg-[#f2f2f2] text-[#111]">
+        {children}
+        <DevBadge />
+      </body>
     </html>
   );
 }
