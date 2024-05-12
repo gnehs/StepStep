@@ -48,7 +48,7 @@ export default function Settings() {
         {syncToken}
       </button>
       <a
-        href="https://www.icloud.com/shortcuts/5f6a00deed514c63bc1498f9e4c3166f"
+        href="https://www.icloud.com/shortcuts/93567aa7d9ef411099f9c794ec2ed3e1"
         target="_blank"
         className="block mt-2 text-blue-500 bg-white p-2 rounded-lg text-center"
       >
