@@ -16,7 +16,7 @@ function Step({
       />
       <div className="mt-2">
         <h2 className="font-bold">{title}</h2>
-        <div>{children}</div>
+        <div className="opacity-75 text-sm">{children}</div>
       </div>
     </div>
   );
@@ -46,7 +46,7 @@ export default function SyncGuide() {
         同步完成後，你會在最下方看到執行結果
       </Step>
       <Step title="6. 設定自動執行" imgSrc="/sync-guide/automation.jpg">
-        我們建議建立不小於四次的每日自動執行，讓你的步步資料能夠即時同步到餅餅踏踏。
+        建議建立不小於四次的每日自動執行，讓你的步步資料能夠即時同步到餅餅踏踏。
       </Step>
     </div>
   );
