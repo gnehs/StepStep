@@ -13,6 +13,7 @@
     "@serwist/next": "^9.0.2",
     "@serwist/precaching": "^9.0.2",
     "@serwist/sw": "^9.0.2",
+    "bcryptjs": "^2.4.3",
     "framer-motion": "^11.1.9",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.378.0",
@@ -24,6 +25,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
     "@types/react": "^18",

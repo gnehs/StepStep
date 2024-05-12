@@ -1,6 +1,7 @@
 "use server";
 import prisma from "@/services/prisma";
 import { getUserFromJWT } from "./auth";
+import bcrypt from "bcryptjs";
 export async function createUser({
   inviteCode,
   name,
@@ -19,7 +20,7 @@ export async function createUser({
     data: {
       name,
       email,
-      password,
+      password: await bcrypt.hash(password, 10),
     },
   });
   return { success: true, user };
