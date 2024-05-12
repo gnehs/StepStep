@@ -11,9 +11,11 @@ export default async function Rank() {
       <PageTitle>排行榜</PageTitle>
       <div>
         {rank.map((item) => (
-          <div key={item.date.toLocaleDateString()}>
-            <SectionTitle>{item.date.toLocaleDateString()}</SectionTitle>{" "}
-            <div className="bg-white rounded-lg p-2 my-2 shadow-sm">
+          <div key={item.date.toLocaleDateString()} className="my-3">
+            <SectionTitle className="mb-1">
+              {item.date.toLocaleDateString("zh-TW")}
+            </SectionTitle>
+            <div className="bg-white rounded-lg p-2 shadow-sm">
               {item.records.map((item, index: number) => (
                 <div
                   key={item.user?.id ?? "" + index}
