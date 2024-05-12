@@ -59,7 +59,12 @@ export default function Home() {
       {history.map((item, index) => (
         <div key={index} className="bg-gray-50 rounded-lg my-2 shadow-sm">
           <div className="p-2 text-sm shadow-sm rounded-t-lg bg-white">
-            {item.date.toLocaleDateString()}
+            {item.date.toLocaleDateString("zh-TW", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </div>
           <div className="grid grid-cols-3 gap-2 p-2 rounded-b-lg">
             <div>

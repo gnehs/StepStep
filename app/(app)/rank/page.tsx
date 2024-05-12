@@ -13,7 +13,12 @@ export default async function Rank() {
         {rank.map((item) => (
           <div key={item.date.toLocaleDateString()} className="my-3">
             <SectionTitle className="mb-1">
-              {item.date.toLocaleDateString("zh-TW")}
+              {item.date.toLocaleDateString("zh-TW", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </SectionTitle>
             <div className="bg-white rounded-lg p-2 shadow-sm">
               {item.records.map((item, index: number) => (
