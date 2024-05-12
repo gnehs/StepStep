@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import SyncGuide from "@/components/SyncGuide";
 import { getSyncStatus } from "@/services/actions/sync";
+import { updateName } from "@/services/actions/user";
 export default function Settings() {
   const [lastsync, setLastsync] = useLocalStorage<Date | null | undefined>(
     "lastsync",
@@ -58,6 +59,22 @@ export default function Settings() {
       <SectionTitle className="mt-2">如何設定同步捷徑？</SectionTitle>
       <SyncGuide />
       <SectionTitle className="mt-2">帳號管理</SectionTitle>
+      <button
+        className="border-2 border-transparent bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center mt-1"
+        onClick={async () => {
+          const name = prompt("請輸入新的暱稱");
+          if (name) {
+            let res = await updateName({ name, token });
+            if (res) {
+              alert("暱稱已更改");
+            } else {
+              alert("更改暱稱失敗");
+            }
+          }
+        }}
+      >
+        更改暱稱
+      </button>
       <button
         className="border-2 border-transparent bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center mt-1"
         onClick={() => {
