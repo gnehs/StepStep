@@ -5,6 +5,7 @@ import PageTitle from "@/components/PageTitle";
 import SectionTitle from "@/components/SectionTitle";
 import { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
+import SyncGuide from "@/components/SyncGuide";
 import { getSyncStatus } from "@/services/actions/sync";
 export default function Settings() {
   const [lastsync, setLastsync] = useLocalStorage<Date | null | undefined>(
@@ -45,6 +46,8 @@ export default function Settings() {
       >
         安裝同步 iOS 捷徑
       </a>
+      <SectionTitle className="mt-2">如何設定同步捷徑？</SectionTitle>
+      <SyncGuide />
     </Container>
   );
 }
