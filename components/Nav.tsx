@@ -30,7 +30,7 @@ function NavButton({
 }
 export default function Nav() {
   return (
-    <div className="bg-white shadow-2xl">
+    <div className="bg-white/80 backdrop-blur-xl drop-shadow-2xl fixed bottom-0 w-full z-10">
       <Container>
         <div className="flex justify-around gap-2 w-full">
           <NavButton href="/" Icon={Cookie}>

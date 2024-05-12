@@ -12,9 +12,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-TW">
-      <body className="bg-[#f2f2f2] h-[100svh] flex flex-col text-[#111]">
-        {children}
-      </body>
+      <body className="bg-[#f2f2f2] text-[#111]">{children}</body>
     </html>
   );
 }

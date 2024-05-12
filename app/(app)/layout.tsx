@@ -30,8 +30,8 @@ export default function RootLayout({
     } catch (error) {}
   }
   return (
-    <div className="bg-[#f2f2f2] h-[100svh] flex flex-col">
-      <div className="grow overflow-y-scroll">{children}</div>
+    <div className="bg-[#f2f2f2] min-h-[100svh]">
+      <div className="grow overflow-y-scroll pb-16">{children}</div>
       <Nav />
     </div>
   );
