@@ -12,7 +12,7 @@ export async function createUser({
   email: string;
   password: string;
 }) {
-  if (inviteCode !== "勝勝聰明勝勝可愛") {
+  if (inviteCode !== process.env.INVITE_CODE) {
     return { success: false, message: "邀請碼錯誤" };
   }
   const user = await prisma.user.create({
