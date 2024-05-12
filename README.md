@@ -4,7 +4,7 @@
 
 ```bash
 pnpm install
-npx prisma migrate deploy
+pnpm dlx prisma migrate deploy
 pnpm dev
 ```
 
