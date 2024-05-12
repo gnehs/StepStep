@@ -1,45 +1,66 @@
 "use server";
 import prisma from "@/services/prisma";
+import crypto from "crypto";
 export async function getRank() {
   // +0800 is the timezone offset for Taipei
   // get today 00:00:00 in Taipei timezone
   let today = new Date();
   today.setHours(0, 0, 0, 0);
-  let tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  let records = await prisma.record.groupBy({
-    by: ["userId"],
-    _sum: {
-      steps: true,
-      distance: true,
-      energy: true,
-    },
-    where: {
-      timestamp: {
-        gte: today,
-        lt: tomorrow,
-      },
-    },
-  });
-  records = records.sort((a, b) => (b._sum.steps ?? 0) - (a._sum.steps ?? 0));
-  records = records.slice(0, 10);
-  records = await Promise.all(
-    records.map(async (record) => {
-      let user = await prisma.user.findUnique({
-        where: {
-          id: record.userId,
-        },
-        select: {
-          id: true,
-          name: true,
-        },
-      });
-      return {
-        ...record,
-        user: user,
-      };
-    })
-  );
 
-  return records;
+  let historyRecords = [];
+  for (let i = 0; i < 7; i++) {
+    let date = new Date(today);
+    date.setDate(date.getDate() - i);
+    let nextDate = new Date(date);
+    nextDate.setDate(nextDate.getDate() + 1);
+    let records = await prisma.record.groupBy({
+      by: ["userId"],
+      _sum: {
+        steps: true,
+        distance: true,
+        energy: true,
+      },
+      where: {
+        timestamp: {
+          gte: date,
+          lt: nextDate,
+        },
+      },
+    });
+
+    records = records.sort((a, b) => (b._sum.steps ?? 0) - (a._sum.steps ?? 0));
+    records = records.slice(0, 10);
+    let parsedRecords = await Promise.all(
+      records.map(async (record) => {
+        let user = await prisma.user.findUnique({
+          where: {
+            id: record.userId,
+          },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        });
+        let emailSha1 = crypto
+          .createHash("sha1")
+          .update(user?.email.trim().toLowerCase() ?? "")
+          .digest("hex");
+        return {
+          ...record._sum,
+          user: {
+            id: user?.id,
+            name: user?.name,
+            email: emailSha1,
+          },
+        };
+      })
+    );
+    historyRecords.push({
+      date,
+      records: parsedRecords,
+    });
+  }
+
+  return historyRecords;
 }
