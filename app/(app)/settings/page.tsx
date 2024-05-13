@@ -16,7 +16,7 @@ export default function Settings() {
   const [syncToken, setSyncToken] = useLocalStorage("syncToken", "");
   const [token, setToken] = useLocalStorage("token", "");
   const lastsyncStatus = lastsync
-    ? new Date(lastsync).toDateString()
+    ? new Date(lastsync).toLocaleString("zh-TW")
     : "從未同步";
   useEffect(() => {
     fetchSyncStatus();
