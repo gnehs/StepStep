@@ -1,6 +1,7 @@
 "use client";
 import Container from "@/components/Container";
-import Input from "@/components/Input";
+import { motion } from "framer-motion";
+import Link from "next/link";
 import PageTitle from "@/components/PageTitle";
 import SectionTitle from "@/components/SectionTitle";
 import { useEffect, useState } from "react";
@@ -9,9 +10,9 @@ import SyncGuide from "@/components/SyncGuide";
 import { getSyncStatus } from "@/services/actions/sync";
 import { updateName } from "@/services/actions/user";
 import StatItem from "@/components/StatItem";
-import { User, CloudUpload } from "lucide-react";
+import { CloudUpload } from "lucide-react";
 export default function Settings() {
-  const [user, setUser] = useState<{
+  const [user, setUser] = useLocalStorage<{
     id: string;
     email: string;
     password: string;
@@ -19,11 +20,7 @@ export default function Settings() {
     token: string;
     lastSync: Date | null;
     lastLogin: Date | null;
-  } | null>(null);
-  const [lastsync, setLastsync] = useLocalStorage<Date | null | undefined>(
-    "lastsync",
-    null
-  );
+  } | null>("user", null);
   const [syncToken, setSyncToken] = useLocalStorage("syncToken", "");
   const [token, setToken] = useLocalStorage("token", "");
   useEffect(() => {
@@ -33,34 +30,26 @@ export default function Settings() {
     let res = await getSyncStatus(token);
     if (res.success) {
       setSyncToken(location.origin + "/api/v1/sync/" + res.user!.token);
-      setLastsync(res.lastSync);
       setUser(res.user!);
     }
   }
-  const lastsyncStatus = user?.lastSync
-    ? new Date(user?.lastSync).toLocaleString("zh-TW")
-    : "從未同步";
+  const lastsyncStatus = user
+    ? user?.lastSync
+      ? new Date(user?.lastSync).toLocaleString("zh-TW")
+      : "從未同步"
+    : "讀取中⋯⋯";
   return (
     <Container>
-      <PageTitle>設定</PageTitle>
-      <div className="rounded-lg p-4 bg-white flex gap-4 my-2 items-center shadow-sm">
-        <img
-          src={`/api/v1/avatar?id=${user?.id}`}
-          alt="avatar"
-          className="size-12 rounded-full"
-        />
-        <div className="grow">
-          <div className="font-semibold">{user?.name}</div>
-          <div className="text-sm opacity-75">{user?.email}</div>
-        </div>
-        <div>
-          <button
-            className="px-2 w-full text-blue-500 text-center text-sm"
-            onClick={() => setToken("")}
-          >
-            登出
-          </button>
-        </div>
+      <div className="flex justify-between items-center gap-2">
+        <PageTitle>設定</PageTitle>
+        <Link href="/settings/user">
+          <motion.img
+            src={`/api/v1/avatar?id=${user?.id}`}
+            alt="avatar"
+            layoutId="avatar"
+            className="size-10 rounded-full bg-white shadow-sm"
+          />
+        </Link>
       </div>
       <StatItem title="上次同步" value={lastsyncStatus} Icon={CloudUpload} />
 
