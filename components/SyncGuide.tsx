@@ -1,19 +1,32 @@
 function Step({
   title,
   imgSrc,
+  vidSrc,
   children,
 }: {
   title: string;
-  imgSrc: string;
+  imgSrc?: string;
+  vidSrc?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col w-[80%] bg-white shrink-0 p-2 rounded-lg snap-always snap-center">
-      <img
-        src={imgSrc}
-        alt=""
-        className="w-full aspect-square object-contain bg-gray-50 rounded"
-      />
+      {imgSrc && (
+        <img
+          src={imgSrc}
+          alt=""
+          className="w-full aspect-square object-contain bg-gray-50 rounded"
+        />
+      )}
+      {vidSrc && (
+        <video
+          src={vidSrc}
+          autoPlay
+          loop
+          muted
+          className="w-full aspect-square object-cover bg-gray-50 rounded"
+        />
+      )}
       <div className="mt-2">
         <h2 className="font-bold">{title}</h2>
         <div className="opacity-75 text-sm">{children}</div>
@@ -36,7 +49,7 @@ export default function SyncGuide() {
       <Step title="3. 選擇資料來源" imgSrc="/sync-guide/change-source.jpg">
         將捷徑下方三個讀取健康樣本的來源設定為您的手錶或手機名稱
       </Step>
-      <Step title="4. 允許大量資料存取" imgSrc="/sync-guide/allow-bulk.jpg">
+      <Step title="4. 允許大量資料存取" vidSrc="/sync-guide/allow-bulk.mp4">
         在設定＞捷徑＞進階＞啟用「允許分享大量資料」
       </Step>
       <Step title="5-1. 首次同步" imgSrc="/sync-guide/sync-allow.jpg">
