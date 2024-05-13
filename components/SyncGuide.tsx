@@ -24,6 +24,7 @@ function Step({
           autoPlay
           loop
           muted
+          playsInline
           className="w-full aspect-square object-cover bg-gray-50 rounded"
         />
       )}
