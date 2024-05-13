@@ -21,7 +21,7 @@ export default function Settings() {
     lastLogin: Date | null;
   } | null>("user", null);
   const [syncToken, setSyncToken] = useLocalStorage("syncToken", "");
-  const [token, setToken] = useLocalStorage("token", "");
+  const [token] = useLocalStorage("token", "");
   useEffect(() => {
     fetchSyncStatus();
   }, []);

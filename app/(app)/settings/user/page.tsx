@@ -24,14 +24,9 @@ export default function SettingsUser() {
   async function fetchSyncStatus() {
     if (!user) {
       let res = await getSyncStatus(token);
-      if (res.success) {
-        setUser(res.user!);
-      }
+      if (res.success) setUser(res.user!);
     }
   }
-  const lastsyncStatus = user?.lastSync
-    ? new Date(user?.lastSync).toLocaleString("zh-TW")
-    : "從未同步";
   return (
     <Container>
       <div className="grid grid-cols-3 gap-2 py-3 items-center mb-3">
@@ -68,12 +63,8 @@ export default function SettingsUser() {
           onClick={async () => {
             const name = prompt("請輸入新的暱稱");
             if (name) {
-              let res = await updateName({ name, token });
-              if (res) {
-                alert("暱稱已更改");
-              } else {
-                alert("更改暱稱失敗");
-              }
+              let updateNameResult = await updateName({ name, token });
+              alert(updateNameResult ? "暱稱已更改" : "更改暱稱失敗");
             }
           }}
         >
