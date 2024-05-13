@@ -15,13 +15,8 @@ export default function Settings() {
   );
   const [syncToken, setSyncToken] = useLocalStorage("syncToken", "");
   const [token, setToken] = useLocalStorage("token", "");
-  const lastSyncIsWhinAnHour =
-    lastsync &&
-    new Date().getTime() - new Date(lastsync).getTime() < 60 * 60 * 1000 * 24;
   const lastsyncStatus = lastsync
-    ? lastSyncIsWhinAnHour
-      ? "已同步至最新"
-      : "最後同步時間：" + new Date(lastsync).toDateString()
+    ? new Date(lastsync).toDateString()
     : "從未同步";
   useEffect(() => {
     fetchSyncStatus();

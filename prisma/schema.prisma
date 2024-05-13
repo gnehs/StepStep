@@ -19,6 +19,8 @@ model User {
   token     String      @unique @default(uuid())
   ownGroups Group[]
   groups    UserGroup[]
+  lastSync  DateTime?
+  lastLogin DateTime?
 }
 
 model Record {

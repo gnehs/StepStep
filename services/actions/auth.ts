@@ -16,6 +16,11 @@ export async function login({
   });
   const passwordMatch = await bcrypt.compare(password, user?.password || "");
   if (user && passwordMatch) {
+    // update user's last sync login time
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { lastLogin: new Date() },
+    });
     let token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!);
     return { success: true, user, token };
   }

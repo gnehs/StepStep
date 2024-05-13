@@ -38,6 +38,11 @@ export async function POST(request: Request) {
       },
     });
   }
+  // update user's last sync time
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { lastSync: new Date() },
+  });
   if (data.time.length > 0) {
     return new Response(`${user.name}，已同步 ${data.time.length} 筆資料`, {
       headers: { "Content-Type": "application/json" },
