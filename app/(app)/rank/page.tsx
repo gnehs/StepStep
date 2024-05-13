@@ -42,7 +42,13 @@ export default async function Rank() {
                       </div>
                     </div>
                   </div>
-                  <div className="bg-gray-100 p-0.5 px-2 text-xs text-gray-600 rounded-full empty:hidden border border-gray-200">
+                  <div
+                    className={twMerge(
+                      "bg-gray-100 p-0.5 px-2 text-xs text-gray-600 rounded-full empty:hidden border border-gray-200",
+                      index === 0 &&
+                        "bg-yellow-100 text-yellow-600 border-yellow-300"
+                    )}
+                  >
                     {index === 0 && "步步冠軍"}
                     {index === 1 && "步步亞軍"}
                     {index === 2 && "步步季軍"}
