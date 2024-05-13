@@ -31,7 +31,7 @@ export default function Settings() {
   return (
     <Container>
       <PageTitle>設定</PageTitle>
-      <SectionTitle>同步狀態</SectionTitle>
+      <SectionTitle>上次同步</SectionTitle>
       <p>{lastsyncStatus}</p>
       <SectionTitle className="mt-2">同步 API 網址</SectionTitle>
       <button
