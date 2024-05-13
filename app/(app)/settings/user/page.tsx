@@ -19,10 +19,10 @@ export default function SettingsUser() {
   } | null>("user", null);
   const [token, setToken] = useLocalStorage("token", "");
   useEffect(() => {
-    fetchSyncStatus();
+    fetchData();
   }, []);
-  async function fetchSyncStatus() {
-    if (!user) {
+  async function fetchData(force = false) {
+    if (!user || force) {
       let res = await getSyncStatus(token);
       if (res.success) setUser(res.user!);
     }
@@ -64,7 +64,8 @@ export default function SettingsUser() {
             const name = prompt("請輸入新的暱稱");
             if (name) {
               let updateNameResult = await updateName({ name, token });
-              alert(updateNameResult ? "暱稱已更改" : "更改暱稱失敗");
+              if (updateNameResult) setUser(updateNameResult);
+              else alert("更改暱稱失敗");
             }
           }}
         >
@@ -75,7 +76,7 @@ export default function SettingsUser() {
           onClick={() => setToken("")}
         >
           登出
-        </button>{" "}
+        </button>
       </div>
     </Container>
   );
