@@ -52,11 +52,11 @@ export default function Settings() {
         </Link>
       </div>
       <div className="flex flex-col gap-2">
-        <div className="bg-white rounded-lg py-2 px-4 shadow-sm">
+        <div className="bg-white rounded-lg py-2 px-3 shadow-sm">
           <div className="opacity-75 text-sm">上次同步</div>
           <div className="font-semibold">{lastsyncStatus}</div>
         </div>
-        <div className="bg-white rounded-lg py-2 px-4 shadow-sm">
+        <div className="bg-white rounded-lg py-2 px-3 shadow-sm">
           <div className="opacity-75 text-sm">同步 API 網址</div>
           <div className="font-semibold flex gap-2">
             <span className="truncate">{syncToken}</span>

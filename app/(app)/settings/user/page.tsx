@@ -29,7 +29,7 @@ export default function SettingsUser() {
   }
   return (
     <Container>
-      <div className="grid grid-cols-3 gap-2 py-3 items-center mb-3">
+      <div className="grid grid-cols-3 gap-2 py-2 items-center mb-3">
         <Link
           href={"/settings"}
           className="flex gap-2 items-center text-blue-500"

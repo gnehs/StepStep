@@ -13,7 +13,7 @@ export default function StatItem({
   Icon: LucideIcon;
 }) {
   return (
-    <div className="flex justify-between bg-white rounded-lg p-2 my-2 items-center shadow-sm">
+    <div className="flex justify-between bg-white rounded-lg py-2 px-3 my-2 items-center shadow-sm">
       <div className="flex flex-col">
         <div className="text-2xl font-bold">
           {value}
