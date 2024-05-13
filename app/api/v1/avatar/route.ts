@@ -12,7 +12,7 @@ export async function GET(request: Request) {
         .createHash("sha256")
         .update(user.email.toLowerCase().trim())
         .digest("hex");
-      avatarUrl = `https://www.gravatar.com/avatar/${hash}`;
+      avatarUrl = `https://www.gravatar.com/avatar/${hash}?d=monsterid`;
     }
   }
   // proxy the image
@@ -21,6 +21,7 @@ export async function GET(request: Request) {
   return new Response(avatarBuffer, {
     headers: {
       "Content-Type": avatar.headers.get("Content-Type")!,
+      "Cache-Control": "public, max-age=86400",
     },
   });
 }
