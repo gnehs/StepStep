@@ -24,6 +24,8 @@ pnpm dev
   - [x] 七天
   - [ ] 一個月
 - [ ] 徽章系統
+- [x] PWA
+- [ ] 分析功能
 
 ## 部署
 
@@ -34,6 +36,7 @@ touch stepstep.db
 docker run -d -p 3000:3000 \
   -v $(pwd)/stepstep.db:/app/prisma/dev.db \
   -e JWT_SECRET=YOUR_SECRET \
+  -e INVITE_CODE=YOUR_INVITE_CODE \
   --name stepstep \
   ghcr.io/gnehs/stepstep
 ```
