@@ -10,6 +10,7 @@ import SyncGuide from "@/components/SyncGuide";
 import { getSyncStatus } from "@/services/actions/sync";
 import StatItem from "@/components/StatItem";
 import { CloudUpload } from "lucide-react";
+import relativeTime from "@/utils/relativeTime";
 export default function Settings() {
   const [user, setUser] = useLocalStorage<{
     id: string;
@@ -34,7 +35,7 @@ export default function Settings() {
   }
   const lastsyncStatus = user
     ? user?.lastSync
-      ? new Date(user?.lastSync).toLocaleString("zh-TW")
+      ? relativeTime(new Date(user?.lastSync))
       : "從未同步"
     : "讀取中⋯⋯";
   return (
@@ -50,26 +51,34 @@ export default function Settings() {
           />
         </Link>
       </div>
-      <StatItem title="上次同步" value={lastsyncStatus} Icon={CloudUpload} />
-
-      <SectionTitle className="mt-2">同步 API 網址</SectionTitle>
-      <button
-        className="border-2 border-transparent bg-white rounded-lg px-4 py-2 w-full outline-none focus:border-blue-500  mt-1 flex justify-between items-center gap-2"
-        onClick={async () => {
-          await navigator.clipboard.writeText(syncToken);
-          alert("已複製至剪貼簿");
-        }}
-      >
-        <span className="truncate">{syncToken}</span>
-        <span className="shrink-0 text-blue-500">複製</span>
-      </button>
-      <a
-        href="https://www.icloud.com/shortcuts/93567aa7d9ef411099f9c794ec2ed3e1"
-        target="_blank"
-        className="block mt-2 text-blue-500 bg-white p-2 rounded-lg text-center"
-      >
-        安裝同步 iOS 捷徑
-      </a>
+      <div className="flex flex-col gap-2">
+        <div className="bg-white rounded-lg py-2 px-4 shadow-sm">
+          <div className="opacity-75 text-sm">上次同步</div>
+          <div className="font-semibold">{lastsyncStatus}</div>
+        </div>
+        <div className="bg-white rounded-lg py-2 px-4 shadow-sm">
+          <div className="opacity-75 text-sm">同步 API 網址</div>
+          <div className="font-semibold flex gap-2">
+            <span className="truncate">{syncToken}</span>
+            <button
+              className="shrink-0 text-blue-500"
+              onClick={async () => {
+                await navigator.clipboard.writeText(syncToken);
+                alert("已複製至剪貼簿");
+              }}
+            >
+              複製
+            </button>
+          </div>
+        </div>
+        <a
+          href="https://www.icloud.com/shortcuts/93567aa7d9ef411099f9c794ec2ed3e1"
+          target="_blank"
+          className="block text-blue-500 bg-white p-2 rounded-lg text-center shadow-sm font-semibold"
+        >
+          安裝同步 iOS 捷徑
+        </a>
+      </div>
       <SectionTitle className="mt-2">如何設定同步捷徑？</SectionTitle>
       <SyncGuide />
     </Container>
