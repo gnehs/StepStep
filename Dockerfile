@@ -15,8 +15,8 @@ COPY . .
 RUN npx prisma generate
 RUN pnpm build
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
 USER nextjs
 
