@@ -6,7 +6,7 @@ const APP_NAME = "餅餅踏踏";
 const APP_TITLE_TEMPLATE = "%s - 餅餅踏踏";
 const APP_DESCRIPTION =
   "來餅餅踏踏紀錄你的步步資料，和親朋好友一起步步大車拼！";
-const PREVIEW_IMAGE = "/cover.jpg";
+const PREVIEW_IMAGE = "https://steps.pancake.tw/cover.jpg";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: {
       default: APP_NAME,
       template: APP_TITLE_TEMPLATE,
