@@ -28,13 +28,13 @@ export async function POST(request: Request) {
         timestamp: time,
         steps: parseInt(data.step[i]),
         distance: parseFloat(data.distance[i]),
-        energy: parseFloat(data.energy[i]),
+        energy: parseFloat(data.energy[i] ?? "0"),
         userId: user.id,
       },
       update: {
         steps: parseInt(data.step[i]),
         distance: parseFloat(data.distance[i]),
-        energy: parseFloat(data.energy[i]),
+        energy: parseFloat(data.energy[i] ?? "0"),
       },
     });
   }
