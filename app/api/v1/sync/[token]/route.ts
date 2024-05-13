@@ -17,7 +17,14 @@ export async function POST(request: Request) {
     distance: string[];
     energy: string[];
   };
-
+  // print peak data
+  console.log("[Sync]", new Date().toLocaleString());
+  console.log("time", data.time.slice(0, 5));
+  console.log("step", data.step.slice(0, 5));
+  console.log("distance", data.distance.slice(0, 5));
+  console.log("energy", data.energy.slice(0, 5));
+  console.log("user", user);
+  console.log("=====================================");
   for (let i = 0; i < data.time.length; i++) {
     let time = new Date(data.time[i]);
     // set minutes and seconds to 0
