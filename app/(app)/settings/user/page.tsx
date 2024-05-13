@@ -51,7 +51,7 @@ export default function SettingsUser() {
       </div>
       <div className="flex flex-col gap-1.5">
         <button
-          className="bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center"
+          className="bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center shadow-sm"
           onClick={async () => {
             alert("請到 Gravatar 網站更改頭貼");
           }}
@@ -59,7 +59,7 @@ export default function SettingsUser() {
           更改頭貼
         </button>
         <button
-          className="bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center"
+          className="bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center shadow-sm"
           onClick={async () => {
             const name = prompt("請輸入新的暱稱");
             if (name) {
@@ -71,7 +71,7 @@ export default function SettingsUser() {
           更改暱稱
         </button>
         <button
-          className="bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center"
+          className="bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center shadow-sm"
           onClick={() => setToken("")}
         >
           登出
