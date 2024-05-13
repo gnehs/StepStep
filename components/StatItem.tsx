@@ -8,7 +8,7 @@ export default function StatItem({
 }: {
   title: string;
   value: string;
-  unit: string;
+  unit?: string;
   children?: React.ReactNode;
   Icon: LucideIcon;
 }) {
