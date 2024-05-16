@@ -3,14 +3,11 @@ import Container from "@/components/Container";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import PageTitle from "@/components/PageTitle";
-import SectionTitle from "@/components/SectionTitle";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import SyncGuide from "@/components/SyncGuide";
 import { getSyncStatus } from "@/services/actions/sync";
-import StatItem from "@/components/StatItem";
-import { CloudUpload } from "lucide-react";
 import relativeTime from "@/utils/relativeTime";
+import InstallDialog from "@/components/SyncGuide/InstallDialog";
 export default function Settings() {
   const [user, setUser] = useLocalStorage<{
     id: string;
@@ -71,16 +68,8 @@ export default function Settings() {
             </button>
           </div>
         </div>
-        <a
-          href="https://www.icloud.com/shortcuts/93567aa7d9ef411099f9c794ec2ed3e1"
-          target="_blank"
-          className="block text-blue-500 bg-white p-2 rounded-lg text-center shadow-sm font-semibold"
-        >
-          安裝同步 iOS 捷徑
-        </a>
+        <InstallDialog />
       </div>
-      <SectionTitle className="mt-2">如何設定同步捷徑？</SectionTitle>
-      <SyncGuide />
     </Container>
   );
 }
