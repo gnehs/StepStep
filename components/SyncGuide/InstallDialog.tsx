@@ -19,7 +19,7 @@ export default function InstallSync() {
           <Drawer.Overlay className="fixed inset-0 z-50 bg-black/40 backdrop-blur" />
           <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 mt-24 flex h-max max-h-[90vh] flex-col rounded-t-[10px] bg-[#f2f2f2] max-w-[500px] m-auto">
             <div className="m-auto mt-3 h-1.5 w-20 rounded-full bg-black/20" />
-            <div className="max-h-[80vh] overflow-y-auto p-4">
+            <div className="max-h-[80vh] overflow-y-auto p-4 pb-[calc(8px+env(safe-area-inset-bottom))]">
               <div className="bg-black/5 p-1 rounded-lg grid grid-cols-2 mb-2">
                 <button
                   onClick={() => setPlatform("ios")}
