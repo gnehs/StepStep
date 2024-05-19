@@ -3,10 +3,10 @@ import Container from "@/components/Container";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import PageTitle from "@/components/PageTitle";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { getSyncStatus } from "@/services/actions/sync";
-import relativeTime from "@/utils/relativeTime";
+import RelativeTime from "@/components/RelativeTime";
 import InstallDialog from "@/components/SyncGuide/InstallDialog";
 export default function Settings() {
   const [user, setUser] = useLocalStorage<{
@@ -30,11 +30,6 @@ export default function Settings() {
       setUser(res.user!);
     }
   }
-  const lastsyncStatus = user
-    ? user?.lastSync
-      ? relativeTime(new Date(user?.lastSync))
-      : "從未同步"
-    : "讀取中⋯⋯";
   return (
     <Container>
       <div className="flex justify-between items-center gap-2">
@@ -51,7 +46,17 @@ export default function Settings() {
       <div className="flex flex-col gap-2">
         <div className="bg-white rounded-lg py-2 px-3 shadow-sm">
           <div className="opacity-75 text-sm">上次同步</div>
-          <div className="font-semibold">{lastsyncStatus}</div>
+          <div className="font-semibold">
+            {user ? (
+              user?.lastSync ? (
+                <RelativeTime time={new Date(user?.lastSync)} />
+              ) : (
+                "從未同步"
+              )
+            ) : (
+              "讀取中⋯⋯"
+            )}
+          </div>
         </div>
         <div className="bg-white rounded-lg py-2 px-3 shadow-sm">
           <div className="opacity-75 text-sm">同步 API 網址</div>
