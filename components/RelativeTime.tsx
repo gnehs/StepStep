@@ -27,10 +27,11 @@ export default function RelativeTime({ time }: { time: Date }) {
       return "剛剛";
     }
   }
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState("計算中⋯⋯");
   const isMounted = useIsMounted();
 
   useEffect(() => {
+    setResult(calcRelativeTime(time));
     const interval = setInterval(() => {
       setResult(calcRelativeTime(time));
     }, 1000);
@@ -39,5 +40,5 @@ export default function RelativeTime({ time }: { time: Date }) {
     };
   }, []);
   //@ts-expect-error
-  return isMounted ? <span>{result}</span> : <span></span>;
+  return isMounted ? <span>{result}</span> : <span>計算中⋯⋯</span>;
 }
