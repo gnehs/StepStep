@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useIsMounted } from "usehooks-ts";
 export default function RelativeTime({ time }: { time: Date }) {
   function calcRelativeTime(date: Date) {
     const now = new Date();
@@ -28,7 +27,6 @@ export default function RelativeTime({ time }: { time: Date }) {
     }
   }
   const [result, setResult] = useState("計算中⋯⋯");
-  const isMounted = useIsMounted();
 
   useEffect(() => {
     setResult(calcRelativeTime(time));
@@ -39,6 +37,5 @@ export default function RelativeTime({ time }: { time: Date }) {
       clearInterval(interval);
     };
   }, []);
-  //@ts-expect-error
-  return isMounted ? <span>{result}</span> : <span>計算中⋯⋯</span>;
+  return <span suppressHydrationWarning>{result}</span>;
 }

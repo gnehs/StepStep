@@ -6,8 +6,12 @@ import PageTitle from "@/components/PageTitle";
 import { use, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { getSyncStatus } from "@/services/actions/sync";
-import RelativeTime from "@/components/RelativeTime";
 import InstallDialog from "@/components/SyncGuide/InstallDialog";
+
+import dynamic from "next/dynamic";
+const RelativeTime = dynamic(() => import("@/components/RelativeTime"), {
+  ssr: false,
+});
 export default function Settings() {
   const [user, setUser] = useLocalStorage<{
     id: string;
