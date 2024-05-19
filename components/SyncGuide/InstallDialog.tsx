@@ -60,11 +60,8 @@ export default function InstallSync() {
               )}
               {platform === "android" && (
                 <>
-                  <div className="flex flex-col w-full bg-white shrink-0 p-2 rounded-lg snap-always snap-center">
-                    <img
-                      src="/android.jpg"
-                      className="w-full rounded-lg shadow-sm"
-                    />
+                  <div className="flex flex-col w-full bg-white shrink-0 p-2 rounded-lg shadow-sm">
+                    <img src="/android.jpg" className="w-full rounded" />
                     <div className="mt-2">
                       <h2 className="font-bold">餅餅踏踏記錄器</h2>
                       <div className="opacity-75 text-sm">
