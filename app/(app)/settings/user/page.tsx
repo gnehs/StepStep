@@ -54,7 +54,7 @@ export default function SettingsUser() {
           className="bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center shadow-sm"
           onClick={async () => {
             if (confirm("將把您引導至 Gravatar 網站更改頭貼"))
-              open("https://gravatar.com/profile/", "_blank").focus();
+              open("https://gravatar.com/profile/", "_blank")?.focus();
           }}
         >
           更改頭貼
