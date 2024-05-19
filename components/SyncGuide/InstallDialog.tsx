@@ -44,7 +44,9 @@ export default function InstallSync() {
               </div>
               {platform === "ios" && (
                 <>
-                  <SyncGuide />
+                  <div className="-mx-4">
+                    <SyncGuide />
+                  </div>
                   <a
                     href="https://www.icloud.com/shortcuts/93567aa7d9ef411099f9c794ec2ed3e1"
                     target="_blank"
@@ -58,10 +60,18 @@ export default function InstallSync() {
               )}
               {platform === "android" && (
                 <>
-                  <img
-                    src="/android.jpg"
-                    className="w-full rounded-lg shadow-sm"
-                  />
+                  <div className="flex flex-col w-full bg-white shrink-0 p-2 rounded-lg snap-always snap-center">
+                    <img
+                      src="/android.jpg"
+                      className="w-full rounded-lg shadow-sm"
+                    />
+                    <div className="mt-2">
+                      <h2 className="font-bold">餅餅踏踏記錄器</h2>
+                      <div className="opacity-75 text-sm">
+                        我們提供了同步 APP，可以將您的步步資料同步到餅餅踏踏。
+                      </div>
+                    </div>
+                  </div>
                   <a
                     href="https://github.com/gnehs/StepStep-RN/releases/latest"
                     target="_blank"

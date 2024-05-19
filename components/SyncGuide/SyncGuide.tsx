@@ -37,7 +37,7 @@ function Step({
 }
 export default function SyncGuide() {
   return (
-    <div className="mt-1 overflow-x-scroll flex gap-2 flex-nowrap snap-x snap-mandatory drop-shadow-sm rounded-sm">
+    <div className="mt-1 overflow-x-scroll flex gap-2 flex-nowrap snap-x snap-mandatory drop-shadow-sm rounded-sm px-4">
       <Step title="0. 安裝捷徑" imgSrc="/sync-guide/install-shortcut.jpg">
         將餅餅踏踏記錄器安裝到您的 iPhone 或 iPad 上
       </Step>
