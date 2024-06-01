@@ -21,20 +21,6 @@ export default function StepChart({ data }: { data: Record[] }) {
         padding={0.3}
         valueScale={{ type: "linear" }}
         indexScale={{ type: "band", round: true }}
-        fill={[
-          {
-            match: {
-              id: "fries",
-            },
-            id: "dots",
-          },
-          {
-            match: {
-              id: "sandwich",
-            },
-            id: "lines",
-          },
-        ]}
         axisTop={null}
         axisRight={null}
         axisBottom={null}
@@ -44,9 +30,7 @@ export default function StepChart({ data }: { data: Record[] }) {
         legends={[]}
         role="application"
         ariaLabel="Steps bar chart"
-        barAriaLabel={(e) =>
-          e.id + ": " + e.formattedValue + " in country: " + e.indexValue
-        }
+        isInteractive={false}
         enableTotals
       />
     </>
