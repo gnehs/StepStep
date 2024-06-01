@@ -29,29 +29,29 @@ export default function SettingsUser() {
   }
   return (
     <Container>
-      <div className="grid grid-cols-3 gap-2 py-2 items-center mb-3">
+      <div className="mb-3 grid grid-cols-3 items-center gap-2 py-2">
         <Link
           href={"/settings"}
-          className="flex gap-2 items-center text-blue-500"
+          className="flex items-center gap-1 text-blue-500"
         >
           <ChevronLeft size={24} />
           返回
         </Link>
         <div className="text-center font-semibold">個人檔案</div>
       </div>
-      <div className="flex items-center justify-center flex-col mb-3">
+      <div className="mb-3 flex flex-col items-center justify-center">
         <motion.img
           src={`/api/v1/avatar?id=${user?.id}`}
           alt="avatar"
           layoutId="avatar"
-          className="size-16 rounded-full bg-white shadow-sm mb-2"
+          className="mb-2 size-16 rounded-full bg-white shadow-sm"
         />
-        <div className="font-semibold text-xl">{user?.name}</div>
+        <div className="text-xl font-semibold">{user?.name}</div>
         <div className="text-sm opacity-75">{user?.email}</div>
       </div>
       <div className="flex flex-col gap-1.5">
         <button
-          className="bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center shadow-sm"
+          className="w-full rounded-lg bg-white px-4 py-2 text-center text-blue-500 shadow-sm"
           onClick={async () => {
             if (confirm("將把您引導至 Gravatar 網站更改頭貼"))
               open("https://gravatar.com/profile/", "_blank")?.focus();
@@ -60,7 +60,7 @@ export default function SettingsUser() {
           更改頭貼
         </button>
         <button
-          className="bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center shadow-sm"
+          className="w-full rounded-lg bg-white px-4 py-2 text-center text-blue-500 shadow-sm"
           onClick={async () => {
             const name = prompt("請輸入新的暱稱");
             if (name) {
@@ -73,7 +73,7 @@ export default function SettingsUser() {
           更改暱稱
         </button>
         <button
-          className="bg-white rounded-lg px-4 py-2 w-full text-blue-500 text-center shadow-sm"
+          className="w-full rounded-lg bg-white px-4 py-2 text-center text-blue-500 shadow-sm"
           onClick={() => setToken("")}
         >
           登出
