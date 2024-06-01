@@ -7,30 +7,20 @@ export default function StepChart({ data }: { data: Record[] }) {
       hour: "2-digit",
       minute: "2-digit",
     }),
-    steps: record.steps,
-    stepsColor: "rgb(17,17,17)",
+    步數: record.steps,
   }));
 
   return (
     <>
       <ResponsiveBar
         data={chartData}
-        keys={["steps"]}
+        keys={["步數"]}
         indexBy="time"
         margin={{ top: 30, right: 0, bottom: 0, left: 0 }}
-        padding={0.3}
-        valueScale={{ type: "linear" }}
         indexScale={{ type: "band", round: true }}
-        axisTop={null}
-        axisRight={null}
-        axisBottom={null}
-        axisLeft={null}
         enableGridY={false}
         enableLabel={false}
-        legends={[]}
-        role="application"
         ariaLabel="Steps bar chart"
-        isInteractive={false}
         enableTotals
       />
     </>
