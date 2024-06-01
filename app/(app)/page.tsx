@@ -6,9 +6,10 @@ import { getHomeData } from "@/services/actions/home";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import type { Record } from "@prisma/client";
-import { Footprints, Flame, Compass, Info } from "lucide-react";
+import { Footprints, Flame, Compass, Info, BarChart } from "lucide-react";
 import StatItem from "@/components/StatItem";
 import StepChart from "@/components/StepChart";
+import Link from "next/link";
 export default function Home() {
   const [token] = useLocalStorage("token", "");
   const [today, setToday] = useState<Record[]>([]);
@@ -36,25 +37,40 @@ export default function Home() {
   }, [token]);
   return (
     <Container>
-      <PageTitle>餅餅踏踏</PageTitle>
+      <div className="flex items-center justify-between gap-2">
+        <PageTitle>餅餅踏踏</PageTitle>
+        <Link
+          href="/analytics"
+          className="flex size-10 items-center justify-center rounded-full bg-white text-blue-500 shadow-sm"
+        >
+          <BarChart strokeWidth={2} />
+        </Link>
+      </div>
+
       <SectionTitle>今日統計</SectionTitle>
       <div className="grid grid-cols-3 gap-2">
         <StatItem
           Icon={Footprints}
           title="踏踏"
-          value={steps.toLocaleString()}
+          value={steps.toLocaleString("zh-TW", {
+            maximumFractionDigits: 0,
+          })}
           unit="步"
         />
         <StatItem
           Icon={Compass}
           title="距離"
-          value={distance.toFixed(2).toLocaleString()}
+          value={distance.toLocaleString("zh-TW", {
+            maximumFractionDigits: 2,
+          })}
           unit="公里"
         />
         <StatItem
           Icon={Flame}
           title="動態能量"
-          value={energy.toFixed(0).toLocaleString()}
+          value={energy.toLocaleString("zh-TW", {
+            maximumFractionDigits: 1,
+          })}
           unit="大卡"
         />
       </div>
