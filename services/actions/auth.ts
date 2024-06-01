@@ -14,14 +14,17 @@ export async function login({
       email,
     },
   });
-  const passwordMatch = await bcrypt.compare(password, user?.password || "");
+  const passwordMatch =
+    user && (await bcrypt.compare(password, user?.password || ""));
   if (user && passwordMatch) {
     // update user's last sync login time
     await prisma.user.update({
       where: { id: user.id },
       data: { lastLogin: new Date() },
     });
-    let token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!);
+    let token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
+      expiresIn: "7d",
+    });
     return { success: true, user, token };
   }
   return { success: false, message: "帳號或密碼錯誤" };
@@ -37,7 +40,9 @@ export async function refreshToken(token: string) {
       },
     });
     if (user) {
-      let newToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!);
+      let newToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
+        expiresIn: "7d",
+      });
       return { success: true, user, token: newToken };
     }
   } catch (error) {}
