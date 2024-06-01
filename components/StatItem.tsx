@@ -19,10 +19,10 @@ export default function StatItem({
       </div>
       <div className="text-xl font-bold">
         {value}
-        <span className="text-sm font-normal"> {unit}</span>
+        <span className="text-xs font-normal text-gray-500"> {unit}</span>
       </div>
       {children}
-      <Icon size={20} className="absolute right-3 top-2 m-auto opacity-20" />
+      <Icon size={20} className="absolute right-2 top-2 m-auto opacity-20" />
     </div>
   );
 }
