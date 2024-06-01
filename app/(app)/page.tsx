@@ -38,24 +38,26 @@ export default function Home() {
     <Container>
       <PageTitle>餅餅踏踏</PageTitle>
       <SectionTitle>今日統計</SectionTitle>
-      <StatItem
-        Icon={Footprints}
-        title="踏踏"
-        value={steps.toLocaleString()}
-        unit="步"
-      />
-      <StatItem
-        Icon={Compass}
-        title="距離"
-        value={distance.toLocaleString()}
-        unit="公里"
-      />
-      <StatItem
-        Icon={Flame}
-        title="動態能量"
-        value={energy.toLocaleString()}
-        unit="大卡"
-      />
+      <div className="grid grid-cols-3 gap-2">
+        <StatItem
+          Icon={Footprints}
+          title="踏踏"
+          value={steps.toLocaleString()}
+          unit="步"
+        />
+        <StatItem
+          Icon={Compass}
+          title="距離"
+          value={distance.toFixed(2).toLocaleString()}
+          unit="公里"
+        />
+        <StatItem
+          Icon={Flame}
+          title="動態能量"
+          value={energy.toFixed(0).toLocaleString()}
+          unit="大卡"
+        />
+      </div>
 
       <SectionTitle>本日步步圖表</SectionTitle>
       <div className="w-full h-[200px] shadow-sm rounded-lg bg-white my-2">
