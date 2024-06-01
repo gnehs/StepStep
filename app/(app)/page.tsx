@@ -74,9 +74,11 @@ export default function Home() {
           unit="大卡"
         />
       </div>
-      <div className="mb-2 h-[150px] w-full rounded-lg bg-white shadow-sm">
-        <StepChart data={today} />
-      </div>
+      {today.length > 0 && (
+        <div className="mb-2 h-[150px] w-full rounded-lg bg-white shadow-sm">
+          <StepChart data={today} />
+        </div>
+      )}
       {history.length !== 0 && <SectionTitle>歷史紀錄</SectionTitle>}
       {history.map((item, index) => (
         <div key={index} className="my-2 rounded-lg bg-gray-50 shadow-sm">
