@@ -22,10 +22,7 @@ export default function StatItem({
         <span className="text-sm font-normal"> {unit}</span>
       </div>
       {children}
-      <Icon
-        size={48}
-        className="absolute bottom-0 right-3 top-0 m-auto opacity-20"
-      />
+      <Icon size={20} className="absolute right-3 top-2 m-auto opacity-20" />
     </div>
   );
 }
