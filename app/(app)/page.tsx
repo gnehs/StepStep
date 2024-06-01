@@ -6,7 +6,7 @@ import { getHomeData } from "@/services/actions/home";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import type { Record } from "@prisma/client";
-import { Footprints, Flame, Compass, Info, BarChart } from "lucide-react";
+import { Footprints, Flame, Compass, Info, BarChart3 } from "lucide-react";
 import StatItem from "@/components/StatItem";
 import StepChart from "@/components/StepChart";
 import Link from "next/link";
@@ -43,7 +43,7 @@ export default function Home() {
           href="/analytics"
           className="flex size-10 items-center justify-center rounded-full bg-white text-blue-500 shadow-sm"
         >
-          <BarChart strokeWidth={2} />
+          <BarChart3 strokeWidth={2} />
         </Link>
       </div>
 
