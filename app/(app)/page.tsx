@@ -8,8 +8,9 @@ import { useLocalStorage } from "usehooks-ts";
 import type { Record } from "@prisma/client";
 import { Footprints, Flame, Compass, Info } from "lucide-react";
 import StatItem from "@/components/StatItem";
+import StepChart from "@/components/StepChart";
 export default function Home() {
-  const [token, setToken] = useLocalStorage("token", "");
+  const [token] = useLocalStorage("token", "");
   const [today, setToday] = useState<Record[]>([]);
   const [history, setHistory] = useState<
     {
@@ -22,15 +23,15 @@ export default function Home() {
   const steps = today.reduce((acc, cur) => acc + cur.steps, 0);
   const distance = today.reduce((acc, cur) => acc + cur.distance, 0);
   const energy = today.reduce((acc, cur) => acc + cur.energy, 0);
-  async function getData() {
-    if (token === "") return;
-    let res = await getHomeData(token);
-    if (res.success) {
-      setToday(res.todayRecords!);
-      setHistory(res.historyRecords!);
-    }
-  }
   useEffect(() => {
+    async function getData() {
+      if (token === "") return;
+      let res = await getHomeData(token);
+      if (res.success) {
+        setToday(res.todayRecords!);
+        setHistory(res.historyRecords!);
+      }
+    }
     getData();
   }, []);
   return (
@@ -55,6 +56,11 @@ export default function Home() {
         value={energy.toLocaleString()}
         unit="大卡"
       />
+
+      <SectionTitle>本日步步圖表</SectionTitle>
+      <div className="w-full h-[200px] shadow-sm rounded-lg bg-white my-2">
+        <StepChart data={today} />
+      </div>
       {history.length !== 0 && <SectionTitle>歷史紀錄</SectionTitle>}
       {history.map((item, index) => (
         <div key={index} className="bg-gray-50 rounded-lg my-2 shadow-sm">
