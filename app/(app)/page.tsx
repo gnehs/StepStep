@@ -58,7 +58,7 @@ export default function Home() {
           unit="大卡"
         />
       </div>
-      <div className="h-[150px] w-full rounded-lg bg-white shadow-sm">
+      <div className="mb-2 h-[150px] w-full rounded-lg bg-white shadow-sm">
         <StepChart data={today} />
       </div>
       {history.length !== 0 && <SectionTitle>歷史紀錄</SectionTitle>}
