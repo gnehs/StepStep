@@ -21,7 +21,6 @@ function HeatMap30d({ data }: { data: any }) {
       }[],
     };
     for (let day of Object.keys(data)) {
-      console.log(data[day][time]);
       res.data.push({
         x: day,
         y: data[day][time].distance,
@@ -48,7 +47,7 @@ function HeatMap30d({ data }: { data: any }) {
       tooltip={({ cell }) => (
         <div className="rounded-xl bg-white px-2 py-1 text-sm shadow-lg">
           <span className="mr-1 text-gray-500">
-            {cell.data.x} - {cell.serieId}
+            週{cell.data.x} {cell.serieId}
           </span>
           <span className="text-gray-700">{cell.value?.toFixed(2)} km</span>
         </div>
@@ -154,7 +153,7 @@ export default function HistoryPage() {
             趟台北高雄來回的距離。
           </div>
           <SectionTitle>過去三十日踏踏時間分布圖</SectionTitle>
-          <div className="my-2 h-[800px] w-full rounded-lg bg-white p-2 shadow-sm">
+          <div className="my-2 h-[600px] w-full rounded-lg bg-white p-2 shadow-sm">
             <HeatMap30d data={res.last30dAggregate} />
           </div>
         </>
