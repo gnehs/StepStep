@@ -33,7 +33,7 @@ export default function Home() {
       }
     }
     getData();
-  }, []);
+  }, [token]);
   return (
     <Container>
       <PageTitle>餅餅踏踏</PageTitle>
