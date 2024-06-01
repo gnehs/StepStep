@@ -6,7 +6,7 @@ import { getHomeData } from "@/services/actions/home";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import type { Record } from "@prisma/client";
-import { Footprints, Flame, Compass } from "lucide-react";
+import { Footprints, Flame, Compass, Info } from "lucide-react";
 import StatItem from "@/components/StatItem";
 export default function Home() {
   const [token, setToken] = useLocalStorage("token", "");
@@ -55,7 +55,7 @@ export default function Home() {
         value={energy.toLocaleString()}
         unit="大卡"
       />
-      <SectionTitle>歷史紀錄</SectionTitle>
+      {history.length !== 0 && <SectionTitle>歷史紀錄</SectionTitle>}
       {history.map((item, index) => (
         <div key={index} className="bg-gray-50 rounded-lg my-2 shadow-sm">
           <div className="py-2 px-3 text-sm shadow-sm rounded-t-lg bg-white">
@@ -95,6 +95,13 @@ export default function Home() {
           </div>
         </div>
       ))}
+
+      {history.length === 0 && (
+        <div className="py-2 px-3 text-sm shadow-sm rounded-lg bg-white text-gray-500 flex items-center gap-3">
+          <Info size={16} />
+          前往「設定」&rarr;「設定同步工具」讓您的健康數據與餅餅踏踏同步
+        </div>
+      )}
     </Container>
   );
 }
