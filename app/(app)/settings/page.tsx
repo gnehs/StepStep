@@ -3,7 +3,7 @@ import Container from "@/components/Container";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import PageTitle from "@/components/PageTitle";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { getSyncStatus } from "@/services/actions/sync";
 import InstallDialog from "@/components/SyncGuide/InstallDialog";
@@ -25,15 +25,15 @@ export default function Settings() {
   const [syncToken, setSyncToken] = useLocalStorage("syncToken", "");
   const [token] = useLocalStorage("token", "");
   useEffect(() => {
+    async function fetchSyncStatus() {
+      let res = await getSyncStatus(token);
+      if (res.success) {
+        setSyncToken(location.origin + "/api/v1/sync/" + res.user!.token);
+        setUser(res.user!);
+      }
+    }
     fetchSyncStatus();
   }, []);
-  async function fetchSyncStatus() {
-    let res = await getSyncStatus(token);
-    if (res.success) {
-      setSyncToken(location.origin + "/api/v1/sync/" + res.user!.token);
-      setUser(res.user!);
-    }
-  }
   return (
     <Container>
       <div className="flex items-center justify-between gap-2">
