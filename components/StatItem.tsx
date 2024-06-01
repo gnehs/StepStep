@@ -14,15 +14,15 @@ export default function StatItem({
 }) {
   return (
     <div className="relative my-2 flex flex-col rounded-lg bg-white px-3 py-2 shadow-sm">
-      <div className="flex items-center gap-1 text-sm text-gray-500">
-        {title}
-      </div>
-      <div className="text-xl font-bold">
+      <div className="text-2xl font-light">
         {value}
         <span className="text-xs font-normal text-gray-500"> {unit}</span>
       </div>
       {children}
-      <Icon size={20} className="absolute right-2 top-2 m-auto opacity-20" />
+      <div className="flex items-center justify-between gap-1 text-xs text-gray-500">
+        {title}
+        <Icon size={16} className="opacity-20" />
+      </div>
     </div>
   );
 }
