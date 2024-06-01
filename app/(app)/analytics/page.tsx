@@ -17,7 +17,7 @@ function HeatMap30d({ data }: { data: any }) {
       id: time,
       data: [] as {
         x: string;
-        y: string;
+        y: number;
       }[],
     };
     for (let day of Object.keys(data)) {
@@ -28,11 +28,19 @@ function HeatMap30d({ data }: { data: any }) {
     }
     parsedData.push(res);
   }
+  const maxVal = Math.max(
+    ...parsedData.map((x) => x.data.map((y) => y.y)).flat(99),
+  );
   return (
     <ResponsiveHeatMap
       data={parsedData as any}
-      margin={{ top: 20, right: 0, bottom: 0, left: 36 }}
+      margin={{ top: 20, right: 0, bottom: 0, left: 40 }}
       valueFormat={(value: number) => `${value.toFixed(3)} 公里`}
+      xInnerPadding={0.025}
+      xOuterPadding={0.05}
+      yInnerPadding={0.05}
+      yOuterPadding={0.05}
+      borderRadius={2}
       label={(d) => `${d.value!.toFixed(1)} km`}
       axisTop={{
         tickSize: 5,
@@ -40,16 +48,20 @@ function HeatMap30d({ data }: { data: any }) {
       }}
       axisLeft={{
         tickSize: 5,
-        tickPadding: 0,
+        tickPadding: 2,
       }}
-      colors={{ type: "sequential", scheme: "blues", minValue: -0.25 }}
-      labelTextColor="#fff"
+      colors={{
+        type: "sequential",
+        scheme: "blue_purple",
+        maxValue: maxVal * 2,
+      }}
+      labelTextColor="#333"
       tooltip={({ cell }) => (
         <div className="rounded-xl bg-white px-2 py-1 text-sm shadow-lg">
           <span className="mr-1 text-gray-500">
             週{cell.data.x} {cell.serieId}
           </span>
-          <span className="text-gray-700">{cell.value?.toFixed(2)} km</span>
+          <span className="text-gray-700">{cell.value?.toFixed(2)} 公里</span>
         </div>
       )}
     />
