@@ -18,8 +18,10 @@ function NavButton({
   return (
     <Link
       className={twMerge(
-        "flex items-center gap-1 p-2 flex-col text-xs",
-        active ? "text-blue-500 font-bold" : "text-gray-500 hover:text-gray-700"
+        "flex flex-col items-center gap-1 p-2 text-xs",
+        active
+          ? "font-bold text-blue-500"
+          : "text-gray-500 hover:text-gray-700",
       )}
       href={href}
     >
@@ -30,9 +32,9 @@ function NavButton({
 }
 export default function Nav() {
   return (
-    <div className="bg-white fixed bottom-0 w-full z-10 pb-[env(safe-area-inset-bottom)] drop-shadow-2xl">
+    <div className="fixed bottom-0 z-10 w-full bg-white pb-[env(safe-area-inset-bottom)] drop-shadow-2xl">
       <Container>
-        <div className="flex justify-around gap-2 w-full">
+        <div className="flex w-full justify-around gap-2">
           <NavButton href="/" Icon={Cookie}>
             首頁
           </NavButton>

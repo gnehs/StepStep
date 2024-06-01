@@ -8,7 +8,7 @@ export default function DevBadge() {
   }, []);
   if (!show) return null;
   return (
-    <div className="fixed top-2 right-2 bg-red-500 text-white text-xs p-1 z-50 rounded">
+    <div className="fixed right-2 top-2 z-50 rounded bg-red-500 p-1 text-xs text-white">
       localhost
     </div>
   );

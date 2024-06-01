@@ -20,16 +20,16 @@ export default async function Rank() {
                 day: "numeric",
               })}
             </SectionTitle>
-            <div className="bg-white rounded-lg p-2 shadow-sm">
+            <div className="rounded-lg bg-white p-2 shadow-sm">
               {item.records.map((item, index: number) => (
                 <div
                   key={item.user?.id ?? "" + index}
                   className={twMerge(
-                    "flex justify-between items-center gap-2",
-                    index !== 0 && "border-t border-gray-100 pt-2 mt-2"
+                    "flex items-center justify-between gap-2",
+                    index !== 0 && "mt-2 border-t border-gray-100 pt-2",
                   )}
                 >
-                  <div className="flex gap-2 items-center">
+                  <div className="flex items-center gap-2">
                     <img
                       src={`/api/v1/avatar?id=${item.user?.id}`}
                       className="size-10 rounded"
@@ -44,9 +44,9 @@ export default async function Rank() {
                   </div>
                   <div
                     className={twMerge(
-                      "bg-gray-100 p-0.5 px-2 text-xs text-gray-600 rounded-full empty:hidden border border-gray-200",
+                      "rounded-full border border-gray-200 bg-gray-100 p-0.5 px-2 text-xs text-gray-600 empty:hidden",
                       index === 0 &&
-                        "bg-yellow-100 text-yellow-600 border-yellow-300"
+                        "border-yellow-300 bg-yellow-100 text-yellow-600",
                     )}
                   >
                     {index === 0 && "步步冠軍"}

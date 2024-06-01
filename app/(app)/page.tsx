@@ -60,13 +60,13 @@ export default function Home() {
       </div>
 
       <SectionTitle>本日步步圖表</SectionTitle>
-      <div className="w-full h-[200px] shadow-sm rounded-lg bg-white my-2">
+      <div className="my-2 h-[200px] w-full rounded-lg bg-white shadow-sm">
         <StepChart data={today} />
       </div>
       {history.length !== 0 && <SectionTitle>歷史紀錄</SectionTitle>}
       {history.map((item, index) => (
-        <div key={index} className="bg-gray-50 rounded-lg my-2 shadow-sm">
-          <div className="py-2 px-3 text-sm shadow-sm rounded-t-lg bg-white">
+        <div key={index} className="my-2 rounded-lg bg-gray-50 shadow-sm">
+          <div className="rounded-t-lg bg-white px-3 py-2 text-sm shadow-sm">
             {item.date.toLocaleDateString("zh-TW", {
               weekday: "long",
               year: "numeric",
@@ -74,7 +74,7 @@ export default function Home() {
               day: "numeric",
             })}
           </div>
-          <div className="grid grid-cols-3 gap-2 py-2 px-3 rounded-b-lg">
+          <div className="grid grid-cols-3 gap-2 rounded-b-lg px-3 py-2">
             <div>
               <div className="text-xs opacity-50">步數</div>
               <div>
@@ -105,7 +105,7 @@ export default function Home() {
       ))}
 
       {history.length === 0 && (
-        <div className="py-2 px-3 text-sm shadow-sm rounded-lg bg-white text-gray-500 flex items-center gap-3">
+        <div className="flex items-center gap-3 rounded-lg bg-white px-3 py-2 text-sm text-gray-500 shadow-sm">
           <Info size={16} />
           前往「設定」&rarr;「設定同步工具」讓您的健康數據與餅餅踏踏同步
         </div>

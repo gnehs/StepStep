@@ -30,7 +30,7 @@ export default function LoginPage() {
     <Container>
       <PageTitle>登入</PageTitle>
       <form onSubmit={onSubmit}>
-        <SectionTitle className="mt-2 mb-1">Email</SectionTitle>
+        <SectionTitle className="mb-1 mt-2">Email</SectionTitle>
         <Input
           id="email"
           type="email"
@@ -38,7 +38,7 @@ export default function LoginPage() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <SectionTitle className="mt-2 mb-1">密碼</SectionTitle>
+        <SectionTitle className="mb-1 mt-2">密碼</SectionTitle>
         <Input
           id="password"
           type="password"
@@ -46,7 +46,7 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <Button className="w-full mt-4" type="submit">
+        <Button className="mt-4 w-full" type="submit">
           登入
         </Button>
       </form>

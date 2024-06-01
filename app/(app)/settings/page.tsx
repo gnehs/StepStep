@@ -3,7 +3,7 @@ import Container from "@/components/Container";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import PageTitle from "@/components/PageTitle";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { getSyncStatus } from "@/services/actions/sync";
 import InstallDialog from "@/components/SyncGuide/InstallDialog";
@@ -36,7 +36,7 @@ export default function Settings() {
   }
   return (
     <Container>
-      <div className="flex justify-between items-center gap-2">
+      <div className="flex items-center justify-between gap-2">
         <PageTitle>設定</PageTitle>
         <Link href="/settings/user">
           <motion.img
@@ -48,8 +48,8 @@ export default function Settings() {
         </Link>
       </div>
       <div className="flex flex-col gap-2">
-        <div className="bg-white rounded-lg py-2 px-3 shadow-sm">
-          <div className="opacity-75 text-sm">上次同步</div>
+        <div className="rounded-lg bg-white px-3 py-2 shadow-sm">
+          <div className="text-sm opacity-75">上次同步</div>
           <div className="font-semibold">
             {user ? (
               user?.lastSync ? (
@@ -62,9 +62,9 @@ export default function Settings() {
             )}
           </div>
         </div>
-        <div className="bg-white rounded-lg py-2 px-3 shadow-sm">
-          <div className="opacity-75 text-sm">同步 API 網址</div>
-          <div className="font-semibold flex gap-2">
+        <div className="rounded-lg bg-white px-3 py-2 shadow-sm">
+          <div className="text-sm opacity-75">同步 API 網址</div>
+          <div className="flex gap-2 font-semibold">
             <span className="truncate">{syncToken}</span>
             <button
               className="shrink-0 text-blue-500"

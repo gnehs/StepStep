@@ -42,21 +42,21 @@ export default function Register() {
     <Container>
       <PageTitle>註冊</PageTitle>
       <form onSubmit={onFormSubmit}>
-        <SectionTitle className="mt-2 mb-1">邀請碼</SectionTitle>
+        <SectionTitle className="mb-1 mt-2">邀請碼</SectionTitle>
         <Input
           id="invite-code"
           value={inviteCode}
           onChange={(e) => setInviteCode(e.target.value)}
           required
         />
-        <SectionTitle className="mt-2 mb-1">暱稱</SectionTitle>
+        <SectionTitle className="mb-1 mt-2">暱稱</SectionTitle>
         <Input
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
         />
-        <SectionTitle className="mt-2 mb-1">Email</SectionTitle>
+        <SectionTitle className="mb-1 mt-2">Email</SectionTitle>
         <Input
           id="email"
           type="email"
@@ -64,10 +64,10 @@ export default function Register() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <p className="text-balance opacity-75 text-xs mt-1">
+        <p className="mt-1 text-balance text-xs opacity-75">
           我們會透過 Gravatar 來顯示你的大頭貼，請確保你的 Email 是正確的。
         </p>
-        <SectionTitle className="mt-2 mb-1">密碼</SectionTitle>
+        <SectionTitle className="mb-1 mt-2">密碼</SectionTitle>
         <Input
           id="password"
           type="password"
@@ -75,7 +75,7 @@ export default function Register() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <SectionTitle className="mt-2 mb-1">確認密碼</SectionTitle>
+        <SectionTitle className="mb-1 mt-2">確認密碼</SectionTitle>
         <Input
           id="confirm-password"
           type="password"
@@ -83,11 +83,11 @@ export default function Register() {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-        <Button className="w-full my-4" type="submit">
+        <Button className="my-4 w-full" type="submit">
           註冊
         </Button>
       </form>
-      <p className="text-center text-balance opacity-75 text-sm">
+      <p className="text-balance text-center text-sm opacity-75">
         如果你弄丟了密碼，你將永遠無法找回你的帳號。
       </p>
     </Container>

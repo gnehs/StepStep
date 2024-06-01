@@ -10,12 +10,12 @@ function Step({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col w-[80%] bg-white shrink-0 p-2 rounded-lg snap-always snap-center">
+    <div className="flex w-[80%] shrink-0 snap-center snap-always flex-col rounded-lg bg-white p-2">
       {imgSrc && (
         <img
           src={imgSrc}
           alt=""
-          className="w-full aspect-square object-contain bg-gray-50 rounded"
+          className="aspect-square w-full rounded bg-gray-50 object-contain"
         />
       )}
       {vidSrc && (
@@ -25,19 +25,19 @@ function Step({
           loop
           muted
           playsInline
-          className="w-full aspect-square object-cover bg-gray-50 rounded"
+          className="aspect-square w-full rounded bg-gray-50 object-cover"
         />
       )}
       <div className="mt-2">
         <h2 className="font-bold">{title}</h2>
-        <div className="opacity-75 text-sm">{children}</div>
+        <div className="text-sm opacity-75">{children}</div>
       </div>
     </div>
   );
 }
 export default function SyncGuide() {
   return (
-    <div className="mt-1 overflow-x-scroll flex gap-2 flex-nowrap snap-x snap-mandatory drop-shadow-sm rounded-sm px-4">
+    <div className="mt-1 flex snap-x snap-mandatory flex-nowrap gap-2 overflow-x-scroll rounded-sm px-4 drop-shadow-sm">
       <Step title="0. 安裝捷徑" imgSrc="/sync-guide/install-shortcut.jpg">
         將餅餅踏踏記錄器安裝到您的 iPhone 或 iPad 上
       </Step>

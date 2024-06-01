@@ -11,8 +11,8 @@ export default function Button({
   return (
     <button
       className={twMerge(
-        `bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600`,
-        className
+        `rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600`,
+        className,
       )}
       {...props}
     >
