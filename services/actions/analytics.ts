@@ -41,13 +41,11 @@ export async function getAnalyticsData(token: string) {
         return weekDays[recordDay] === day && hours[recordHour] === hour;
       });
       let reducedData = filteredData.reduce(
-        (acc, record) => {
-          return {
-            distance: (acc.distance ?? 0) + record.distance,
-            energy: (acc.energy ?? 0) + record.energy,
-            steps: (acc.steps ?? 0) + record.steps,
-          };
-        },
+        (acc, record) => ({
+          distance: (acc.distance ?? 0) + record.distance,
+          energy: (acc.energy ?? 0) + record.energy,
+          steps: (acc.steps ?? 0) + record.steps,
+        }),
         {} as Record<string, number>,
       );
       last30dAggregate[day][hour] = {
