@@ -124,7 +124,7 @@ export default function Home() {
       ))}
 
       {history.length === 0 && (
-        <div className="flex items-center gap-3 rounded-lg bg-white px-3 py-2 text-sm text-gray-500 shadow-sm dark:bg-black/5 dark:text-white/90">
+        <div className="dark:glass-effect flex items-center gap-3 rounded-lg bg-white px-3 py-2 text-sm text-gray-500 shadow-sm dark:bg-black/5 dark:text-white/90">
           <Info size={16} />
           前往「設定」&rarr;「設定同步工具」讓您的健康數據與餅餅踏踏同步
         </div>
