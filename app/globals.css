@@ -28,9 +28,10 @@
 
   .dark-gradient {
     background-image: url("/noise.svg"),
-      radial-gradient(at top left, #000 0%, #361337 100%);
+      linear-gradient(to bottom, #010101 50%, #53628d);
     background-size:
       100px 100px,
       cover;
+    background-attachment: fixed;
   }
 }
