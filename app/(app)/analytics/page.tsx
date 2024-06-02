@@ -89,70 +89,81 @@ export default function HistoryPage() {
         </Link>
         <div className="text-center font-semibold">踏踏分析</div>
       </div>
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <SectionTitle>踏踏總計</SectionTitle>
+          <StatItem
+            Icon={Footprints}
+            title="總踏踏"
+            value={
+              res
+                ? (res.aggregate._sum.steps / 10_000).toLocaleString("zh-TW", {
+                    maximumFractionDigits: 2,
+                  })
+                : "0"
+            }
+            unit="萬步"
+          />
+          <StatItem
+            Icon={Compass}
+            title="總距離"
+            value={
+              res?.aggregate._sum.distance.toLocaleString("zh-TW", {
+                maximumFractionDigits: 2,
+              }) ?? 0
+            }
+            unit="公里"
+          />
+          <StatItem
+            Icon={Flame}
+            title="總動態能量"
+            value={
+              res?.aggregate._sum.energy.toLocaleString("zh-TW", {
+                maximumFractionDigits: 0,
+              }) ?? 0
+            }
+            unit="大卡"
+          />
+        </div>
+        <div>
+          <SectionTitle>踏踏平均</SectionTitle>
+          <StatItem
+            Icon={Footprints}
+            title="每小時踏踏"
+            value={
+              res?.aggregate._avg.steps.toLocaleString("zh-TW", {
+                maximumFractionDigits: 2,
+              }) ?? 0
+            }
+            unit="步"
+          />
+          <StatItem
+            Icon={Compass}
+            title="每小時距離"
+            value={
+              res?.aggregate._avg.distance.toLocaleString("zh-TW", {
+                maximumFractionDigits: 2,
+              }) ?? 0
+            }
+            unit="公里"
+          />
+          <StatItem
+            Icon={Flame}
+            title="每小時動態能量"
+            value={
+              res?.aggregate._avg.energy.toLocaleString("zh-TW", {
+                maximumFractionDigits: 2,
+              }) ?? 0
+            }
+            unit="大卡"
+          />
+        </div>
+      </div>
       {res === null && (
         <Loader size={32} className="mx-auto my-10 animate-spin opacity-20" />
       )}
       {res !== null && (
         <>
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <SectionTitle>踏踏總計</SectionTitle>
-              <StatItem
-                Icon={Footprints}
-                title="總踏踏"
-                value={(res.aggregate._sum.steps / 10_000).toLocaleString(
-                  "zh-TW",
-                  {
-                    maximumFractionDigits: 2,
-                  },
-                )}
-                unit="萬步"
-              />
-              <StatItem
-                Icon={Compass}
-                title="總距離"
-                value={res.aggregate._sum.distance.toLocaleString("zh-TW", {
-                  maximumFractionDigits: 2,
-                })}
-                unit="公里"
-              />
-              <StatItem
-                Icon={Flame}
-                title="總動態能量"
-                value={res.aggregate._sum.energy.toLocaleString("zh-TW", {
-                  maximumFractionDigits: 0,
-                })}
-                unit="大卡"
-              />
-            </div>
-            <div>
-              <SectionTitle>踏踏平均</SectionTitle>
-              <StatItem
-                Icon={Footprints}
-                title="每小時踏踏"
-                value={res.aggregate._avg.steps.toLocaleString("zh-TW", {
-                  maximumFractionDigits: 2,
-                })}
-                unit="步"
-              />
-              <StatItem
-                Icon={Compass}
-                title="每小時距離"
-                value={res.aggregate._avg.distance.toLocaleString("zh-TW", {
-                  maximumFractionDigits: 2,
-                })}
-                unit="公里"
-              />
-              <StatItem
-                Icon={Flame}
-                title="每小時動態能量"
-                value={res.aggregate._avg.energy.toLocaleString("zh-TW", {
-                  maximumFractionDigits: 2,
-                })}
-                unit="大卡"
-              />
-            </div>
-          </div>
           <div className="mb-6 text-sm text-gray-600">
             你已經在餅餅踏踏上累計了{" "}
             {res.aggregate._sum.distance.toLocaleString("zh-TW", {
