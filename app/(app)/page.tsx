@@ -74,7 +74,7 @@ export default function Home() {
           unit="大卡"
         />
       </div>
-      {today.length > 0 && (
+      {today.length > 0 && steps > 0 && (
         <div className="mb-2 h-[150px] w-full rounded-lg bg-white shadow-sm">
           <StepChart data={today} />
         </div>
