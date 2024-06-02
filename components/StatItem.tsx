@@ -13,7 +13,7 @@ export default function StatItem({
   Icon: LucideIcon;
 }) {
   return (
-    <div className="relative my-2 flex flex-col rounded-lg bg-white px-3 py-2 shadow-sm dark:bg-white/10">
+    <div className="dark:glass-effect relative my-2 flex flex-col rounded-lg bg-white px-3 py-2 shadow-sm dark:bg-black/5">
       <div className="text-2xl font-light dark:text-white">
         {value}
         <span className="text-xs font-normal text-gray-500 dark:text-white/50">

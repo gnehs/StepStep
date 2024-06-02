@@ -30,10 +30,7 @@ export default function RootLayout({
     } catch (error) {}
   }
   return (
-    <div
-      className="min-h-[100svh] bg-[#f2f2f2] text-gray-950 dark:bg-[#222] dark:text-gray-50"
-      vaul-drawer-wrapper=""
-    >
+    <div className="min-h-[100svh]" vaul-drawer-wrapper="">
       <div className="grow overflow-y-scroll pb-[calc(64px+8px+env(safe-area-inset-bottom))]">
         {children}
       </div>

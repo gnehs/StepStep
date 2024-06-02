@@ -184,7 +184,7 @@ export default function HistoryPage() {
             趟台北高雄來回的距離。
           </div>
           <SectionTitle>過去三十日踏踏時間分布圖</SectionTitle>
-          <div className="my-2 h-[730px] w-full rounded-lg bg-white p-2 shadow-sm dark:bg-white/10">
+          <div className="dark:glass-effect my-2 h-[730px] w-full rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">
             <HeatMap30d data={res.last30dAggregate} />
           </div>
         </>

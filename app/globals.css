@@ -6,4 +6,31 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .glass-effect {
+    --bg-board-color: lch(76.67 38.33 203.29 / 0.1);
+    background-image: linear-gradient(
+      140deg,
+      var(--bg-board-color) 28.7%,
+      color-mix(in lch, var(--bg-board-color) 30%, transparent)
+    );
+    box-shadow:
+      rgba(255, 255, 255, 0.06) 1px 1px 1px 0px inset,
+      rgba(255, 255, 255, 0.01) -1px -1px 1px 0px inset,
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+    backdrop-filter: blur(8px);
+  }
+
+  .glass-effect.hoverable {
+    @apply bg-white bg-opacity-0 transition-colors duration-150 hover:bg-opacity-[0.025] active:bg-opacity-5;
+  }
+
+  .dark-gradient {
+    background-image: url("/noise.svg"),
+      radial-gradient(at top left, #000 0%, #361337 100%);
+    background-size:
+      100px 100px,
+      cover;
+  }
 }

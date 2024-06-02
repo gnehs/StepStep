@@ -10,7 +10,7 @@ function Step({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex w-[80%] shrink-0 snap-center snap-always flex-col rounded-lg bg-white p-2 dark:bg-white/10">
+    <div className="dark:glass-effect flex w-[80%] shrink-0 snap-center snap-always flex-col rounded-lg bg-white p-2 dark:bg-black/5">
       {imgSrc && (
         <img
           src={imgSrc}

@@ -48,7 +48,7 @@ export default function Settings() {
         </Link>
       </div>
       <div className="flex flex-col gap-2">
-        <div className="rounded-lg bg-white px-3 py-2 shadow-sm dark:bg-white/10">
+        <div className="dark:glass-effect rounded-lg bg-white px-3 py-2 shadow-sm dark:bg-black/5">
           <div className="text-sm opacity-75">上次同步</div>
           <div className="font-semibold">
             {user ? (
@@ -62,7 +62,7 @@ export default function Settings() {
             )}
           </div>
         </div>
-        <div className="rounded-lg bg-white px-3 py-2 shadow-sm dark:bg-white/10">
+        <div className="dark:glass-effect rounded-lg bg-white px-3 py-2 shadow-sm dark:bg-black/5">
           <div className="text-sm opacity-75">同步 API 網址</div>
           <div className="flex gap-2 font-semibold">
             <span className="truncate">{syncToken}</span>

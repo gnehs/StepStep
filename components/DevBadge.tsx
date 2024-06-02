@@ -8,7 +8,7 @@ export default function DevBadge() {
   }, []);
   if (!show) return null;
   return (
-    <div className="fixed right-2 top-2 z-50 rounded bg-red-500 p-1 text-xs text-white">
+    <div className="dark:glass-effect fixed right-2 top-2 z-50 rounded bg-red-500 p-1 text-xs text-white dark:bg-red-500/20">
       localhost
     </div>
   );

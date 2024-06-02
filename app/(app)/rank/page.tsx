@@ -20,7 +20,7 @@ export default async function Rank() {
                 day: "numeric",
               })}
             </SectionTitle>
-            <div className="rounded-lg bg-white p-2 shadow-sm dark:bg-white/10">
+            <div className="dark:glass-effect rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">
               {item.records.map((item, index: number) => (
                 <div
                   key={item.user?.id ?? "" + index}
@@ -45,9 +45,9 @@ export default async function Rank() {
                   </div>
                   <div
                     className={twMerge(
-                      "rounded-full border border-gray-200 bg-gray-100 p-0.5 px-2 text-xs text-gray-600 empty:hidden",
+                      "dark:glass-effect rounded-full border border-gray-200 bg-gray-100 p-0.5 px-2 text-xs text-gray-600 empty:hidden dark:border-0 dark:bg-gray-800/20 dark:text-white/75",
                       index === 0 &&
-                        "border-yellow-300 bg-yellow-100 text-yellow-600",
+                        "border-yellow-300 bg-yellow-100 text-yellow-600 dark:bg-yellow-800/20 dark:text-yellow-200/80",
                     )}
                   >
                     {index === 0 && "步步冠軍"}

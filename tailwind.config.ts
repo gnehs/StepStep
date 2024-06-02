@@ -11,6 +11,9 @@ const config: Config = {
       fontFamily: {
         sans: ["Inter", "Noto Sans TC", "sans-serif"],
       },
+      backgroundImage: {
+        noise: "url('/noise.svg')",
+      },
     },
   },
   plugins: [],

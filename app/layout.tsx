@@ -84,7 +84,7 @@ export default function RootLayout({
         <link rel="icon" href="/logo-favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/maskable_icon.png" type="image/png" />
       </head>
-      <body className="bg-[#f2f2f2] pt-[env(safe-area-inset-top)] text-[#111] dark:bg-[#222] dark:text-gray-50">
+      <body className="dark:dark-gradient bg-[#f2f2f2] pt-[env(safe-area-inset-top)] text-[#111] dark:text-gray-50">
         {children}
         <DevBadge />
       </body>

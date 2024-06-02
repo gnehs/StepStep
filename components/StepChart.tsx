@@ -14,17 +14,18 @@ export default function StepChart({ data }: { data: Record[] }) {
       data={chartData}
       keys={["步數"]}
       indexBy="time"
-      margin={{ top: 30, right: 0, bottom: 0, left: 0 }}
+      margin={{ top: 24, right: 0, bottom: 0, left: 0 }}
       indexScale={{ type: "band", round: true }}
       enableGridY={false}
       enableLabel={false}
       ariaLabel="Steps bar chart"
-      colors={{ scheme: "blues" }}
       theme={{
         text: {
           fill: "currentColor",
+          fontSize: 10,
         },
       }}
+      borderRadius={4}
       enableTotals
       valueFormat={(val) => val.toLocaleString()}
       tooltip={({ indexValue, value }) => (
