@@ -5,5 +5,6 @@ export async function getSyncStatus(token: string) {
   if (!user) {
     return { success: false, message: "無效的 token" };
   }
+  user.password = "";
   return { success: true, user, lastSync: user.lastSync };
 }
