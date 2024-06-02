@@ -7,7 +7,7 @@ export default function Input({
   return (
     <input
       className={twMerge(
-        "w-full rounded-lg border-2 border-transparent bg-white px-4 py-2 outline-none focus:border-blue-500",
+        "w-full rounded-lg border-2 border-transparent bg-white px-4 py-2 outline-none focus:border-blue-500 dark:bg-white/10",
         className,
       )}
       {...props}

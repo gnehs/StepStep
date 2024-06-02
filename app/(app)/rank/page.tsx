@@ -20,19 +20,20 @@ export default async function Rank() {
                 day: "numeric",
               })}
             </SectionTitle>
-            <div className="rounded-lg bg-white p-2 shadow-sm">
+            <div className="rounded-lg bg-white p-2 shadow-sm dark:bg-white/10">
               {item.records.map((item, index: number) => (
                 <div
                   key={item.user?.id ?? "" + index}
                   className={twMerge(
                     "flex items-center justify-between gap-2",
-                    index !== 0 && "mt-2 border-t border-gray-100 pt-2",
+                    index !== 0 &&
+                      "mt-2 border-t border-gray-100 pt-2 dark:border-white/10",
                   )}
                 >
                   <div className="flex items-center gap-2">
                     <img
                       src={`/api/v1/avatar?id=${item.user?.id}`}
-                      className="size-10 rounded"
+                      className="size-10 rounded bg-white"
                     />
                     <div>
                       <div className="font-bold">{item.user?.name}</div>

@@ -41,7 +41,7 @@ export default function Home() {
         <PageTitle>餅餅踏踏</PageTitle>
         <Link
           href="/analytics"
-          className="flex size-10 items-center justify-center rounded-full bg-white text-blue-500 shadow-sm"
+          className="flex size-10 items-center justify-center rounded-full bg-white text-blue-500 shadow-sm dark:bg-white/10 dark:text-blue-300"
         >
           <BarChart3 strokeWidth={2} />
         </Link>
@@ -75,14 +75,17 @@ export default function Home() {
         />
       </div>
       {today.length > 0 && steps > 0 && (
-        <div className="mb-2 h-[150px] w-full rounded-lg bg-white shadow-sm">
+        <div className="mb-2 h-[150px] w-full rounded-lg bg-white shadow-sm dark:bg-white/10">
           <StepChart data={today} />
         </div>
       )}
       {history.length !== 0 && <SectionTitle>歷史紀錄</SectionTitle>}
       {history.map((item, index) => (
-        <div key={index} className="my-2 rounded-lg bg-gray-50 shadow-sm">
-          <div className="rounded-t-lg bg-white px-3 py-2 text-sm shadow-sm">
+        <div
+          key={index}
+          className="my-2 rounded-lg bg-gray-50 shadow-sm dark:bg-white/10"
+        >
+          <div className="rounded-t-lg bg-white px-3 py-2 text-sm shadow-sm dark:bg-white/10">
             {item.date.toLocaleDateString("zh-TW", {
               weekday: "long",
               year: "numeric",
@@ -121,7 +124,7 @@ export default function Home() {
       ))}
 
       {history.length === 0 && (
-        <div className="flex items-center gap-3 rounded-lg bg-white px-3 py-2 text-sm text-gray-500 shadow-sm">
+        <div className="flex items-center gap-3 rounded-lg bg-white px-3 py-2 text-sm text-gray-500 shadow-sm dark:bg-white/10 dark:text-white/90">
           <Info size={16} />
           前往「設定」&rarr;「設定同步工具」讓您的健康數據與餅餅踏踏同步
         </div>

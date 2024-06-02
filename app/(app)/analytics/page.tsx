@@ -50,6 +50,11 @@ function HeatMap30d({ data }: { data: any }) {
         tickSize: 5,
         tickPadding: 2,
       }}
+      theme={{
+        text: {
+          fill: "currentColor",
+        },
+      }}
       colors={{
         type: "sequential",
         scheme: "blue_purple",
@@ -83,7 +88,10 @@ export default function HistoryPage() {
   return (
     <Container>
       <div className="mb-3 grid grid-cols-3 items-center gap-2 py-2">
-        <Link href="/" className="flex items-center gap-1 text-blue-500">
+        <Link
+          href="/"
+          className="flex items-center gap-1 text-blue-500 dark:text-blue-300"
+        >
           <ChevronLeft size={24} />
           返回
         </Link>
@@ -164,7 +172,7 @@ export default function HistoryPage() {
       )}
       {res !== null && (
         <>
-          <div className="mb-6 text-sm text-gray-600">
+          <div className="mb-6 text-sm text-gray-600 dark:text-white/40">
             你已經在餅餅踏踏上累計了{" "}
             {res.aggregate._sum.distance.toLocaleString("zh-TW", {
               maximumFractionDigits: 2,
@@ -176,7 +184,7 @@ export default function HistoryPage() {
             趟台北高雄來回的距離。
           </div>
           <SectionTitle>過去三十日踏踏時間分布圖</SectionTitle>
-          <div className="my-2 h-[730px] w-full rounded-lg bg-white p-2 shadow-sm">
+          <div className="my-2 h-[730px] w-full rounded-lg bg-white p-2 shadow-sm dark:bg-white/10">
             <HeatMap30d data={res.last30dAggregate} />
           </div>
         </>

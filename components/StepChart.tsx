@@ -19,6 +19,12 @@ export default function StepChart({ data }: { data: Record[] }) {
       enableGridY={false}
       enableLabel={false}
       ariaLabel="Steps bar chart"
+      colors={{ scheme: "blues" }}
+      theme={{
+        text: {
+          fill: "currentColor",
+        },
+      }}
       enableTotals
       valueFormat={(val) => val.toLocaleString()}
       tooltip={({ indexValue, value }) => (

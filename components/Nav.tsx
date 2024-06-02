@@ -20,8 +20,8 @@ function NavButton({
       className={twMerge(
         "flex flex-col items-center gap-1 p-2 text-xs",
         active
-          ? "font-bold text-blue-500"
-          : "text-gray-500 hover:text-gray-700",
+          ? "font-bold text-blue-500 dark:text-blue-400"
+          : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300",
       )}
       href={href}
     >
@@ -32,7 +32,7 @@ function NavButton({
 }
 export default function Nav() {
   return (
-    <div className="fixed bottom-0 z-10 w-full bg-white pb-[env(safe-area-inset-bottom)] drop-shadow-2xl">
+    <div className="fixed bottom-0 z-10 w-full bg-white pb-[env(safe-area-inset-bottom)] drop-shadow-2xl dark:bg-[#333]">
       <Container>
         <div className="flex w-full justify-around gap-2">
           <NavButton href="/" Icon={Cookie}>
