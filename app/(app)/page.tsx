@@ -83,7 +83,7 @@ export default function Home() {
       {history.map((item, index) => (
         <div
           key={index}
-          className="dark:glass-effect my-2 rounded-lg bg-gray-50 shadow-sm dark:bg-black/5"
+          className="dark:glass-effect bg-primary-50 border-primary-100 my-2 rounded-lg border shadow-sm dark:border-0 dark:bg-black/5"
         >
           <div className="rounded-t-lg bg-white px-3 py-2 text-sm shadow-sm dark:bg-white/5">
             {item.date.toLocaleDateString("zh-TW", {

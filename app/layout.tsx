@@ -52,8 +52,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#191717" },
-    { media: "(prefers-color-scheme: light)", color: "#f2f2f2" },
+    { media: "(prefers-color-scheme: dark)", color: "#202D3A" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f8fa" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -84,7 +84,7 @@ export default function RootLayout({
         <link rel="icon" href="/logo-favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/maskable_icon.png" type="image/png" />
       </head>
-      <body className="dark:dark-gradient bg-[#f2f2f2] pt-[env(safe-area-inset-top)] text-[#111] dark:text-gray-50">
+      <body className="dark:bg-primary-950 dark:text-primary-50 bg-primary-50 pt-[env(safe-area-inset-top)] text-[#111]">
         {children}
         <DevBadge />
       </body>
