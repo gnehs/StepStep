@@ -25,13 +25,4 @@
   .glass-effect.hoverable {
     @apply bg-white bg-opacity-0 transition-colors duration-150 hover:bg-opacity-[0.025] active:bg-opacity-5;
   }
-
-  .dark-gradient {
-    background-image: url("/noise.svg"),
-      linear-gradient(to bottom, #010101 50%, #53628d);
-    background-size:
-      100px 100px,
-      cover;
-    background-attachment: fixed;
-  }
 }
