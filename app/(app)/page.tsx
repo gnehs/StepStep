@@ -93,7 +93,7 @@ export default function Home() {
               day: "numeric",
             })}
           </div>
-          <div className="grid grid-cols-3 gap-2 rounded-b-lg bg-white bg-noise px-3 py-2 dark:bg-transparent">
+          <div className="grid grid-cols-3 gap-2 rounded-b-lg bg-white px-3 py-2 dark:bg-black/10">
             <div>
               <div className="text-xs opacity-50">步數</div>
               <div>

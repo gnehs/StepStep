@@ -21,11 +21,15 @@ function NavButton({
         "flex flex-col items-center gap-1 p-2 text-xs",
         active
           ? "text-primary-500 dark:text-primary-400 font-bold"
-          : "text-primary-500 hover:text-primary-700 dark:hover:text-primary-300 dark:text-[#7F7F7F]",
+          : "text-primary-300 hover:text-primary-400 dark:text-primary-600 dark:hover:text-primary-500",
       )}
       href={href}
     >
-      <Icon size={28} strokeWidth={active ? 2 : 1.5} />
+      <Icon
+        size={28}
+        strokeWidth={active ? 2 : 1.5}
+        className="transition-all"
+      />
       {children}
     </Link>
   );
