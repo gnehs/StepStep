@@ -54,46 +54,60 @@ export default function InstallSync() {
                   </AnimatePresence>
                 </button>
               </div>
-              {platform === "ios" && (
-                <>
-                  <div className="-mx-4">
-                    <SyncGuide />
-                  </div>
-                  <a
-                    href="https://www.icloud.com/shortcuts/93567aa7d9ef411099f9c794ec2ed3e1"
-                    target="_blank"
-                    className="mt-2 block rounded-lg border border-blue-700 bg-gradient-to-b from-blue-500 to-blue-700 p-2 text-center font-semibold shadow-sm hover:to-blue-800"
+              <AnimatePresence mode="sync">
+                {platform === "ios" && (
+                  <motion.div
+                    key="ios"
+                    className="-mx-4 overflow-hidden"
+                    initial={{ opacity: 0, height: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, height: "auto", scale: 1 }}
+                    exit={{ opacity: 0, height: 0, scale: 0.5 }}
                   >
-                    <span className="text-white drop-shadow-lg">
-                      安裝同步 iOS 捷徑
-                    </span>
-                  </a>
-                </>
-              )}
-              {platform === "android" && (
-                <>
-                  <div className="dark:glass-effect flex w-full shrink-0 flex-col rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">
-                    <img
-                      src="/android.jpg"
-                      className="h-[378px] w-full rounded object-cover"
-                    />
-                    <div className="mt-2">
-                      <h2 className="font-bold">餅餅踏踏記錄器</h2>
-                      <div className="text-sm opacity-75">
-                        我們提供了同步 APP，可以將您的步步資料同步到餅餅踏踏。
+                    <SyncGuide />
+                  </motion.div>
+                )}
+                {platform === "android" && (
+                  <motion.div
+                    key="android"
+                    className="overflow-hidden"
+                    initial={{ opacity: 0, height: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, height: "auto", scale: 1 }}
+                    exit={{ opacity: 0, height: 0, scale: 0.5 }}
+                  >
+                    <div className="dark:glass-effect w-full rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">
+                      <img src="/android.jpg" className="w-full rounded" />
+                      <div className="mt-2">
+                        <h2 className="font-bold">餅餅踏踏記錄器</h2>
+                        <div className="text-sm opacity-75">
+                          我們提供了同步 APP，可以將您的步步資料同步到餅餅踏踏。
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <a
-                    href="https://github.com/gnehs/StepStep-RN/releases/latest"
-                    target="_blank"
-                    className="mt-2 block rounded-lg border border-blue-700 bg-gradient-to-b from-blue-500 to-blue-700 p-2 text-center font-semibold shadow-sm hover:to-blue-800"
-                  >
-                    <span className="text-white drop-shadow-lg">
-                      安裝同步 APP
-                    </span>
-                  </a>
-                </>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {platform === "ios" && (
+                <a
+                  href="https://www.icloud.com/shortcuts/93567aa7d9ef411099f9c794ec2ed3e1"
+                  target="_blank"
+                  className="mt-2 block rounded-lg border border-blue-700 bg-gradient-to-b from-blue-500 to-blue-700 p-2 text-center font-semibold shadow-sm hover:to-blue-800"
+                >
+                  <span className="text-white drop-shadow-lg">
+                    安裝同步 iOS 捷徑
+                  </span>
+                </a>
+              )}
+              {platform === "android" && (
+                <a
+                  href="https://github.com/gnehs/StepStep-RN/releases/latest"
+                  target="_blank"
+                  className="mt-2 block rounded-lg border border-blue-700 bg-gradient-to-b from-blue-500 to-blue-700 p-2 text-center font-semibold shadow-sm hover:to-blue-800"
+                >
+                  <span className="text-white drop-shadow-lg">
+                    安裝同步 APP
+                  </span>
+                </a>
               )}
             </div>
           </Drawer.Content>
