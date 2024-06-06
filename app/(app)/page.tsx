@@ -83,7 +83,7 @@ export default function Home() {
       {history.map((item, index) => (
         <div
           key={index}
-          className="dark:glass-effect bg-primary-50 my-2 rounded-lg shadow-sm dark:bg-black/5"
+          className="dark:glass-effect my-2 rounded-lg bg-white shadow-sm dark:bg-black/5"
         >
           <div className="rounded-t-lg bg-white px-3 py-2 text-sm drop-shadow-sm dark:bg-transparent">
             {item.date.toLocaleDateString("zh-TW", {
@@ -93,7 +93,7 @@ export default function Home() {
               day: "numeric",
             })}
           </div>
-          <div className="grid grid-cols-3 gap-2 rounded-b-lg bg-white px-3 py-2 dark:bg-black/10">
+          <div className="grid grid-cols-3 gap-2 rounded-b-lg bg-[#f2f2f2]/25 px-3 py-2 dark:bg-black/10">
             <div>
               <div className="text-xs opacity-50">步數</div>
               <div>
