@@ -30,7 +30,7 @@ export default function InstallSync() {
                         className="dark:glass-effect absolute left-0 top-0 h-full w-full rounded-[6px] bg-white bg-noise font-semibold shadow-sm dark:bg-black/5"
                         layoutId="switcher"
                         style={{
-                          originY: 0,
+                          originY: "0px",
                         }}
                       />
                     )}
@@ -47,7 +47,7 @@ export default function InstallSync() {
                         className="dark:glass-effect absolute left-0 top-0 h-full w-full rounded-[6px] bg-white bg-noise font-semibold shadow-sm dark:bg-black/5"
                         layoutId="switcher"
                         style={{
-                          originY: 0,
+                          originY: "0px",
                         }}
                       />
                     )}
