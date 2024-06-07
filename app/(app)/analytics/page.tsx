@@ -8,6 +8,7 @@ import { useLocalStorage } from "usehooks-ts";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { getAnalyticsData } from "@/services/actions/analytics";
+import { AreaChart } from "@tremor/react";
 import StatItem from "@/components/StatItem";
 function HeatMap30d({ data }: { data: any }) {
   const parsedData = [];
@@ -85,6 +86,44 @@ export default function HistoryPage() {
     }
     getData();
   }, [token]);
+  const customTooltip = (props) => {
+    const { payload, active } = props;
+    if (!active || !payload) return null;
+    return (
+      <div className="rounded-tremor-default border-tremor-border bg-tremor-background text-tremor-default shadow-tremor-dropdown w-30 z-10 border p-2">
+        {payload.map((category: any, idx: string) => (
+          <div key={idx}>
+            <p className="text-tremor-content tabular-nums">
+              {category.payload.date}
+            </p>
+            <p className="text-tremor-content-emphasis font-medium tabular-nums">
+              {category.value.toLocaleString()}{" "}
+              <span className="text-tremor-content font-normal opacity-50">
+                步
+              </span>
+            </p>
+            <p className="text-tremor-content-emphasis font-medium tabular-nums">
+              {category.payload.distance.toLocaleString("zh-TW", {
+                maximumFractionDigits: 2,
+              })}{" "}
+              <span className="text-tremor-content font-normal opacity-50">
+                公里
+              </span>
+            </p>
+            <p className="text-tremor-content-emphasis font-medium tabular-nums">
+              {category.payload.energy.toLocaleString("zh-TW", {
+                maximumFractionDigits: 2,
+              })}{" "}
+              <span className="text-tremor-content font-normal opacity-50">
+                大卡
+              </span>
+            </p>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <Container>
       <div className="mb-3 grid grid-cols-3 items-center gap-2 py-2">
@@ -182,6 +221,29 @@ export default function HistoryPage() {
               maximumFractionDigits: 1,
             })}{" "}
             趟台北高雄來回的距離。
+          </div>
+          <SectionTitle>過去三十日步數</SectionTitle>
+          <div className="dark:glass-effect my-2 mb-6 w-full rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">
+            <AreaChart
+              className="h-72"
+              data={res.last30dByDay
+                .map((d: any) => ({
+                  date: new Date(d.timestamp).toLocaleDateString("zh-TW", {
+                    month: "numeric",
+                    day: "2-digit",
+                  }),
+                  步數: d.steps,
+                  ...d,
+                }))
+                .reverse()}
+              index="date"
+              categories={["步數"]}
+              colors={["blue"]}
+              customTooltip={customTooltip}
+              showYAxis={false}
+              showLegend={false}
+              startEndOnly
+            />
           </div>
           <SectionTitle>過去三十日踏踏時間分布圖</SectionTitle>
           <div className="dark:glass-effect my-2 h-[730px] w-full rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">

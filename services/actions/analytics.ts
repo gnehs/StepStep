@@ -55,6 +55,36 @@ export async function getAnalyticsData(token: string) {
       };
     }
   }
+  // 30d by day
+  let last30dByDay = [] as {
+    timestamp: Date;
+    distance: number;
+    energy: number;
+    steps: number;
+  }[];
+  // group by day
+  for (let i = 0; i < 30; i++) {
+    let day = new Date();
+    day.setDate(day.getDate() - i);
+    day.setHours(0, 0, 0, 0);
+    let filteredData = last30dData.filter(
+      (record) => record.timestamp.toDateString() === day.toDateString(),
+    );
+    let reducedData = filteredData.reduce(
+      (acc, record) => ({
+        distance: (acc.distance ?? 0) + record.distance,
+        energy: (acc.energy ?? 0) + record.energy,
+        steps: (acc.steps ?? 0) + record.steps,
+      }),
+      {} as Record<string, number>,
+    );
+    last30dByDay.push({
+      timestamp: day,
+      distance: reducedData.distance,
+      energy: reducedData.energy,
+      steps: reducedData.steps,
+    });
+  }
 
-  return { success: true, data: { aggregate, last30dAggregate } };
+  return { success: true, data: { aggregate, last30dAggregate, last30dByDay } };
 }
