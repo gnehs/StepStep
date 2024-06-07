@@ -1,5 +1,5 @@
-import { ResponsiveBar } from "@nivo/bar";
 import type { Record } from "@prisma/client";
+import { BarChart } from "@tremor/react";
 export default function StepChart({ data }: { data: Record[] }) {
   const chartData = data.map((record) => ({
     time: new Date(record.timestamp).toLocaleTimeString("zh-TW", {
@@ -10,30 +10,15 @@ export default function StepChart({ data }: { data: Record[] }) {
     步數: record.steps,
   }));
   return (
-    <ResponsiveBar
+    <BarChart
+      className="h-36"
       data={chartData}
-      keys={["步數"]}
-      indexBy="time"
-      margin={{ top: 24, right: 0, bottom: 0, left: 0 }}
-      indexScale={{ type: "band", round: true }}
-      enableGridY={false}
-      enableLabel={false}
-      ariaLabel="Steps bar chart"
-      theme={{
-        text: {
-          fill: "currentColor",
-          fontSize: 10,
-        },
-      }}
-      borderRadius={4}
-      enableTotals
-      valueFormat={(val) => val.toLocaleString()}
-      tooltip={({ indexValue, value }) => (
-        <div className="rounded-xl bg-white px-2 py-1 text-sm shadow-lg">
-          <span className="mr-1 text-gray-500"> {indexValue}</span>
-          <span className="text-gray-700"> {value.toLocaleString()} 步</span>
-        </div>
-      )}
+      index="time"
+      categories={["步數"]}
+      colors={["blue"]}
+      showYAxis={false}
+      showLegend={false}
+      showGridLines={false}
     />
   );
 }

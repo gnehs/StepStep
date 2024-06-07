@@ -75,7 +75,7 @@ export default function Home() {
         />
       </div>
       {today.length > 0 && steps > 0 && (
-        <div className="dark:glass-effect mb-2 h-[150px] w-full rounded-lg bg-white pb-1 shadow-sm dark:bg-black/5">
+        <div className="dark:glass-effect mb-2 w-full rounded-lg bg-white p-1 pb-0 shadow-sm dark:bg-black/5">
           <StepChart data={today} />
         </div>
       )}
