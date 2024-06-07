@@ -18,7 +18,6 @@ export default function StepChart({ data }: { data: Record[] }) {
       colors={["blue"]}
       showYAxis={false}
       showLegend={false}
-      showGridLines={false}
     />
   );
 }
