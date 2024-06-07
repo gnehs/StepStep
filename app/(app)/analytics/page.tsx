@@ -8,7 +8,7 @@ import { useLocalStorage } from "usehooks-ts";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { getAnalyticsData } from "@/services/actions/analytics";
-import { AreaChart } from "@tremor/react";
+import { BarChart } from "@tremor/react";
 import StatItem from "@/components/StatItem";
 function HeatMap30d({ data }: { data: any }) {
   const parsedData = [];
@@ -86,35 +86,35 @@ export default function HistoryPage() {
     }
     getData();
   }, [token]);
-  const customTooltip = (props) => {
+  const customTooltip = (props: any) => {
     const { payload, active } = props;
     if (!active || !payload) return null;
     return (
-      <div className="rounded-tremor-default border-tremor-border bg-tremor-background text-tremor-default shadow-tremor-dropdown w-30 z-10 border p-2">
+      <div className="w-30 z-10 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown">
         {payload.map((category: any, idx: string) => (
           <div key={idx}>
-            <p className="text-tremor-content tabular-nums">
+            <p className="tabular-nums text-tremor-content">
               {category.payload.date}
             </p>
-            <p className="text-tremor-content-emphasis font-medium tabular-nums">
+            <p className="font-medium tabular-nums text-tremor-content-emphasis">
               {category.value.toLocaleString()}{" "}
-              <span className="text-tremor-content font-normal opacity-50">
+              <span className="font-normal text-tremor-content opacity-50">
                 步
               </span>
             </p>
-            <p className="text-tremor-content-emphasis font-medium tabular-nums">
+            <p className="font-medium tabular-nums text-tremor-content-emphasis">
               {category.payload.distance.toLocaleString("zh-TW", {
                 maximumFractionDigits: 2,
               })}{" "}
-              <span className="text-tremor-content font-normal opacity-50">
+              <span className="font-normal text-tremor-content opacity-50">
                 公里
               </span>
             </p>
-            <p className="text-tremor-content-emphasis font-medium tabular-nums">
+            <p className="font-medium tabular-nums text-tremor-content-emphasis">
               {category.payload.energy.toLocaleString("zh-TW", {
                 maximumFractionDigits: 2,
               })}{" "}
-              <span className="text-tremor-content font-normal opacity-50">
+              <span className="font-normal text-tremor-content opacity-50">
                 大卡
               </span>
             </p>
@@ -224,7 +224,7 @@ export default function HistoryPage() {
           </div>
           <SectionTitle>過去三十日步數</SectionTitle>
           <div className="dark:glass-effect my-2 mb-6 w-full rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">
-            <AreaChart
+            <BarChart
               className="h-72"
               data={res.last30dByDay
                 .map((d: any) => ({
@@ -242,7 +242,6 @@ export default function HistoryPage() {
               customTooltip={customTooltip}
               showYAxis={false}
               showLegend={false}
-              startEndOnly
             />
           </div>
           <SectionTitle>過去三十日踏踏時間分布圖</SectionTitle>
