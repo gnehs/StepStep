@@ -38,13 +38,13 @@ export default [
   {
     id: "daywalker",
     name: "晝行者",
-    description: "一天內在白天累積超過 15,000 步",
+    description: "在白天累積超過 15,000 步",
     icon: "🌞",
   },
   {
     id: "nightwalker",
     name: "夜行者",
-    description: "一天內在晚間累積超過 15,000 步",
+    description: "在晚間累積超過 15,000 步",
     icon: "🌙",
   },
   {
@@ -52,6 +52,12 @@ export default [
     name: "午夜行者",
     description: "在午夜時分累積超過 15,000 步",
     icon: "🛌",
+  },
+  {
+    id: "lazy-bones",
+    name: "懶骨頭",
+    description: "單日步數少於 750 步",
+    icon: "🦴",
   },
   {
     id: "country-jp",
