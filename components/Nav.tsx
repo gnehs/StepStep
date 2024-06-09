@@ -1,7 +1,7 @@
 "use client";
 import Container from "@/components/Container";
 import { usePathname } from "next/navigation";
-import { Cog, User, Cookie, BarChart2 } from "lucide-react";
+import { Cog, Cookie, BarChart2 } from "lucide-react";
 import { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
@@ -20,7 +20,7 @@ function NavButton({
       className={twMerge(
         "flex flex-col items-center gap-1 p-2 text-xs",
         active
-          ? "text-primary-500 dark:text-primary-400 font-bold"
+          ? "font-bold text-primary-500 dark:text-primary-400"
           : "text-primary-300 hover:text-primary-400 dark:text-primary-600 dark:hover:text-primary-500",
       )}
       href={href}
@@ -36,7 +36,7 @@ function NavButton({
 }
 export default function Nav() {
   return (
-    <div className="dark:bg-primary-900 fixed bottom-0 z-10 w-full bg-white pb-[env(safe-area-inset-bottom)] drop-shadow-2xl">
+    <div className="fixed bottom-0 z-10 w-full bg-white pb-[env(safe-area-inset-bottom)] drop-shadow-2xl dark:bg-primary-900">
       <Container>
         <div className="flex w-full justify-around gap-2">
           <NavButton href="/" Icon={Cookie}>

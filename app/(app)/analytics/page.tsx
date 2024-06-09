@@ -63,11 +63,11 @@ function HeatMap30d({ data }: { data: any }) {
       }}
       labelTextColor="#333"
       tooltip={({ cell }) => (
-        <div className="rounded-xl bg-white px-2 py-1 text-sm shadow-lg">
-          <span className="mr-1 text-gray-500">
+        <div className="dark:glass-effect rounded-xl bg-white px-2 py-1 text-sm shadow-lg dark:bg-primary-950/50 dark:text-white">
+          <span className="mr-1 opacity-75">
             週{cell.data.x} {cell.serieId}
           </span>
-          <span className="text-gray-700">{cell.value?.toFixed(2)} 公里</span>
+          <span>{cell.value?.toFixed(2)} 公里</span>
         </div>
       )}
     />
@@ -90,34 +90,30 @@ export default function HistoryPage() {
     const { payload, active } = props;
     if (!active || !payload) return null;
     return (
-      <div className="w-30 z-10 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown">
+      <div className="w-30 dark:glass-effect z-10 rounded-xl bg-white text-tremor-default tabular-nums shadow-lg dark:bg-primary-950/50 dark:text-white">
         {payload.map((category: any, idx: string) => (
           <div key={idx}>
-            <p className="tabular-nums text-tremor-content">
+            <div className="border-b border-tremor-border/10 p-1 px-3 font-bold">
               {category.payload.date}
-            </p>
-            <p className="font-medium tabular-nums text-tremor-content-emphasis">
-              {category.value.toLocaleString()}{" "}
-              <span className="font-normal text-tremor-content opacity-50">
-                步
-              </span>
-            </p>
-            <p className="font-medium tabular-nums text-tremor-content-emphasis">
-              {category.payload.distance.toLocaleString("zh-TW", {
-                maximumFractionDigits: 2,
-              })}{" "}
-              <span className="font-normal text-tremor-content opacity-50">
-                公里
-              </span>
-            </p>
-            <p className="font-medium tabular-nums text-tremor-content-emphasis">
-              {category.payload.energy.toLocaleString("zh-TW", {
-                maximumFractionDigits: 2,
-              })}{" "}
-              <span className="font-normal text-tremor-content opacity-50">
-                大卡
-              </span>
-            </p>
+            </div>
+            <div className="p-1 px-3">
+              <p className="font-medium">
+                {category.value.toLocaleString()}{" "}
+                <span className="text-xs font-normal opacity-50">步</span>
+              </p>
+              <p className="font-medium">
+                {category.payload.distance.toLocaleString("zh-TW", {
+                  maximumFractionDigits: 2,
+                })}{" "}
+                <span className="text-xs font-normal opacity-50">公里</span>
+              </p>
+              <p className="font-medium">
+                {category.payload.energy.toLocaleString("zh-TW", {
+                  maximumFractionDigits: 2,
+                })}{" "}
+                <span className="text-xs font-normal opacity-50">大卡</span>
+              </p>
+            </div>
           </div>
         ))}
       </div>
