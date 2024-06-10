@@ -36,7 +36,7 @@ export default function Page() {
         <div className="text-center font-semibold">獎章</div>
       </div>
       {userBadges === null && <Loader />}
-      {userBadges?.length > 0 && (
+      {userBadges !== null && userBadges.length > 0 && (
         <div className="flex flex-col gap-2">
           {userBadges.map((badge) => {
             const info = getBadgeById(badge.badgeId);
