@@ -27,7 +27,9 @@ export async function getRank() {
       },
     });
 
-    records = records.sort((a, b) => (b._sum.steps ?? 0) - (a._sum.steps ?? 0));
+    records = records.sort(
+      (a, b) => (b._sum.distance ?? 0) - (a._sum.distance ?? 0),
+    );
     records = records.slice(0, 10);
     let parsedRecords = await Promise.all(
       records.map(async (record) => {
@@ -44,7 +46,7 @@ export async function getRank() {
           ...record._sum,
           user,
         };
-      })
+      }),
     );
     historyRecords.push({
       date,
