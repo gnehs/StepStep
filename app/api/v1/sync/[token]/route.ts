@@ -1,14 +1,15 @@
 import { getUserBySyncToken } from "@/services/actions/auth";
+import { checkAndGiveBadge } from "@/services/actions/badge";
 import prisma from "@/services/prisma";
 export async function POST(request: Request) {
   const id = request.url.split("/").pop();
   const user = await getUserBySyncToken(id!);
   if (!user) {
     return new Response(
-      JSON.stringify({ success: false, message: "無效的 token" }),
+      JSON.stringify({ success: false, message: "令牌無效" }),
       {
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
   }
   const data = (await request.json()) as {
@@ -50,6 +51,7 @@ export async function POST(request: Request) {
     where: { id: user.id },
     data: { lastSync: new Date() },
   });
+  await checkAndGiveBadge({ id: user.id });
   if (data.time.length > 0) {
     return new Response(`${user.name}，已同步 ${data.time.length} 筆資料`, {
       headers: { "Content-Type": "application/json" },
@@ -59,7 +61,7 @@ export async function POST(request: Request) {
       `${user.name}，沒有接受到任何健康資料，請檢查來源是否正確`,
       {
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
   }
 }

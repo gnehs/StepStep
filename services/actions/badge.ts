@@ -6,7 +6,6 @@ export async function getBadgeData(token: string) {
   if (!user) {
     return [];
   }
-  await checkAndGiveBadge(user.id);
   let badgeData = await prisma.badge.findMany({
     where: {
       userId: user.id,
@@ -50,8 +49,7 @@ async function giveUserBadge(
   }
 }
 
-async function checkAndGiveBadge(userId: string) {
-  console.time(`fetch records for user ${userId}`);
+export async function checkAndGiveBadge({ id }: { id: string }) {
   let records = await prisma.record.groupBy({
     by: ["userId"],
     _sum: {
@@ -60,17 +58,17 @@ async function checkAndGiveBadge(userId: string) {
       energy: true,
     },
     where: {
-      userId: userId,
+      userId: id,
     },
   });
-  console.timeEnd(`fetch records for user ${userId}`);
+
   if ((records[0]._sum.steps ?? 0) >= 1) {
-    await giveUserBadge(userId, "first-step");
+    await giveUserBadge(id, "first-step");
   }
   if ((records[0]._sum.distance ?? 0) >= 352.3) {
-    await giveUserBadge(userId, "tpe-to-khh");
+    await giveUserBadge(id, "tpe-to-khh");
   }
   if ((records[0]._sum.distance ?? 0) >= 384400) {
-    await giveUserBadge(userId, "to-the-moon");
+    await giveUserBadge(id, "to-the-moon");
   }
 }
