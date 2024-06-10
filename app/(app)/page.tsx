@@ -18,6 +18,7 @@ import {
 import StatItem from "@/components/StatItem";
 import StepChart from "@/components/StepChart";
 import Link from "next/link";
+import { twMerge } from "tailwind-merge";
 export default function Home() {
   const [token] = useLocalStorage("token", "");
   const [today, setToday] = useState<Record[]>([]);
@@ -100,7 +101,14 @@ export default function Home() {
       {badges.length !== 0 && <SectionTitle>最近的獎章</SectionTitle>}
       {badges.length > 0 && (
         <div className="dark:glass-effect my-2 rounded-lg bg-white p-3 shadow-sm dark:bg-black/5">
-          <div className="flex justify-around gap-2">
+          <div
+            className={twMerge(
+              "grid gap-2",
+              badges.length === 1 && "grid-cols-1",
+              badges.length === 2 && "grid-cols-2",
+              badges.length >= 3 && "grid-cols-3",
+            )}
+          >
             {badges.slice(0, 3).map((badge, index) => {
               const badgeData = BadgesData.find((b) => b.id === badge.badgeId);
               if (!badgeData) return null;
