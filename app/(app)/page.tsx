@@ -6,7 +6,14 @@ import { getHomeData } from "@/services/actions/home";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import type { Record } from "@prisma/client";
-import { Footprints, Flame, Compass, Info, BarChart3 } from "lucide-react";
+import {
+  Footprints,
+  Flame,
+  Compass,
+  Info,
+  BarChart3,
+  Award,
+} from "lucide-react";
 import StatItem from "@/components/StatItem";
 import StepChart from "@/components/StepChart";
 import Link from "next/link";
@@ -39,12 +46,20 @@ export default function Home() {
     <Container>
       <div className="flex items-center justify-between gap-2">
         <PageTitle>餅餅踏踏</PageTitle>
-        <Link
-          href="/analytics"
-          className="dark:glass-effect flex size-10 items-center justify-center rounded-full bg-white text-blue-500 shadow-sm dark:bg-black/5 dark:text-blue-300"
-        >
-          <BarChart3 strokeWidth={2} />
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href="/badges"
+            className="dark:glass-effect flex size-10 items-center justify-center rounded-full bg-white text-blue-500 shadow-sm dark:bg-black/5 dark:text-blue-300"
+          >
+            <Award strokeWidth={2} />
+          </Link>
+          <Link
+            href="/analytics"
+            className="dark:glass-effect flex size-10 items-center justify-center rounded-full bg-white text-blue-500 shadow-sm dark:bg-black/5 dark:text-blue-300"
+          >
+            <BarChart3 strokeWidth={2} />
+          </Link>
+        </div>
       </div>
 
       <SectionTitle>今日統計</SectionTitle>
