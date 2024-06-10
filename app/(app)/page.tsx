@@ -121,7 +121,7 @@ export default function Home() {
       )}
       {badges.length !== 0 && (
         <Link
-          className="dark:glass-effect my-2 block w-full rounded-lg bg-primary-50 p-2 text-center text-primary-600 dark:bg-black/5 dark:text-white"
+          className="dark:glass-effect my-2 block w-full rounded-lg bg-white p-2 text-center text-primary-600 shadow-sm dark:bg-black/5 dark:text-white"
           href="/badges"
         >
           查看更多
