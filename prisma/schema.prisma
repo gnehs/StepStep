@@ -59,7 +59,7 @@ model Badge {
   badgeId String
   created DateTime @default(now())
   updated DateTime @default(now())
-  count   Int
+  count   Int      @default(1)
 
   @@unique([badgeId, userId])
 }
