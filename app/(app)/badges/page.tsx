@@ -35,9 +35,8 @@ export default function Page() {
         </Link>
         <div className="text-center font-semibold">獎章</div>
       </div>
-      {userBadges === null ? (
-        <Loader />
-      ) : (
+      {userBadges === null && <Loader />}
+      {userBadges?.length > 0 && (
         <div className="flex flex-col gap-2">
           {userBadges.map((badge) => {
             const info = getBadgeById(badge.badgeId);
@@ -57,6 +56,11 @@ export default function Page() {
               </div>
             );
           })}
+        </div>
+      )}
+      {userBadges?.length === 0 && (
+        <div className="my-10 text-center text-gray-500 dark:text-gray-400">
+          你還沒有任何獎章喔
         </div>
       )}
     </Container>
