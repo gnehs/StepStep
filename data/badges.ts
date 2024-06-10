@@ -2,7 +2,7 @@ export default [
   {
     id: "first-step",
     name: "第一步",
-    description: "成功在餅餅踏踏同步第一步，這是你的一小步，也是最重要的一步",
+    description: "成功在餅餅踏踏同步第一步",
     icon: "👣",
   },
   {
