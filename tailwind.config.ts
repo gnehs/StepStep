@@ -15,6 +15,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["Inter", "Noto Sans TC", "sans-serif"],
+        emoji: ["Noto Emoji", "sans-serif"],
       },
       backgroundImage: {
         noise: "url('/noise.svg')",

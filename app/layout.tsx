@@ -77,14 +77,14 @@ export default function RootLayout({
           crossOrigin=""
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Noto+Emoji:wght@300..700&display=swap"
           rel="stylesheet"
         />
         {/* icon */}
         <link rel="icon" href="/logo-favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/maskable_icon.png" type="image/png" />
       </head>
-      <body className="dark:bg-primary-950 dark:text-primary-50 bg-primary-50 pt-[env(safe-area-inset-top)] text-[#111]">
+      <body className="bg-primary-50 pt-[env(safe-area-inset-top)] text-[#111] dark:bg-primary-950 dark:text-primary-50">
         {children}
         <DevBadge />
       </body>
