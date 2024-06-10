@@ -132,7 +132,7 @@ export default function HistoryPage() {
         </Link>
         <div className="text-center font-semibold">踏踏分析</div>
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="mb-2 grid grid-cols-2 gap-2">
         <div>
           <SectionTitle>踏踏總計</SectionTitle>
           <StatItem
@@ -206,7 +206,7 @@ export default function HistoryPage() {
       {res !== null && (
         <>
           <SectionTitle>過去三十日步數</SectionTitle>
-          <div className="dark:glass-effect my-2 mb-6 w-full rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">
+          <div className="dark:glass-effect my-2 mb-4 w-full rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">
             <BarChart
               className="h-72"
               data={res.last30dByDay
