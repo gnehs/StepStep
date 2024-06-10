@@ -2,14 +2,14 @@
 import Container from "@/components/Container";
 import SectionTitle from "@/components/SectionTitle";
 import { ResponsiveHeatMap } from "@nivo/heatmap";
-import { Footprints, Flame, Compass, Loader } from "lucide-react";
+import { Footprints, Flame, Compass, ChevronLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { getAnalyticsData } from "@/services/actions/analytics";
 import { BarChart } from "@tremor/react";
 import StatItem from "@/components/StatItem";
+import Loader from "@/components/Loader";
 function HeatMap30d({ data }: { data: any }) {
   const parsedData = [];
 
@@ -202,9 +202,7 @@ export default function HistoryPage() {
           />
         </div>
       </div>
-      {res === null && (
-        <Loader size={32} className="mx-auto my-10 animate-spin opacity-20" />
-      )}
+      {res === null && <Loader />}
       {res !== null && (
         <>
           <div className="mb-6 text-sm text-gray-600 dark:text-white/40">
