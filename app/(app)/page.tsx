@@ -5,7 +5,8 @@ import SectionTitle from "@/components/SectionTitle";
 import { getHomeData } from "@/services/actions/home";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import type { Record } from "@prisma/client";
+import type { Record, Badge } from "@prisma/client";
+import BadgesData from "@/data/badges";
 import {
   Footprints,
   Flame,
@@ -20,6 +21,7 @@ import Link from "next/link";
 export default function Home() {
   const [token] = useLocalStorage("token", "");
   const [today, setToday] = useState<Record[]>([]);
+  const [badges, setBadges] = useState<Badge[]>([]);
   const [history, setHistory] = useState<
     {
       steps: number | null;
@@ -38,6 +40,7 @@ export default function Home() {
       if (res.success) {
         setToday(res.todayRecords!);
         setHistory(res.historyRecords!);
+        setBadges(res.badges!);
       }
     }
     getData();
@@ -93,6 +96,36 @@ export default function Home() {
         <div className="dark:glass-effect mb-2 w-full rounded-lg bg-white p-1 pb-0 shadow-sm dark:bg-black/5">
           <StepChart data={today} />
         </div>
+      )}
+      {badges.length !== 0 && <SectionTitle>最近的獎章</SectionTitle>}
+      {badges.length > 0 && (
+        <div className="dark:glass-effect my-2 rounded-lg bg-white p-3 shadow-sm dark:bg-black/5">
+          <div className="flex justify-around gap-2">
+            {badges.slice(0, 3).map((badge, index) => {
+              const badgeData = BadgesData.find((b) => b.id === badge.badgeId);
+              if (!badgeData) return null;
+              return (
+                <div
+                  key={index}
+                  className="flex flex-col items-center gap-2 text-center"
+                >
+                  <div className="dark:glass-effect flex size-10 items-center justify-center rounded-full bg-[#f2f2f2] font-emoji text-primary-600 dark:bg-black/10 dark:text-white">
+                    {badgeData?.icon}
+                  </div>
+                  <div className="text-xs opacity-50">{badgeData?.name}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+      {badges.length !== 0 && (
+        <Link
+          className="dark:glass-effect my-2 block w-full rounded-lg bg-primary-50 p-2 text-center text-primary-600 dark:bg-black/5 dark:text-white"
+          href="/badges"
+        >
+          查看更多
+        </Link>
       )}
       {history.length !== 0 && <SectionTitle>歷史紀錄</SectionTitle>}
       {history.map((item, index) => (

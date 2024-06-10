@@ -47,7 +47,7 @@ export default function Page() {
                 key={badge.id}
                 className="dark:glass-effect flex items-center gap-2 rounded-full bg-white p-3 shadow-sm dark:bg-gray-800/50"
               >
-                <div className="dark:glass-effect flex size-12 items-center justify-center rounded-full bg-primary-50 text-center font-emoji text-2xl dark:bg-primary-900/50">
+                <div className="dark:glass-effect flex size-12 items-center justify-center rounded-full bg-primary-50 text-center font-emoji text-2xl text-primary-600 dark:bg-primary-900/50 dark:text-white">
                   {info.icon}
                 </div>
                 <div>

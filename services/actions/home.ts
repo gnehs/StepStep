@@ -1,6 +1,7 @@
 "use server";
 import prisma from "@/services/prisma";
 import { getUserFromJWT } from "@/services/actions/auth";
+import { getBadgeData } from "@/services/actions/badge";
 export async function getHomeData(token: string) {
   let user = await getUserFromJWT(token);
   if (!user) {
@@ -63,5 +64,6 @@ export async function getHomeData(token: string) {
     lastSync: lastSync?.timestamp || null,
     todayRecords,
     historyRecords,
+    badges: await getBadgeData(token),
   };
 }
