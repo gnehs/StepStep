@@ -205,17 +205,6 @@ export default function HistoryPage() {
       {res === null && <Loader />}
       {res !== null && (
         <>
-          <div className="mb-6 text-sm text-gray-600 dark:text-white/40">
-            你已經在餅餅踏踏上累計了{" "}
-            {res.aggregate._sum.distance.toLocaleString("zh-TW", {
-              maximumFractionDigits: 2,
-            })}{" "}
-            公里的步步資料，大概是{" "}
-            {(res.aggregate._sum.distance / 352.3).toLocaleString("zh-TW", {
-              maximumFractionDigits: 1,
-            })}{" "}
-            趟台北高雄來回的距離。
-          </div>
           <SectionTitle>過去三十日步數</SectionTitle>
           <div className="dark:glass-effect my-2 mb-6 w-full rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">
             <BarChart
