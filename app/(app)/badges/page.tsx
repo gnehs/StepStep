@@ -45,9 +45,9 @@ export default function Page() {
             return (
               <div
                 key={badge.id}
-                className="dark:glass-effect flex items-center gap-2 rounded-lg bg-white p-3 shadow-sm dark:bg-gray-800/50"
+                className="dark:glass-effect flex items-center gap-2 rounded-full bg-white p-3 shadow-sm dark:bg-gray-800/50"
               >
-                <div className="dark:glass-effect font-emoji flex size-12 items-center justify-center rounded bg-primary-50 text-center text-xl dark:bg-primary-900/50">
+                <div className="dark:glass-effect flex size-12 items-center justify-center rounded-full bg-primary-50 text-center font-emoji text-2xl dark:bg-primary-900/50">
                   {info.icon}
                 </div>
                 <div>
