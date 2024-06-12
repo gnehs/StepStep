@@ -11,7 +11,6 @@ export async function GET(request: Request) {
         .update(user.email.toLowerCase().trim())
         .digest("hex");
       avatarUrl = `https://www.gravatar.com/avatar/${hash}?d=monsterid`;
-      console.log("[Avatar]", user.name, avatarUrl);
     }
   }
   // proxy the image
