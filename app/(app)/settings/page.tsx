@@ -40,7 +40,7 @@ export default function Settings() {
         <PageTitle>設定</PageTitle>
         <Link href="/settings/user">
           <motion.img
-            src={`/api/v1/avatar?id=${user?.id}`}
+            src={`/api/v1/avatar/${user?.id}`}
             alt="avatar"
             layoutId="avatar"
             className="size-10 rounded-full bg-white shadow-sm"

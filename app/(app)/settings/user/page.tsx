@@ -41,7 +41,7 @@ export default function SettingsUser() {
       </div>
       <div className="mb-3 flex flex-col items-center justify-center">
         <motion.img
-          src={`/api/v1/avatar?id=${user?.id}`}
+          src={`/api/v1/avatar/${user?.id}`}
           alt="avatar"
           layoutId="avatar"
           className="mb-2 size-16 rounded-full bg-white shadow-sm"

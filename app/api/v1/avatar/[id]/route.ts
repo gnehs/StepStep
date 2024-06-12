@@ -2,9 +2,7 @@ import { getUserById } from "@/services/actions/auth";
 import crypto from "crypto";
 export async function GET(request: Request) {
   let avatarUrl = `https://www.gravatar.com/avatar/`;
-  // get id from query string
-  const url = new URL(request.url);
-  const id = url.searchParams.get("id");
+  const id = request.url.split("/").pop();
   if (id) {
     const user = await getUserById(id);
     if (user) {

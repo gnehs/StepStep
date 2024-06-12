@@ -183,9 +183,10 @@ export default function Calendar() {
                   className={twMerge(
                     "relative flex flex-col items-center justify-center rounded-full p-1 transition-all",
                     avatarView && "rounded-sm text-sm",
-                    item.current && avatarId
+                    avatarId
                       ? "text-gray-800 dark:text-primary-300"
                       : "text-gray-300 dark:text-gray-600",
+                    !item.current && "opacity-40",
                     item.text === currentDate &&
                       item.current &&
                       "font-semibold text-primary-600 dark:text-primary-50",
@@ -217,8 +218,8 @@ export default function Calendar() {
                         exit={{ opacity: 0, height: 0, scale: 0 }}
                       >
                         {avatarId ? (
-                          <img
-                            src={`/api/v1/avatar?id=${avatarId}`}
+                          <motion.img
+                            src={`/api/v1/avatar/${avatarId}`}
                             className="h-full w-full object-cover"
                           />
                         ) : (
@@ -246,8 +247,8 @@ export default function Calendar() {
                 )}
               >
                 <div className="flex items-center gap-2">
-                  <img
-                    src={`/api/v1/avatar?id=${item.user?.id}`}
+                  <motion.img
+                    src={`/api/v1/avatar/${item.user?.id}`}
                     className="size-10 rounded bg-white"
                   />
                   <div>
