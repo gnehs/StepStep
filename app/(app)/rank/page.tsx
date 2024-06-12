@@ -176,14 +176,14 @@ export default function Calendar() {
               const currentDayRank = rank.find(
                 (z) => z.date.getDate() === item.text,
               );
-              const avatar = currentDayRank?.records[0]?.user.id;
+              const avatarId = currentDayRank?.records[0]?.user.id;
 
               return (
                 <motion.button
                   className={twMerge(
                     "relative flex flex-col items-center justify-center rounded-full p-1 transition-all",
                     avatarView && "rounded-sm text-sm",
-                    item.current
+                    item.current && avatarId
                       ? "text-gray-800 dark:text-primary-300"
                       : "text-gray-300 dark:text-gray-600",
                     item.text === currentDate &&
@@ -209,16 +209,16 @@ export default function Calendar() {
                   )}
                   <div className="relative">{item.text}</div>
                   <AnimatePresence>
-                    {avatarView && item.current && avatar && (
+                    {avatarView && item.current && avatarId && (
                       <motion.div
                         className="aspect-square w-full overflow-hidden rounded-sm bg-white"
                         initial={{ opacity: 0, height: 0, scale: 0 }}
                         animate={{ opacity: 1, height: "48px", scale: 1 }}
                         exit={{ opacity: 0, height: 0, scale: 0 }}
                       >
-                        {avatar ? (
+                        {avatarId ? (
                           <img
-                            src={`/api/v1/avatar?id=${avatar}`}
+                            src={`/api/v1/avatar?id=${avatarId}`}
                             className="h-full w-full object-cover"
                           />
                         ) : (
