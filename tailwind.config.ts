@@ -12,6 +12,9 @@ const config: Config = {
   theme: {
     transparent: "transparent",
     current: "currentColor",
+    screens: {
+      sm: "512px",
+    },
     extend: {
       fontFamily: {
         sans: ["Inter", "Noto Sans TC", "sans-serif"],

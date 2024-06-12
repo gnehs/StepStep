@@ -1,17 +1,18 @@
 "use server";
 import prisma from "@/services/prisma";
-export async function getRank() {
+export async function getRank(year?: number, month?: number) {
+  if (!year) year = new Date().getFullYear();
+  if (!month) month = new Date().getMonth() + 1;
+
   // +0800 is the timezone offset for Taipei
   // get today 00:00:00 in Taipei timezone
-  let today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const numDays = (y: number, m: number) => new Date(y, m, 0).getDate();
+  let dates = Array.from({ length: numDays(year, month) }, (_, i) => i + 1);
 
   let historyRecords = [];
-  for (let i = 0; i < 7; i++) {
-    let date = new Date(today);
-    date.setDate(date.getDate() - i);
-    let nextDate = new Date(date);
-    nextDate.setDate(nextDate.getDate() + 1);
+  for (let date of dates) {
+    let gte = new Date(year, month - 1, date);
+    let lt = new Date(year, month - 1, date + 1);
     let records = await prisma.record.groupBy({
       by: ["userId"],
       _sum: {
@@ -21,16 +22,16 @@ export async function getRank() {
       },
       where: {
         timestamp: {
-          gte: date,
-          lt: nextDate,
+          gte,
+          lt,
         },
       },
     });
-
     records = records.sort(
       (a, b) => (b._sum.distance ?? 0) - (a._sum.distance ?? 0),
     );
     records = records.slice(0, 10);
+
     let parsedRecords = await Promise.all(
       records.map(async (record) => {
         let user = await prisma.user.findUnique({
@@ -49,7 +50,7 @@ export async function getRank() {
       }),
     );
     historyRecords.push({
-      date,
+      date: gte,
       records: parsedRecords,
     });
   }
