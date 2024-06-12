@@ -152,7 +152,6 @@ export default function Calendar() {
         <motion.div
           className="grid grid-cols-7 place-items-center gap-2 px-2 py-1 tabular-nums"
           drag
-          dragElastic={0.1}
           dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
           onDragEnd={(event, info) => {
             const { offset } = info;
@@ -182,7 +181,7 @@ export default function Calendar() {
                 <motion.button
                   className={twMerge(
                     "relative flex flex-col items-center justify-center rounded-full p-1 transition-all",
-                    avatarView && "rounded-sm text-sm",
+                    avatarView && "rounded-sm",
                     avatarId
                       ? "text-gray-800 dark:text-primary-300"
                       : "text-gray-300 dark:text-gray-600",
@@ -199,31 +198,40 @@ export default function Calendar() {
                     setCurrentDate(item.text);
                   }}
                 >
-                  {item.text === currentDate && item.current && !avatarView && (
-                    <motion.div
-                      layoutId="selected"
-                      className="dark:glass-effect absolute top-0 size-8 rounded-full bg-primary-500/10"
-                      initial={{ opacity: 0, scale: 0.75 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.75 }}
-                    />
-                  )}
+                  <AnimatePresence>
+                    {item.text === currentDate && item.current && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0 }}
+                        className={twMerge(
+                          "dark:glass-effect absolute top-0 size-8 rounded-full bg-primary-500/10",
+                          avatarView && "h-full w-full rounded-[14px]",
+                        )}
+                      />
+                    )}
+                  </AnimatePresence>
                   <div className="relative">{item.text}</div>
                   <AnimatePresence>
-                    {avatarView && item.current && avatarId && (
+                    {avatarView && item.current && (
                       <motion.div
-                        className="aspect-square w-full overflow-hidden rounded-sm bg-white"
+                        className={twMerge(
+                          "relative aspect-square w-full overflow-hidden rounded-xl bg-white",
+                          !avatarId && "bg-gray-100/50 dark:bg-gray-500/50",
+                        )}
                         initial={{ opacity: 0, height: 0, scale: 0 }}
-                        animate={{ opacity: 1, height: "48px", scale: 1 }}
+                        animate={{
+                          opacity: 1,
+                          height: "48px",
+                          scale: 1,
+                        }}
                         exit={{ opacity: 0, height: 0, scale: 0 }}
                       >
-                        {avatarId ? (
+                        {avatarId && (
                           <motion.img
                             src={`/api/v1/avatar/${avatarId}`}
                             className="h-full w-full object-cover"
                           />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center text-gray-300 dark:text-gray-600"></div>
                         )}
                       </motion.div>
                     )}
