@@ -235,41 +235,42 @@ export default function Calendar() {
       </motion.div>
       {(currentDayRank?.records.length ?? 0) > 0 ? (
         <div className="dark:glass-effect my-2 rounded-lg bg-white p-2 shadow-sm dark:bg-black/20">
-          {currentDayRank.records.map((item, index) => (
-            <div
-              key={item.user?.id ?? "" + index}
-              className={twMerge(
-                "flex items-center justify-between gap-2",
-                index !== 0 &&
-                  "mt-2 border-t border-gray-100 pt-2 dark:border-white/10",
-              )}
-            >
-              <div className="flex items-center gap-2">
-                <img
-                  src={`/api/v1/avatar?id=${item.user?.id}`}
-                  className="size-10 rounded bg-white"
-                />
-                <div>
-                  <div className="font-bold">{item.user?.name}</div>
-                  <div className="text-xs opacity-75">
-                    {item.steps?.toLocaleString() ?? 0} 步 -{" "}
-                    {item.distance?.toFixed(2) ?? 0} 公里
-                  </div>
-                </div>
-              </div>
+          {currentDayRank &&
+            currentDayRank.records.map((item, index) => (
               <div
+                key={item.user?.id ?? "" + index}
                 className={twMerge(
-                  "dark:glass-effect rounded-full border border-gray-200 bg-gray-100 p-0.5 px-2 text-xs text-gray-600 empty:hidden dark:border-0 dark:bg-gray-800/20 dark:text-white/75",
-                  index === 0 &&
-                    "border-yellow-300 bg-yellow-100 text-yellow-600 dark:bg-yellow-800/20 dark:text-yellow-200/80",
+                  "flex items-center justify-between gap-2",
+                  index !== 0 &&
+                    "mt-2 border-t border-gray-100 pt-2 dark:border-white/10",
                 )}
               >
-                {index === 0 && "步步冠軍"}
-                {index === 1 && "步步亞軍"}
-                {index === 2 && "步步季軍"}
+                <div className="flex items-center gap-2">
+                  <img
+                    src={`/api/v1/avatar?id=${item.user?.id}`}
+                    className="size-10 rounded bg-white"
+                  />
+                  <div>
+                    <div className="font-bold">{item.user?.name}</div>
+                    <div className="text-xs opacity-75">
+                      {item.steps?.toLocaleString() ?? 0} 步 -{" "}
+                      {item.distance?.toFixed(2) ?? 0} 公里
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={twMerge(
+                    "dark:glass-effect rounded-full border border-gray-200 bg-gray-100 p-0.5 px-2 text-xs text-gray-600 empty:hidden dark:border-0 dark:bg-gray-800/20 dark:text-white/75",
+                    index === 0 &&
+                      "border-yellow-300 bg-yellow-100 text-yellow-600 dark:bg-yellow-800/20 dark:text-yellow-200/80",
+                  )}
+                >
+                  {index === 0 && "步步冠軍"}
+                  {index === 1 && "步步亞軍"}
+                  {index === 2 && "步步季軍"}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       ) : (
         <div className="my-4 text-center opacity-50">尚無紀錄</div>
