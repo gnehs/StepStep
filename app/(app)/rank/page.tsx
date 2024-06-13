@@ -9,10 +9,37 @@ import {
 } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 import { getRank } from "@/services/actions/rank";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Loader from "@/components/Loader";
+const variants = {
+  enter: (direction: number) => {
+    return {
+      x: direction > 0 ? 500 : -500,
+      opacity: 0,
+      filter: "blur(4px)",
+    };
+  },
+  center: {
+    zIndex: 1,
+    x: 0,
+    opacity: 1,
+    filter: "blur(0px)",
+  },
+  exit: (direction: number) => {
+    return {
+      zIndex: 0,
+      x: direction < 0 ? 500 : -500,
+      opacity: 0,
+      filter: "blur(4px)",
+    };
+  },
+};
 export default function Calendar() {
   const dragY = useMotionValue(0);
-  const weekDragY = useTransform(() => (dragY.get() > 0 ? dragY.get() / 6 : 0));
-
+  const weekDragY = useTransform(() =>
+    dragY.get() > 0 ? (dragY.get() / 6) * 250 : 0,
+  );
+  const [direction, setDirection] = useState(0);
   const [avatarView, setAvatarView] = useState(false);
 
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -89,6 +116,32 @@ export default function Calendar() {
       setCurrentMonth(currentMonth - 1);
     }
   }
+  function nextDay() {
+    if (currentDate === lastDate) {
+      if (currentMonth === 12) {
+        setCurrentYear(currentYear + 1);
+        setCurrentMonth(1);
+      } else {
+        setCurrentMonth(currentMonth + 1);
+      }
+      setCurrentDate(1);
+    } else {
+      setCurrentDate(currentDate + 1);
+    }
+  }
+  function prevDay() {
+    if (currentDate === 1) {
+      if (currentMonth === 1) {
+        setCurrentYear(currentYear - 1);
+        setCurrentMonth(12);
+      } else {
+        setCurrentMonth(currentMonth - 1);
+      }
+      setCurrentDate(lastDate);
+    } else {
+      setCurrentDate(currentDate - 1);
+    }
+  }
   return (
     <Container>
       <div className="col-span-4 mt-2 text-center font-semibold">
@@ -101,12 +154,13 @@ export default function Calendar() {
       <div className="grid grid-cols-10 gap-2 tabular-nums">
         <motion.button
           onClick={prevMonth}
-          className="col-span-3 p-2 text-left text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+          className="col-span-3 flex items-center gap-1 p-2 text-left text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
           layoutId={(currentMonth - 2).toString()}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
+          <ChevronLeft size={16} />
           {new Date(
             currentYear,
             currentMonth - 2,
@@ -130,7 +184,7 @@ export default function Calendar() {
         </motion.h1>
         <motion.button
           onClick={nextMonth}
-          className="col-span-3 p-2 text-right text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+          className="col-span-3 flex items-center justify-end gap-1 p-2 text-right text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
           layoutId={currentMonth.toString()}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -141,6 +195,7 @@ export default function Calendar() {
             currentMonth,
             new Date().getDate(),
           ).toLocaleDateString("ja-JP", { month: "long" })}
+          <ChevronRight size={16} />
         </motion.button>
       </div>
       <div className="grid grid-cols-7 gap-2 pb-1 text-center text-sm font-light text-gray-400 sm:px-2">
@@ -148,142 +203,196 @@ export default function Calendar() {
           <div key={day}>{day}</div>
         ))}
       </div>
-      <motion.div className="dark:sm:glass-effect overflow-hidden bg-white max-sm:-mx-2 max-sm:border-b max-sm:border-t max-sm:border-primary-100 sm:rounded-lg sm:border-transparent sm:shadow-sm dark:bg-transparent max-sm:dark:border-primary-800 dark:max-sm:bg-primary-900">
-        <motion.div
-          className="grid grid-cols-7 place-items-center gap-2 px-2 py-1 tabular-nums"
-          drag
-          dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-          onDragEnd={(event, info) => {
-            const { offset } = info;
-            // check x or y
-            if (Math.abs(offset.x) > Math.abs(offset.y)) {
-              if (offset.x > 0) {
-                prevMonth();
+      <motion.div
+        drag="y"
+        dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+        dragElastic={0.001}
+        style={{ y: dragY }}
+        className="dark:sm:glass-effect relative mb-2 overflow-hidden bg-white max-sm:-mx-2 max-sm:border-b max-sm:border-t max-sm:border-primary-100 sm:rounded-lg sm:border-transparent sm:shadow-sm dark:bg-transparent max-sm:dark:border-primary-800 dark:max-sm:bg-primary-900"
+      >
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <motion.div
+            className="grid grid-cols-7 place-items-center gap-2 px-2 py-1 tabular-nums"
+            key={currentMonth}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            onDragEnd={(event, info) => {
+              const { offset } = info;
+              // check x or y
+              if (Math.abs(offset.x) > Math.abs(offset.y)) {
+                if (offset.x > 0) {
+                  prevMonth();
+                  setDirection(-1);
+                } else {
+                  nextMonth();
+                  setDirection(1);
+                }
               } else {
-                nextMonth();
+                setAvatarView(offset.y > 0);
               }
-            } else {
-              setAvatarView(offset.y > 0);
-            }
-          }}
-          dragDirectionLock
-          style={{ y: dragY }}
-        >
-          {
-            // split by week and render
-            dates.map((item, index) => {
-              const currentDayRank = rank.find(
-                (z) => z.date.getDate() === item.text,
-              );
-              const avatarId = currentDayRank?.records[0]?.user.id;
+            }}
+            dragDirectionLock
+          >
+            {
+              // split by week and render
+              dates.map((item, index) => {
+                const currentDayRank = rank.find(
+                  (z) => z.date.getDate() === item.text,
+                );
+                const avatarId = currentDayRank?.records[0]?.user.id;
 
-              return (
-                <motion.button
-                  className={twMerge(
-                    "relative flex flex-col items-center justify-center rounded-full p-1 transition-all",
-                    avatarView && "rounded-sm",
-                    avatarId
-                      ? "text-gray-800 dark:text-primary-300"
-                      : "text-gray-300 dark:text-gray-600",
-                    !item.current && "opacity-40",
-                    item.text === currentDate &&
-                      item.current &&
-                      "font-semibold text-primary-600 dark:text-primary-50",
-                  )}
-                  style={{ marginBottom: weekDragY }}
-                  key={index}
-                  onClick={() => {
-                    setCurrentYear(item.date.getFullYear());
-                    setCurrentMonth(item.date.getMonth() + 1);
-                    setCurrentDate(item.text);
-                  }}
-                >
-                  <AnimatePresence>
-                    {item.text === currentDate && item.current && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0 }}
-                        className={twMerge(
-                          "dark:glass-effect absolute top-0 size-8 rounded-full bg-primary-500/10",
-                          avatarView && "h-full w-full rounded-[14px]",
-                        )}
-                      />
+                return (
+                  <motion.button
+                    className={twMerge(
+                      "relative flex flex-col items-center justify-center rounded-full p-1 transition-all",
+                      avatarView && "rounded-sm",
+                      avatarId
+                        ? "text-gray-800 dark:text-primary-300"
+                        : "text-gray-300 dark:text-gray-600",
+                      !item.current && "opacity-40",
+                      item.text === currentDate &&
+                        item.current &&
+                        "font-semibold text-primary-600 dark:text-primary-50",
                     )}
-                  </AnimatePresence>
-                  <div className="relative">{item.text}</div>
-                  <AnimatePresence>
-                    {avatarView && item.current && (
-                      <motion.div
-                        className={twMerge(
-                          "relative aspect-square w-full overflow-hidden rounded-xl bg-white",
-                          !avatarId && "bg-gray-100/50 dark:bg-gray-500/50",
-                        )}
-                        initial={{ opacity: 0, height: 0, scale: 0 }}
-                        animate={{
-                          opacity: 1,
-                          height: "48px",
-                          scale: 1,
-                        }}
-                        exit={{ opacity: 0, height: 0, scale: 0 }}
-                      >
-                        {avatarId && (
-                          <motion.img
-                            src={`/api/v1/avatar/${avatarId}`}
-                            className="h-full w-full object-cover"
-                          />
-                        )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.button>
-              );
-            })
-          }
-        </motion.div>
+                    style={{ marginBottom: weekDragY }}
+                    key={index}
+                    onClick={() => {
+                      setCurrentYear(item.date.getFullYear());
+                      setCurrentMonth(item.date.getMonth() + 1);
+                      setCurrentDate(item.text);
+                      setDirection(
+                        item.date.getMonth() + 1 > currentMonth ? 1 : -1,
+                      );
+                    }}
+                  >
+                    <AnimatePresence>
+                      {item.text === currentDate && item.current && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0 }}
+                          className={twMerge(
+                            "dark:glass-effect absolute top-0 size-8 rounded-full bg-primary-500/10",
+                            avatarView && "h-full w-full rounded-[14px]",
+                          )}
+                        />
+                      )}
+                    </AnimatePresence>
+                    <div className="relative">{item.text}</div>
+                    <AnimatePresence initial={!avatarView}>
+                      {avatarView && item.current && (
+                        <motion.div
+                          className={twMerge(
+                            "relative aspect-square w-full overflow-hidden rounded-xl bg-white",
+                            !avatarId && "bg-gray-200/50 dark:bg-gray-500/50",
+                          )}
+                          initial={{ opacity: 0, height: 0, scale: 0 }}
+                          animate={{
+                            opacity: 1,
+                            height: "48px",
+                            scale: 1,
+                          }}
+                          exit={{ opacity: 0, height: 0, scale: 0 }}
+                        >
+                          {avatarId && (
+                            <motion.img
+                              src={`/api/v1/avatar/${avatarId}`}
+                              className="h-full w-full object-cover"
+                            />
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
+                );
+              })
+            }
+          </motion.div>
+        </AnimatePresence>
       </motion.div>
-      {(currentDayRank?.records.length ?? 0) > 0 ? (
-        <div className="dark:glass-effect my-2 rounded-lg bg-white p-2 shadow-sm dark:bg-black/20">
-          {currentDayRank &&
-            currentDayRank.records.map((item, index) => (
-              <div
-                key={item.user?.id ?? "" + index}
-                className={twMerge(
-                  "flex items-center justify-between gap-2",
-                  index !== 0 &&
-                    "mt-2 border-t border-gray-100 pt-2 dark:border-white/10",
-                )}
-              >
-                <div className="flex items-center gap-2">
-                  <motion.img
-                    src={`/api/v1/avatar/${item.user?.id}`}
-                    className="size-10 rounded bg-white"
-                  />
-                  <div>
-                    <div className="font-bold">{item.user?.name}</div>
-                    <div className="text-xs opacity-75">
-                      {item.steps?.toLocaleString() ?? 0} 步 -{" "}
-                      {item.distance?.toFixed(2) ?? 0} 公里
+      <AnimatePresence initial={false} custom={direction} mode="popLayout">
+        {(currentDayRank?.records.length ?? 0) > 0 && (
+          <motion.div
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            key={currentDate}
+            onDragEnd={(event, info) => {
+              const { offset } = info;
+              // check x or y
+              if (Math.abs(offset.x) > Math.abs(offset.y)) {
+                if (offset.x > 0) {
+                  prevDay();
+                  setDirection(-1);
+                } else {
+                  nextDay();
+                  setDirection(1);
+                }
+              }
+            }}
+          >
+            <motion.div className="dark:glass-effect rounded-lg bg-white p-2 shadow-sm dark:bg-black/20">
+              {currentDayRank &&
+                currentDayRank.records.map((item, index) => (
+                  <div
+                    key={item.user?.id ?? "" + index}
+                    className={twMerge(
+                      "flex items-center justify-between gap-2",
+                      index !== 0 &&
+                        "mt-2 border-t border-gray-100 pt-2 dark:border-white/10",
+                    )}
+                  >
+                    <div className="flex items-center gap-2">
+                      <motion.img
+                        src={`/api/v1/avatar/${item.user?.id}`}
+                        className="size-10 rounded bg-white"
+                      />
+                      <div>
+                        <div className="font-bold">{item.user?.name}</div>
+                        <div className="text-xs opacity-75">
+                          {item.steps?.toLocaleString() ?? 0} 步 -{" "}
+                          {item.distance?.toFixed(2) ?? 0} 公里
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className={twMerge(
+                        "dark:glass-effect rounded-full border border-gray-200 bg-gray-100 p-0.5 px-2 text-xs text-gray-600 empty:hidden dark:border-0 dark:bg-gray-800/20 dark:text-white/75",
+                        index === 0 &&
+                          "border-yellow-300 bg-yellow-100 text-yellow-600 dark:bg-yellow-800/20 dark:text-yellow-200/80",
+                      )}
+                    >
+                      {index === 0 && "步步冠軍"}
+                      {index === 1 && "步步亞軍"}
+                      {index === 2 && "步步季軍"}
                     </div>
                   </div>
-                </div>
-                <div
-                  className={twMerge(
-                    "dark:glass-effect rounded-full border border-gray-200 bg-gray-100 p-0.5 px-2 text-xs text-gray-600 empty:hidden dark:border-0 dark:bg-gray-800/20 dark:text-white/75",
-                    index === 0 &&
-                      "border-yellow-300 bg-yellow-100 text-yellow-600 dark:bg-yellow-800/20 dark:text-yellow-200/80",
-                  )}
-                >
-                  {index === 0 && "步步冠軍"}
-                  {index === 1 && "步步亞軍"}
-                  {index === 2 && "步步季軍"}
-                </div>
-              </div>
-            ))}
-        </div>
-      ) : (
+                ))}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {currentDayRank?.records.length === 0 && (
         <div className="my-4 text-center opacity-50">尚無紀錄</div>
       )}
+      {rank.length === 0 && <Loader />}
     </Container>
   );
 }
