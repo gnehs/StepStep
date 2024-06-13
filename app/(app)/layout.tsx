@@ -31,7 +31,7 @@ export default function RootLayout({
   }
   return (
     <div className="min-h-[100svh]" vaul-drawer-wrapper="">
-      <div className="grow overflow-x-hidden overflow-y-scroll pb-[calc(64px+8px+env(safe-area-inset-bottom))]">
+      <div className="h-[calc(100vh-64px-env(safe-area-inset-bottom))] grow overflow-hidden overflow-y-scroll pb-2">
         {children}
       </div>
       <Nav />
