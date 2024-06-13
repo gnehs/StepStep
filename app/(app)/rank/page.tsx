@@ -269,9 +269,13 @@ export default function Calendar() {
                       setCurrentYear(item.date.getFullYear());
                       setCurrentMonth(item.date.getMonth() + 1);
                       setCurrentDate(item.text);
-                      setDirection(
-                        item.date.getMonth() + 1 > currentMonth ? 1 : -1,
-                      );
+                      if (item.date.getMonth() + 1 != currentMonth) {
+                        setDirection(
+                          item.date.getMonth() + 1 > currentMonth ? 1 : -1,
+                        );
+                      } else if (item.text != currentDate) {
+                        setDirection(item.text > currentDate ? 1 : -1);
+                      }
                     }}
                   >
                     <AnimatePresence>
