@@ -16,21 +16,18 @@ const variants = {
     return {
       x: direction > 0 ? 500 : -500,
       opacity: 0,
-      filter: "blur(4px)",
     };
   },
   center: {
     zIndex: 1,
     x: 0,
     opacity: 1,
-    filter: "blur(0px)",
   },
   exit: (direction: number) => {
     return {
       zIndex: 0,
       x: direction < 0 ? 500 : -500,
       opacity: 0,
-      filter: "blur(4px)",
     };
   },
 };
