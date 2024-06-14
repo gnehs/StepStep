@@ -11,6 +11,7 @@ import { twMerge } from "tailwind-merge";
 import { getRank } from "@/services/actions/rank";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Loader from "@/components/Loader";
+const SWIPE_THRESHOLD = 300;
 const variants = {
   enter: (direction: number) => {
     if (direction === 0) {
@@ -243,17 +244,22 @@ export default function Calendar() {
             }}
             onDragEnd={(event, info) => {
               const { offset } = info;
-              // check x or y
-              if (Math.abs(offset.x) > Math.abs(offset.y)) {
-                if (offset.x > 0) {
-                  prevMonth();
-                  setDirection(-1);
+              if (
+                Math.abs(offset.x) > SWIPE_THRESHOLD ||
+                Math.abs(offset.y) > SWIPE_THRESHOLD
+              ) {
+                // check x or y
+                if (Math.abs(offset.x) > Math.abs(offset.y)) {
+                  if (offset.x > 0) {
+                    prevMonth();
+                    setDirection(-1);
+                  } else {
+                    nextMonth();
+                    setDirection(1);
+                  }
                 } else {
-                  nextMonth();
-                  setDirection(1);
+                  setAvatarView(offset.y > 0);
                 }
-              } else {
-                setAvatarView(offset.y > 0);
               }
             }}
             dragDirectionLock
@@ -355,14 +361,19 @@ export default function Calendar() {
           key={currentDate + currentMonth}
           onDragEnd={(event, info) => {
             const { offset } = info;
-            // check x or y
-            if (Math.abs(offset.x) > Math.abs(offset.y)) {
-              if (offset.x > 0) {
-                prevDay();
-                setDirection(-1);
-              } else {
-                nextDay();
-                setDirection(1);
+            if (
+              Math.abs(offset.x) > SWIPE_THRESHOLD ||
+              Math.abs(offset.y) > SWIPE_THRESHOLD
+            ) {
+              // check x or y
+              if (Math.abs(offset.x) > Math.abs(offset.y)) {
+                if (offset.x > 0) {
+                  prevDay();
+                  setDirection(-1);
+                } else {
+                  nextDay();
+                  setDirection(1);
+                }
               }
             }
           }}
