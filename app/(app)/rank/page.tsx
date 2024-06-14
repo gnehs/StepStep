@@ -11,7 +11,7 @@ import { twMerge } from "tailwind-merge";
 import { getRank } from "@/services/actions/rank";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Loader from "@/components/Loader";
-const SWIPE_THRESHOLD_X = 300;
+const SWIPE_THRESHOLD_X = 200;
 const SWIPE_THRESHOLD_Y = 100;
 const variants = {
   enter: (direction: number) => {
