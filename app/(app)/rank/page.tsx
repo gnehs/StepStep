@@ -11,8 +11,11 @@ import { twMerge } from "tailwind-merge";
 import { getRank } from "@/services/actions/rank";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Loader from "@/components/Loader";
-const SWIPE_THRESHOLD_X = 200;
-const SWIPE_THRESHOLD_Y = 100;
+
+const swipeConfidenceThreshold = 10000;
+const swipePower = (offset: number, velocity: number) => {
+  return Math.abs(offset) * velocity;
+};
 const variants = {
   enter: (direction: number) => {
     if (direction === 0) {
@@ -246,10 +249,12 @@ export default function Calendar() {
               opacity: { duration: 0.2 },
             }}
             onDragEnd={(event, info) => {
-              const { offset } = info;
+              const { offset, velocity } = info;
+              const swipeX = swipePower(offset.x, velocity.x);
+              const swipeY = swipePower(offset.y, velocity.y);
               if (
-                Math.abs(offset.x) > SWIPE_THRESHOLD_X ||
-                Math.abs(offset.y) > SWIPE_THRESHOLD_Y
+                swipeX > swipeConfidenceThreshold ||
+                swipeY > swipeConfidenceThreshold
               ) {
                 // check x or y
                 if (Math.abs(offset.x) > Math.abs(offset.y)) {
@@ -382,8 +387,9 @@ export default function Calendar() {
           exit="exit"
           key={currentDate + currentMonth}
           onDragEnd={(event, info) => {
-            const { offset } = info;
-            if (Math.abs(offset.x) > SWIPE_THRESHOLD_X) {
+            const { offset, velocity } = info;
+            const swipe = swipePower(offset.x, velocity.x);
+            if (swipe > swipeConfidenceThreshold) {
               if (offset.x > 0) {
                 prevDay();
                 setDirection(-1);
