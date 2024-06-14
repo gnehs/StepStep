@@ -13,9 +13,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Loader from "@/components/Loader";
 
 const swipeConfidenceThreshold = 10000;
-const swipePower = (offset: number, velocity: number) => {
-  return Math.abs(offset) * velocity;
-};
+const swipePower = (offset: number, velocity: number) =>
+  Math.abs(offset) * velocity;
+
 const variants = {
   enter: (direction: number) => {
     if (direction === 0) {
