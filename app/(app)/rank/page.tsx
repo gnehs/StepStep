@@ -11,7 +11,8 @@ import { twMerge } from "tailwind-merge";
 import { getRank } from "@/services/actions/rank";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Loader from "@/components/Loader";
-const SWIPE_THRESHOLD = 300;
+const SWIPE_THRESHOLD_X = 300;
+const SWIPE_THRESHOLD_Y = 100;
 const variants = {
   enter: (direction: number) => {
     if (direction === 0) {
@@ -48,6 +49,8 @@ export default function Calendar() {
   const weekDragY = useTransform(() =>
     dragY.get() > 0 ? (dragY.get() / 6) * 250 : 0,
   );
+  const avatarDragY = useTransform(dragY, [0, -1], [1, 0.5]);
+  const avatarDragMarginBottom = useTransform(dragY, [0, -1], ["0px", "-24px"]);
   const [direction, setDirection] = useState(0);
   const [avatarView, setAvatarView] = useState(false);
 
@@ -245,8 +248,8 @@ export default function Calendar() {
             onDragEnd={(event, info) => {
               const { offset } = info;
               if (
-                Math.abs(offset.x) > SWIPE_THRESHOLD ||
-                Math.abs(offset.y) > SWIPE_THRESHOLD
+                Math.abs(offset.x) > SWIPE_THRESHOLD_X ||
+                Math.abs(offset.y) > SWIPE_THRESHOLD_Y
               ) {
                 // check x or y
                 if (Math.abs(offset.x) > Math.abs(offset.y)) {
@@ -314,30 +317,38 @@ export default function Calendar() {
                       )}
                     </AnimatePresence>
                     <div className="relative">{item.text}</div>
-                    <AnimatePresence initial={!avatarView}>
-                      {avatarView && item.current && (
-                        <motion.div
-                          className={twMerge(
-                            "relative aspect-square w-full rounded-xl bg-white shadow-sm",
-                            !avatarId && "bg-gray-200/50 dark:bg-gray-500/50",
-                          )}
-                          initial={{ opacity: 0, height: 0, scale: 0 }}
-                          animate={{
-                            opacity: 1,
-                            height: "48px",
-                            scale: 1,
-                          }}
-                          exit={{ opacity: 0, height: 0, scale: 0 }}
-                        >
-                          {avatarId && (
-                            <motion.img
-                              src={`/api/v1/avatar/${avatarId}`}
-                              className="h-full w-full rounded-xl object-cover"
-                            />
-                          )}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    <motion.div
+                      style={{
+                        scale: avatarDragY,
+                        marginBottom: avatarDragMarginBottom,
+                      }}
+                      className="origin-top"
+                    >
+                      <AnimatePresence initial={!avatarView}>
+                        {avatarView && item.current && (
+                          <motion.div
+                            className={twMerge(
+                              "relative aspect-square w-full rounded-xl bg-white shadow-sm",
+                              !avatarId && "bg-gray-200/50 dark:bg-gray-500/50",
+                            )}
+                            initial={{ opacity: 0, height: 0, scale: 0 }}
+                            animate={{
+                              opacity: 1,
+                              height: "48px",
+                              scale: 1,
+                            }}
+                            exit={{ opacity: 0, height: 0, scale: 0 }}
+                          >
+                            {avatarId && (
+                              <motion.img
+                                src={`/api/v1/avatar/${avatarId}`}
+                                className="h-full w-full rounded-xl object-cover"
+                              />
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
                   </motion.button>
                 );
               })
@@ -361,19 +372,13 @@ export default function Calendar() {
           key={currentDate + currentMonth}
           onDragEnd={(event, info) => {
             const { offset } = info;
-            if (
-              Math.abs(offset.x) > SWIPE_THRESHOLD ||
-              Math.abs(offset.y) > SWIPE_THRESHOLD
-            ) {
-              // check x or y
-              if (Math.abs(offset.x) > Math.abs(offset.y)) {
-                if (offset.x > 0) {
-                  prevDay();
-                  setDirection(-1);
-                } else {
-                  nextDay();
-                  setDirection(1);
-                }
+            if (Math.abs(offset.x) > SWIPE_THRESHOLD_X) {
+              if (offset.x > 0) {
+                prevDay();
+                setDirection(-1);
+              } else {
+                nextDay();
+                setDirection(1);
               }
             }
           }}
