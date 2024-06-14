@@ -328,16 +328,27 @@ export default function Calendar() {
                         {avatarView && item.current && (
                           <motion.div
                             className={twMerge(
-                              "relative aspect-square w-full rounded-xl bg-white shadow-sm",
+                              "relative aspect-square w-full bg-white shadow-sm",
                               !avatarId && "bg-gray-200/50 dark:bg-gray-500/50",
                             )}
-                            initial={{ opacity: 0, height: 0, scale: 0 }}
+                            initial={{
+                              opacity: 0,
+                              height: 0,
+                              scale: 0,
+                              borderRadius: "48px",
+                            }}
                             animate={{
                               opacity: 1,
                               height: "48px",
+                              borderRadius: "12px",
                               scale: 1,
                             }}
-                            exit={{ opacity: 0, height: 0, scale: 0 }}
+                            exit={{
+                              opacity: 0,
+                              height: 0,
+                              scale: 0,
+                              borderRadius: "48px",
+                            }}
                           >
                             {avatarId && (
                               <motion.img
@@ -403,8 +414,8 @@ export default function Calendar() {
                       <div>
                         <div className="font-bold">{item.user?.name}</div>
                         <div className="text-xs opacity-75">
-                          {item.steps?.toLocaleString() ?? 0} 步 -{" "}
-                          {item.distance?.toFixed(2) ?? 0} 公里
+                          {item.distance?.toFixed(2) ?? 0} 公里 -{" "}
+                          {item.steps?.toLocaleString() ?? 0} 步
                         </div>
                       </div>
                     </div>
