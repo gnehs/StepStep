@@ -8,7 +8,7 @@
   }
 
   .glass-effect {
-    --bg-board-color: lch(76.67 38.33 203.29 / 0.1);
+    --bg-board-color: rgba(103, 160, 201, 0.1);
     background-image: linear-gradient(
       140deg,
       var(--bg-board-color) 28.7%,
