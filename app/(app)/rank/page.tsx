@@ -104,6 +104,7 @@ export default function Calendar() {
     } else {
       setCurrentMonth(currentMonth + 1);
     }
+    setDirection(1);
   }
   function prevMonth() {
     if (currentMonth === 1) {
@@ -112,6 +113,7 @@ export default function Calendar() {
     } else {
       setCurrentMonth(currentMonth - 1);
     }
+    setDirection(-1);
   }
   function nextDay() {
     if (currentDate === lastDate) {
