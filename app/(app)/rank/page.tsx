@@ -14,7 +14,7 @@ import Loader from "@/components/Loader";
 
 const swipeConfidenceThreshold = 10000;
 const swipePower = (offset: number, velocity: number) =>
-  Math.abs(offset) * velocity;
+  Math.abs(offset) * Math.abs(velocity);
 
 const variants = {
   enter: (direction: number) => {
