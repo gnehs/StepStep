@@ -13,20 +13,31 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Loader from "@/components/Loader";
 const variants = {
   enter: (direction: number) => {
+    if (direction === 0) {
+      return {
+        y: 100,
+        x: 0,
+        opacity: 1,
+      };
+    }
     return {
       x: direction > 0 ? 500 : -500,
       opacity: 0,
+      scale: 0.75,
     };
   },
   center: {
     zIndex: 1,
     x: 0,
+    y: 0,
+    scale: 1,
     opacity: 1,
   },
   exit: (direction: number) => {
     return {
       zIndex: 0,
       x: direction < 0 ? 500 : -500,
+      scale: 0.75,
       opacity: 0,
     };
   },
@@ -143,59 +154,65 @@ export default function Calendar() {
   }
   return (
     <Container>
-      <div className="col-span-4 mt-2 text-center font-semibold">
+      <div className="col-span-4 text-center text-sm opacity-50 sm:mt-2">
         {new Date(
           currentYear,
           currentMonth - 1,
           new Date().getDate(),
         ).toLocaleDateString("zh-TW", { year: "numeric" })}
       </div>
-      <div className="grid grid-cols-10 gap-2 tabular-nums">
-        <motion.button
-          onClick={prevMonth}
-          className="col-span-3 flex items-center gap-1 p-2 text-left text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
-          layoutId={(currentMonth - 2).toString()}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <ChevronLeft size={16} />
-          {new Date(
-            currentYear,
-            currentMonth - 2,
-            new Date().getDate(),
-          ).toLocaleDateString("zh-TW", { month: "long" })}
-        </motion.button>
-        <motion.h1
-          className="col-span-4 text-center text-2xl font-bold"
-          layoutId={(currentMonth - 1).toString()}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          {new Date(
-            currentYear,
-            currentMonth - 1,
-            new Date().getDate(),
-          ).toLocaleDateString("zh-TW", {
-            month: "long",
-          })}
-        </motion.h1>
-        <motion.button
-          onClick={nextMonth}
-          className="col-span-3 flex items-center justify-end gap-1 p-2 text-right text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
-          layoutId={currentMonth.toString()}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          {new Date(
-            currentYear,
-            currentMonth,
-            new Date().getDate(),
-          ).toLocaleDateString("ja-JP", { month: "long" })}
-          <ChevronRight size={16} />
-        </motion.button>
+      <div className="grid grid-cols-10 items-center gap-2 tabular-nums">
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <motion.button
+            onClick={prevMonth}
+            className="col-span-3 flex items-center gap-1 px-2 text-left text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+            key={`prev-${currentMonth - 2}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <ChevronLeft size={16} />
+            {new Date(
+              currentYear,
+              currentMonth - 2,
+              new Date().getDate(),
+            ).toLocaleDateString("zh-TW", { month: "long" })}
+          </motion.button>
+        </AnimatePresence>
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <motion.h1
+            className="col-span-4 text-center text-xl font-bold"
+            key={`current-${currentMonth - 1}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {new Date(
+              currentYear,
+              currentMonth - 1,
+              new Date().getDate(),
+            ).toLocaleDateString("zh-TW", {
+              month: "long",
+            })}
+          </motion.h1>
+        </AnimatePresence>
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <motion.button
+            onClick={nextMonth}
+            className="col-span-3 flex items-center justify-end gap-1 px-2 text-right text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+            key={`next-${currentMonth}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {new Date(
+              currentYear,
+              currentMonth,
+              new Date().getDate(),
+            ).toLocaleDateString("ja-JP", { month: "long" })}
+            <ChevronRight size={16} />
+          </motion.button>{" "}
+        </AnimatePresence>
       </div>
       <div className="grid grid-cols-7 gap-2 pb-1 text-center text-sm font-light text-gray-400 sm:px-2">
         {["日", "月", "火", "水", "木", "金", "土"].map((day) => (
@@ -207,7 +224,7 @@ export default function Calendar() {
         dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
         dragElastic={0.001}
         style={{ y: dragY }}
-        className="dark:sm:glass-effect relative mb-2 overflow-hidden bg-white max-sm:-mx-2 max-sm:border-b max-sm:border-t max-sm:border-primary-100 sm:rounded-lg sm:border-transparent sm:shadow-sm dark:bg-transparent max-sm:dark:border-primary-800 dark:max-sm:bg-primary-900"
+        className="dark:sm:glass-effect relative mb-2 overflow-hidden bg-white max-sm:-mx-2 max-sm:border-b max-sm:border-t max-sm:border-primary-100 sm:rounded-lg sm:border-transparent sm:shadow-sm dark:bg-transparent max-sm:dark:border-white/5 dark:max-sm:bg-primary-900/20"
       >
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
@@ -295,7 +312,7 @@ export default function Calendar() {
                       {avatarView && item.current && (
                         <motion.div
                           className={twMerge(
-                            "relative aspect-square w-full overflow-hidden rounded-xl bg-white",
+                            "relative aspect-square w-full rounded-xl bg-white shadow-sm",
                             !avatarId && "bg-gray-200/50 dark:bg-gray-500/50",
                           )}
                           initial={{ opacity: 0, height: 0, scale: 0 }}
@@ -309,7 +326,7 @@ export default function Calendar() {
                           {avatarId && (
                             <motion.img
                               src={`/api/v1/avatar/${avatarId}`}
-                              className="h-full w-full object-cover"
+                              className="h-full w-full rounded-xl object-cover"
                             />
                           )}
                         </motion.div>
@@ -322,35 +339,35 @@ export default function Calendar() {
           </motion.div>
         </AnimatePresence>
       </motion.div>
-      <AnimatePresence initial={false} custom={direction} mode="popLayout">
-        {(currentDayRank?.records.length ?? 0) > 0 && (
-          <motion.div
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.2 },
-            }}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            key={currentDate}
-            onDragEnd={(event, info) => {
-              const { offset } = info;
-              // check x or y
-              if (Math.abs(offset.x) > Math.abs(offset.y)) {
-                if (offset.x > 0) {
-                  prevDay();
-                  setDirection(-1);
-                } else {
-                  nextDay();
-                  setDirection(1);
-                }
+      <AnimatePresence custom={direction} mode="popLayout">
+        <motion.div
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 },
+          }}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          key={currentDate + currentMonth}
+          onDragEnd={(event, info) => {
+            const { offset } = info;
+            // check x or y
+            if (Math.abs(offset.x) > Math.abs(offset.y)) {
+              if (offset.x > 0) {
+                prevDay();
+                setDirection(-1);
+              } else {
+                nextDay();
+                setDirection(1);
               }
-            }}
-          >
+            }
+          }}
+        >
+          {(currentDayRank?.records.length ?? 0) > 0 && (
             <motion.div className="dark:glass-effect rounded-lg bg-white p-2 shadow-sm dark:bg-black/20">
               {currentDayRank &&
                 currentDayRank.records.map((item, index) => (
@@ -389,12 +406,14 @@ export default function Calendar() {
                   </div>
                 ))}
             </motion.div>
-          </motion.div>
-        )}
+          )}
+          {currentDayRank?.records.length === 0 && (
+            <div className="flex h-20 items-center justify-center text-center opacity-50">
+              尚無紀錄
+            </div>
+          )}
+        </motion.div>
       </AnimatePresence>
-      {currentDayRank?.records.length === 0 && (
-        <div className="my-4 text-center opacity-50">尚無紀錄</div>
-      )}
       {rank.length === 0 && <Loader />}
     </Container>
   );
