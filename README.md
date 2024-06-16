@@ -40,3 +40,24 @@ docker run -d -p 3000:3000 \
   --name stepstep \
   ghcr.io/gnehs/stepstep
 ```
+
+## API
+
+### GET `/api/v1/rank?date=2024-06-10`
+
+- 取得指定日期的排行榜。
+- 日期格式為 `YYYY-MM-DD`。
+
+```json
+[
+  {
+    "steps": 5000,
+    "distance": 5.123456789,
+    "energy": 0,
+    "user": {
+      "id": "c123456",
+      "name": "Test"
+    }
+  }
+]
+```
