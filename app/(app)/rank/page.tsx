@@ -420,8 +420,8 @@ export default function Calendar() {
                       <div>
                         <div className="font-bold">{item.user?.name}</div>
                         <div className="text-xs opacity-75">
-                          {item.distance?.toFixed(2) ?? 0} 公里 -{" "}
-                          {item.steps?.toLocaleString() ?? 0} 步
+                          {item.steps?.toLocaleString() ?? 0} 步 -{" "}
+                          {item.distance?.toFixed(2) ?? 0} 公里
                         </div>
                       </div>
                     </div>
