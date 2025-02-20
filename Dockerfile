@@ -3,6 +3,7 @@ FROM node:20-alpine as base
 ENV PNPM_HOME="/var/lib/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
+RUN npm install --global corepack@latest
 RUN corepack enable
 RUN apk add --no-cache tzdata
 ENV TZ=Asia/Taipei
