@@ -6,7 +6,7 @@ import { Footprints, Flame, Compass, ChevronLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import Link from "next/link";
-import { getAnalyticsData } from "@/services/actions/analytics";
+import { getAnalyticsDataFromJWT } from "@/services/actions/analytics";
 import { BarChart } from "@tremor/react";
 import StatItem from "@/components/StatItem";
 import Loader from "@/components/Loader";
@@ -79,9 +79,9 @@ export default function HistoryPage() {
   useEffect(() => {
     async function getData() {
       if (token === "") return;
-      let res = await getAnalyticsData(token);
-      if (res.success) {
-        setRes(res.data);
+      const response = await getAnalyticsDataFromJWT(token);
+      if ("data" in response && response.success) {
+        setRes(response.data);
       }
     }
     getData();

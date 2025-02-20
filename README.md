@@ -61,3 +61,59 @@ docker run -d -p 3000:3000 \
   }
 ]
 ```
+
+### GET `/api/v1/analytics?token=<TOKEN>`
+
+- 透過同步令牌取得分析資料。
+
+```ts
+interface ActivityData {
+  success: boolean;
+  data: {
+    aggregate: {
+      _sum: {
+        distance: number;
+        energy: number;
+        steps: number;
+      };
+      _avg: {
+        distance: number;
+        energy: number;
+        steps: number;
+      };
+    };
+    last30dAggregate: {
+      日: {
+        [hour: string]: { distance: number; energy: number; steps: number };
+      };
+      一: {
+        [hour: string]: { distance: number; energy: number; steps: number };
+      };
+      二: {
+        [hour: string]: { distance: number; energy: number; steps: number };
+      };
+      三: {
+        [hour: string]: { distance: number; energy: number; steps: number };
+      };
+      四: {
+        [hour: string]: { distance: number; energy: number; steps: number };
+      };
+      五: {
+        [hour: string]: { distance: number; energy: number; steps: number };
+      };
+      六: {
+        [hour: string]: { distance: number; energy: number; steps: number };
+      };
+    };
+    last30dByDay: Array<
+      | {
+          distance: number;
+          energy: number;
+          steps: number;
+          timestamp: string;
+        }
+      | { timestamp: string }
+    >;
+  };
+}
+```

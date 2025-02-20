@@ -1,13 +1,29 @@
 "use server";
 import prisma from "@/services/prisma";
 import { getUserFromJWT } from "@/services/actions/auth";
-export async function getAnalyticsData(token: string) {
+
+export async function getAnalyticsDataFromJWT(token: string) {
   let user = await getUserFromJWT(token);
   if (!user) {
     return { success: false, message: "無效的 token" };
   }
+  return await getAnalyticsData(user.id);
+}
+export async function getAnalyticsDataFromToken(token: string) {
+  let user = await prisma.user.findFirst({
+    where: {
+      token: token,
+    },
+  });
+  if (!user) {
+    return { success: false, message: "無效的 token" };
+  }
+  return await getAnalyticsData(user.id);
+}
+
+export async function getAnalyticsData(userId: string) {
   let aggregate = await prisma.record.aggregate({
-    where: { userId: user.id },
+    where: { userId: userId },
     _sum: { distance: true, energy: true, steps: true },
     _avg: { distance: true, energy: true, steps: true },
   });
@@ -16,7 +32,7 @@ export async function getAnalyticsData(token: string) {
   last30d.setDate(last30d.getDate() - 30);
   let last30dData = await prisma.record.findMany({
     where: {
-      userId: user.id,
+      userId: userId,
       timestamp: {
         gte: last30d,
       },
