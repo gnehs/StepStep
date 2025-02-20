@@ -23,7 +23,7 @@ export async function login({
       data: { lastLogin: new Date() },
     });
     let token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-      expiresIn: "7d",
+      expiresIn: "30d",
     });
     return { success: true, user, token };
   }
