@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { getSyncStatus } from "@/services/actions/sync";
 import InstallDialog from "@/components/SyncGuide/InstallDialog";
+import { ChevronRight, KeyRound } from "lucide-react";
 
 import dynamic from "next/dynamic";
 const RelativeTime = dynamic(() => import("@/components/RelativeTime"), {
@@ -48,6 +49,17 @@ export default function Settings() {
         </Link>
       </div>
       <div className="flex flex-col gap-2">
+        <Link
+          href="/settings/passkeys"
+          className="dark:glass-effect flex items-center gap-3 rounded-lg bg-white px-3 py-3 shadow-sm hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 dark:bg-black/5 dark:hover:bg-white/5"
+        >
+          <KeyRound size={20} aria-hidden="true" />
+          <div className="min-w-0 flex-1">
+            <div className="font-semibold">Passkey</div>
+            <div className="text-sm opacity-75">管理免密碼登入方式</div>
+          </div>
+          <ChevronRight size={20} aria-hidden="true" />
+        </Link>
         <div className="dark:glass-effect rounded-lg bg-white px-3 py-2 shadow-sm dark:bg-black/5">
           <div className="text-sm opacity-75">上次同步</div>
           <div className="font-semibold">

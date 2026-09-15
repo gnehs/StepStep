@@ -25,6 +25,7 @@ pnpm dev
 - [x] 獎章系統
 - [x] PWA
 - [x] 分析功能
+- [x] Passkey 登入與管理
 
 ## 部署
 
@@ -39,6 +40,28 @@ docker run -d -p 3000:3000 \
   --name stepstep \
   ghcr.io/gnehs/stepstep
 ```
+
+### Passkey
+
+先用密碼登入，在「設定 → Passkey」輸入目前密碼與方便辨識的名稱，即可使用裝置的指紋、臉部辨識或 PIN 新增 Passkey。之後可在登入頁選擇「使用 Passkey 登入」，不必輸入 Email。Passkey 子頁面可查看及移除已新增的 Passkey；移除網站上的紀錄後，也可自行從裝置的密碼管理器刪除對應項目。密碼登入仍可使用。
+
+正式環境需設定公開網站的來源（通訊協定、網域及非預設連接埠，不含路徑）：
+
+```bash
+WEBAUTHN_ORIGIN=https://steps.example.com
+```
+
+Docker 部署時加入 `-e WEBAUTHN_ORIGIN=https://steps.example.com`。網站必須使用 HTTPS；本機開發預設為 `http://localhost:3000`，若使用其他連接埠，請明確設定 `WEBAUTHN_ORIGIN`。反向代理後方也應填寫使用者實際開啟的 HTTPS 來源。未設定時，正式環境會停用 Passkey 註冊與登入，密碼登入不受影響。
+
+Passkey 綁定此來源的網域；更換網域後需重新新增。資料儲存在同一份 SQLite 資料庫的 `Passkey` 與 `PasskeyChallenge` 表，首次使用自動建立，不需執行 Prisma migration。伺服器只保存公鑰與驗證資訊，私鑰由裝置或密碼管理器保管。新增 Passkey 需再次確認目前密碼；每次驗證要求裝置驗證使用者，挑戰五分鐘後過期且只能使用一次。
+
+執行 Passkey 整合測試（使用暫存 SQLite 與測試金鑰，不會存取開發資料庫）：
+
+```bash
+pnpm test:passkey
+```
+
+實作參考 [SimpleWebAuthn 官方文件](https://simplewebauthn.dev/docs/packages/server) 與 [Next.js Server Functions 安全指南](https://nextjs.org/docs/app/getting-started/mutating-data)。
 
 ## API
 

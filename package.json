@@ -10,7 +10,8 @@
     "dev": "concurrently -p none \"serwist build serwist.config.mjs --watch\" \"next dev\"",
     "build": "next build && serwist build serwist.config.mjs",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:passkey": "node scripts/test-passkeys.mjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",
@@ -19,6 +20,8 @@
     "@nivo/heatmap": "^0.99.0",
     "@remixicon/react": "^4.9.0",
     "@serwist/next": "^9.5.12",
+    "@simplewebauthn/browser": "^14.0.0",
+    "@simplewebauthn/server": "^14.0.2",
     "@tremor/react": "^3.18.7",
     "bcryptjs": "^3.0.3",
     "framer-motion": "^13.3.0",
