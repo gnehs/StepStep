@@ -42,3 +42,4 @@ prisma/dev.db
 *.db
 *.db-*
 *.sqlite*
+.pnpm-store
