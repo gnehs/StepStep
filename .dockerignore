@@ -1,5 +1,7 @@
 node_modules
 .next
+public/sw.js
+public/sw.js.map
 .git
 .gitignore
 *.md
