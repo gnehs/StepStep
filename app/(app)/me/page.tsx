@@ -1,6 +1,5 @@
 import Container from "@/components/Container";
 import PageTitle from "@/components/PageTitle";
-import SectionTitle from "@/components/SectionTitle";
 export default function Home() {
   return (
     <Container>

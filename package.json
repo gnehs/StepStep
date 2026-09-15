@@ -11,7 +11,9 @@
     "build": "next build && serwist build serwist.config.mjs",
     "start": "next start",
     "lint": "eslint .",
-    "test:passkey": "node scripts/test-passkeys.mjs"
+    "test": "node scripts/test-passkeys.mjs --all",
+    "test:passkey": "node scripts/test-passkeys.mjs",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",

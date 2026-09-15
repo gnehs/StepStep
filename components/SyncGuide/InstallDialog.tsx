@@ -64,7 +64,15 @@ function PlatformPanels({
   );
 }
 
-export default function InstallSync() {
+export default function InstallSync({
+  syncEndpoint,
+  legacySyncEndpoint,
+  syncToken,
+}: {
+  syncEndpoint: string;
+  legacySyncEndpoint: string;
+  syncToken: string;
+}) {
   const [visible, setVisible] = useState(false);
   const [platform, setPlatform] = useState<"ios" | "android">("ios");
 
@@ -123,7 +131,12 @@ export default function InstallSync() {
                     opacity: platform === "ios" ? 1 : 0,
                   }}
                 >
-                  <SyncGuide active={visible && platform === "ios"} />
+                  <SyncGuide
+                    active={visible && platform === "ios"}
+                    syncEndpoint={syncEndpoint}
+                    legacySyncEndpoint={legacySyncEndpoint}
+                    syncToken={syncToken}
+                  />
                 </div>
                 <div
                   inert={platform !== "android"}

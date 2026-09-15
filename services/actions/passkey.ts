@@ -2,7 +2,6 @@
 
 import { randomBytes } from "node:crypto";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import {
   generateAuthenticationOptions,
@@ -12,7 +11,7 @@ import {
   type AuthenticationResponseJSON,
   type RegistrationResponseJSON,
 } from "@simplewebauthn/server";
-import { getUserFromJWT } from "./auth";
+import { createSession, getCurrentUserRecord } from "@/services/session";
 import { findUser, transaction, updateUserRow } from "../db";
 import { getPasskeyConfig } from "../passkey-config";
 import {
@@ -65,12 +64,9 @@ async function takeChallenge(ceremony: Ceremony) {
   return id ? consumeChallenge(id, ceremony) : null;
 }
 
-export async function getPasskeyRegistrationOptions(
-  token: string,
-  password: string,
-) {
+export async function getPasskeyRegistrationOptions(password: string) {
   try {
-    const user = await getUserFromJWT(token);
+    const user = await getCurrentUserRecord();
     if (!user) return failure("登入已失效，請重新登入。");
     if (
       typeof password !== "string" ||
@@ -109,13 +105,12 @@ export async function getPasskeyRegistrationOptions(
 }
 
 export async function verifyPasskeyRegistration(
-  token: string,
   response: RegistrationResponseJSON,
   name: string,
 ) {
   try {
     const challenge = await takeChallenge("registration");
-    const user = await getUserFromJWT(token);
+    const user = await getCurrentUserRecord();
     if (!user || !challenge || challenge.userId !== user.id) {
       return failure("驗證已失效，請重新新增 Passkey。");
     }
@@ -199,7 +194,7 @@ export async function verifyPasskeyAuthentication(
       },
     );
     if (!verified) return failure(invalid);
-    const token = transaction(() => {
+    const userId = transaction(() => {
       if (
         !findUser("id", passkey.userId) ||
         !updatePasskeyUsage(
@@ -211,19 +206,18 @@ export async function verifyPasskeyAuthentication(
         throw new Error("Credential changed during verification");
       }
       updateUserRow(passkey.userId, "lastLogin", new Date());
-      return jwt.sign({ userId: passkey.userId }, process.env.JWT_SECRET!, {
-        expiresIn: "30d",
-      });
+      return passkey.userId;
     });
-    return { success: true as const, token };
+    await createSession(userId);
+    return { success: true as const };
   } catch {
     return failure(invalid);
   }
 }
 
-export async function listPasskeys(token: string) {
+export async function listPasskeys() {
   try {
-    const user = await getUserFromJWT(token);
+    const user = await getCurrentUserRecord();
     if (!user) return failure("登入已失效，請重新登入。");
     const passkeys = findPasskeys(user.id).map(
       ({ id, name, createdAt, lastUsedAt }) => ({
@@ -239,9 +233,9 @@ export async function listPasskeys(token: string) {
   }
 }
 
-export async function removePasskey(token: string, id: string) {
+export async function removePasskey(id: string) {
   try {
-    const user = await getUserFromJWT(token);
+    const user = await getCurrentUserRecord();
     if (!user) return failure("登入已失效，請重新登入。");
     if (typeof id !== "string" || !deletePasskey(user.id, id))
       return failure("找不到此 Passkey，請重新整理。");

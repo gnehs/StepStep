@@ -23,6 +23,8 @@ model User {
   lastSync  DateTime?
   lastLogin DateTime?
   Badge     Badge[]
+  passkeys  Passkey[]
+  passkeyChallenges PasskeyChallenge[]
 }
 
 model Record {
@@ -63,4 +65,31 @@ model Badge {
   count   Int      @default(1)
 
   @@unique([badgeId, userId])
+}
+
+model Passkey {
+  id          String   @id
+  userId      String
+  name        String
+  publicKey   Bytes
+  counter     Int
+  transports  String
+  deviceType  String
+  backedUp    Boolean
+  createdAt   BigInt
+  lastUsedAt  BigInt?
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([userId])
+}
+
+model PasskeyChallenge {
+  id         String   @id
+  ceremony   String
+  challenge  String
+  userId     String?
+  expiresAt  BigInt
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([expiresAt])
 }

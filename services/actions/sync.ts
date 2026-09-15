@@ -1,10 +1,19 @@
 "use server";
-import { getUserFromJWT } from "@/services/actions/auth";
-export async function getSyncStatus(token: string) {
-  let user = await getUserFromJWT(token);
+import { getCurrentUserRecord, toPublicUser } from "@/services/session";
+
+/** Return the authenticated user's sync status without exposing the database row. */
+export async function getSyncStatus() {
+  const user = await getCurrentUserRecord();
   if (!user) {
-    return { success: false, message: "無效的 token" };
+    return { success: false as const, message: "登入已失效，請重新登入。" };
   }
-  user.password = "";
-  return { success: true, user, lastSync: user.lastSync };
+
+  return {
+    success: true as const,
+    user: toPublicUser(user),
+    // User.token is the external sync credential. Keep it separate from the
+    // normal public user DTO and expose it only to this settings action.
+    syncToken: user.token,
+    lastSync: user.lastSync,
+  };
 }

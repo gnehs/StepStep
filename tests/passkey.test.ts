@@ -10,13 +10,16 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import type {
   AuthenticationResponseJSON,
   RegistrationResponseJSON,
 } from "@simplewebauthn/server";
 import { createUserRow, getDb, findUser } from "../services/db";
 import { getPasskeyConfig } from "../services/passkey-config";
+import {
+  SESSION_COOKIE_NAME,
+  signSessionToken,
+} from "../services/session";
 import {
   findPasskey,
   consumeChallenge,
@@ -31,7 +34,7 @@ import {
   listPasskeys,
   removePasskey,
 } from "../services/actions/passkey";
-import { cookieValues, cookieOptions } from "./mocks/headers";
+import { cookieValues, cookieOptions, resetCookies } from "./mocks/headers";
 
 const directory = mkdtempSync(join(tmpdir(), "stepstep-passkey-db-"));
 const origin = "https://steps.example.test";
@@ -39,13 +42,13 @@ const rpID = "steps.example.test";
 const password = randomBytes(24).toString("base64url");
 let user: ReturnType<typeof createUserRow>;
 let other: ReturnType<typeof createUserRow>;
-let token: string;
-let otherToken: string;
+const previousNodeEnv = process.env.NODE_ENV;
 
 before(async () => {
   process.env.SQLITE_PATH = join(directory, "test.db");
   process.env.WEBAUTHN_ORIGIN = origin;
   process.env.JWT_SECRET = randomBytes(32).toString("base64url");
+  Object.assign(process.env, { NODE_ENV: "production" });
   user = createUserRow(
     "Test User",
     "test@example.invalid",
@@ -56,13 +59,19 @@ before(async () => {
     "other@example.invalid",
     await bcrypt.hash(password, 4),
   );
-  token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
-  otherToken = jwt.sign({ userId: other.id }, process.env.JWT_SECRET);
+  resetCookies();
+  setSession(user.id);
 });
 after(() => {
   getDb().close();
   rmSync(directory, { recursive: true, force: true });
+  if (previousNodeEnv === undefined) Reflect.deleteProperty(process.env, "NODE_ENV");
+  else Object.assign(process.env, { NODE_ENV: previousNodeEnv });
 });
+
+function setSession(userId: string) {
+  cookieValues.set(SESSION_COOKIE_NAME, signSessionToken(userId));
+}
 
 // Minimal test authenticator: emit CBOR attestation and sign genuine ES256 assertions.
 // Production verification always uses the real SimpleWebAuthn implementation.
@@ -200,7 +209,8 @@ function authenticator() {
 }
 
 async function enroll(device = authenticator()) {
-  const options = await getPasskeyRegistrationOptions(token, password);
+  setSession(user.id);
+  const options = await getPasskeyRegistrationOptions(password);
   if (!options.success) throw new Error(options.message);
   assert.equal(options.options.authenticatorSelection?.residentKey, "required");
   assert.equal(
@@ -209,7 +219,6 @@ async function enroll(device = authenticator()) {
   );
   assert.deepEqual(
     await verifyPasskeyRegistration(
-      token,
       device.registration(options.options.challenge),
       "Test passkey",
     ),
@@ -226,7 +235,7 @@ async function challenge() {
   return result.options.challenge;
 }
 
-test("registers, authenticates with a genuine signature, and issues the existing JWT format", async () => {
+test("registers and authenticates with a genuine signature, issuing an HttpOnly session", async () => {
   const device = await enroll();
   const response = device.authentication(await challenge());
   const cookie = cookieOptions.get("stepstep-passkey-authentication");
@@ -238,55 +247,56 @@ test("registers, authenticates with a genuine signature, and issues the existing
     maxAge: 300,
   });
   const result = await verifyPasskeyAuthentication(response);
-  if (!result.success) throw new Error(result.message);
-  const decoded = jwt.verify(
-    result.token,
-    process.env.JWT_SECRET!,
-  ) as jwt.JwtPayload;
-  assert.equal(decoded.userId, user.id);
+  assert.deepEqual(result, { success: true });
+  const session = cookieOptions.get(SESSION_COOKIE_NAME);
+  assert.equal(session?.httpOnly, true);
+  assert.equal(session?.secure, true);
+  assert.equal(session?.sameSite, "lax");
+  assert.equal(session?.path, "/");
+  assert.equal(session?.maxAge, 30 * 24 * 60 * 60);
   assert.ok(findUser("id", user.id)?.lastLogin);
   assert.ok(findPasskey(device.id)?.lastUsedAt);
   assert.equal((await verifyPasskeyAuthentication(response)).success, false);
 });
 
 test("registration requires a valid session, password, and the same account at verification", async () => {
+  cookieValues.delete(SESSION_COOKIE_NAME);
+  assert.equal((await getPasskeyRegistrationOptions(password)).success, false);
+  setSession(user.id);
   assert.equal(
-    (await getPasskeyRegistrationOptions("invalid", password)).success,
+    (await getPasskeyRegistrationOptions("incorrect")).success,
     false,
   );
-  assert.equal(
-    (await getPasskeyRegistrationOptions(token, "incorrect")).success,
-    false,
-  );
-  const options = await getPasskeyRegistrationOptions(token, password);
+  const options = await getPasskeyRegistrationOptions(password);
   if (!options.success) throw new Error(options.message);
   const device = authenticator();
   const response = device.registration(options.options.challenge);
+  setSession(other.id);
   assert.equal(
-    (await verifyPasskeyRegistration(otherToken, response, "Wrong account"))
-      .success,
+    (await verifyPasskeyRegistration(response, "Wrong account")).success,
     false,
   );
+  setSession(user.id);
   assert.equal(
-    (await verifyPasskeyRegistration(token, response, "Replay")).success,
+    (await verifyPasskeyRegistration(response, "Replay")).success,
     false,
   );
   assert.equal(findPasskey(device.id), null);
 });
 
 test("registration rejects wrong origin, RP ID, absent user verification, and duplicate credentials", async () => {
+  setSession(user.id);
   for (const settings of [
     { origin: "https://attacker.example.test" },
     { rpID: "attacker.example.test" },
     { flags: 0x41 },
   ]) {
-    const options = await getPasskeyRegistrationOptions(token, password);
+    const options = await getPasskeyRegistrationOptions(password);
     if (!options.success) throw new Error(options.message);
     const device = authenticator();
     assert.equal(
       (
         await verifyPasskeyRegistration(
-          token,
           device.registration(options.options.challenge, settings),
           "Invalid",
         )
@@ -296,7 +306,7 @@ test("registration rejects wrong origin, RP ID, absent user verification, and du
     assert.equal(findPasskey(device.id), null);
   }
   const device = await enroll();
-  const options = await getPasskeyRegistrationOptions(token, password);
+  const options = await getPasskeyRegistrationOptions(password);
   if (!options.success) throw new Error(options.message);
   assert.ok(
     options.options.excludeCredentials?.some(({ id }) => id === device.id),
@@ -304,7 +314,6 @@ test("registration rejects wrong origin, RP ID, absent user verification, and du
   assert.equal(
     (
       await verifyPasskeyRegistration(
-        token,
         device.registration(options.options.challenge),
         "Duplicate",
       )
@@ -434,8 +443,10 @@ test("nonzero counters must advance; zero-counter passkeys can sign in repeatedl
 
 test("management enforces ownership, returns only metadata, and removed credentials cannot sign in", async () => {
   const device = await enroll();
-  assert.equal((await listPasskeys("invalid")).success, false);
-  const list = await listPasskeys(token);
+  cookieValues.delete(SESSION_COOKIE_NAME);
+  assert.equal((await listPasskeys()).success, false);
+  setSession(user.id);
+  const list = await listPasskeys();
   if (!list.success) throw new Error(list.message);
   const item = list.passkeys.find(({ id }) => id === device.id)!;
   assert.deepEqual(Object.keys(item).sort(), [
@@ -444,15 +455,19 @@ test("management enforces ownership, returns only metadata, and removed credenti
     "lastUsedAt",
     "name",
   ]);
-  assert.deepEqual(await listPasskeys(otherToken), {
+  setSession(other.id);
+  assert.deepEqual(await listPasskeys(), {
     success: true,
     passkeys: [],
   });
-  assert.equal((await removePasskey("invalid", device.id)).success, false);
-  assert.equal((await removePasskey(otherToken, device.id)).success, false);
+  cookieValues.delete(SESSION_COOKIE_NAME);
+  assert.equal((await removePasskey(device.id)).success, false);
+  setSession(other.id);
+  assert.equal((await removePasskey(device.id)).success, false);
+  setSession(user.id);
   const response = device.authentication(await challenge());
   const stored = findPasskey(device.id)!;
-  assert.equal((await removePasskey(token, device.id)).success, true);
+  assert.equal((await removePasskey(device.id)).success, true);
   assert.equal(updatePasskeyUsage(stored, 1, false), false);
   assert.equal((await verifyPasskeyAuthentication(response)).success, false);
 });

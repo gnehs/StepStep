@@ -24,31 +24,7 @@ type Challenge = {
 };
 
 function db() {
-  const connection = getDb();
-  connection.exec(`
-    CREATE TABLE IF NOT EXISTS "Passkey" (
-      "id" TEXT PRIMARY KEY NOT NULL,
-      "userId" TEXT NOT NULL REFERENCES "User"("id") ON DELETE CASCADE,
-      "name" TEXT NOT NULL,
-      "publicKey" BLOB NOT NULL,
-      "counter" INTEGER NOT NULL,
-      "transports" TEXT NOT NULL,
-      "deviceType" TEXT NOT NULL,
-      "backedUp" INTEGER NOT NULL,
-      "createdAt" INTEGER NOT NULL,
-      "lastUsedAt" INTEGER
-    );
-    CREATE INDEX IF NOT EXISTS "Passkey_userId_idx" ON "Passkey"("userId");
-    CREATE TABLE IF NOT EXISTS "PasskeyChallenge" (
-      "id" TEXT PRIMARY KEY NOT NULL,
-      "ceremony" TEXT NOT NULL,
-      "challenge" TEXT NOT NULL,
-      "userId" TEXT REFERENCES "User"("id") ON DELETE CASCADE,
-      "expiresAt" INTEGER NOT NULL
-    );
-    CREATE INDEX IF NOT EXISTS "PasskeyChallenge_expiresAt_idx" ON "PasskeyChallenge"("expiresAt");
-  `);
-  return connection;
+  return getDb();
 }
 
 type PasskeyRow = Omit<StoredPasskey, "transports" | "backedUp"> & {

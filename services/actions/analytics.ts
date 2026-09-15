@@ -1,83 +1,121 @@
 "use server";
 import { aggregateRecords, findRecords, findUser } from "@/services/db";
-import { getUserFromJWT } from "@/services/actions/auth";
+import { getCurrentUser } from "@/services/session";
 
-export async function getAnalyticsDataFromJWT(token: string) {
-  let user = await getUserFromJWT(token);
-  if (!user) {
-    return { success: false, message: "無效的 token" };
-  }
-  return await getAnalyticsData(user.id);
-}
-export async function getAnalyticsDataFromToken(token: string) {
-  let user = findUser("token", token);
-  if (!user) {
-    return { success: false, message: "無效的 token" };
-  }
-  return await getAnalyticsData(user.id);
-}
-
-export async function getAnalyticsData(userId: string) {
-  let aggregate = aggregateRecords(userId);
-  // 30d by hours & week by days
-  let last30d = new Date();
-  last30d.setDate(last30d.getDate() - 30);
-  let last30dData = findRecords(userId, last30d);
-  let weekDays = ["日", "一", "二", "三", "四", "五", "六"];
-  let hours = Array.from(
-    { length: 24 },
-    (_, i) => i.toString().padStart(2, "0") + ":00",
-  );
-  let last30dAggregate = {} as Record<
+export type AnalyticsData = {
+  aggregate: {
+    _sum: { steps: number; distance: number; energy: number };
+    _avg: { steps: number; distance: number; energy: number };
+  };
+  last30dAggregate: Record<
     string,
-    Record<string, Record<string, number>>
+    Record<string, { distance: number; energy: number; steps: number }>
   >;
-
-  for (let day of weekDays) {
-    for (let hour of hours) {
-      if (!last30dAggregate[day]) last30dAggregate[day] = {};
-      let filteredData = last30dData.filter((record) => {
-        let recordDay = record.timestamp.getDay();
-        let recordHour = record.timestamp.getHours();
-        return weekDays[recordDay] === day && hours[recordHour] === hour;
-      });
-      let reducedData = filteredData.reduce(
-        (acc, record) => ({
-          distance: (acc.distance ?? 0) + record.distance,
-          energy: (acc.energy ?? 0) + record.energy,
-          steps: (acc.steps ?? 0) + record.steps,
-        }),
-        {} as Record<string, number>,
-      );
-      last30dAggregate[day][hour] = {
-        distance: reducedData.distance / filteredData.length,
-        energy: reducedData.energy / filteredData.length,
-        steps: reducedData.steps / filteredData.length,
-      };
-    }
-  }
-  // 30d by day
-  let last30dByDay = [] as {
+  last30dByDay: {
     timestamp: Date;
     distance: number;
     energy: number;
     steps: number;
   }[];
-  // group by day
+};
+
+type AnalyticsResult =
+  | { success: true; data: AnalyticsData }
+  | { success: false; message: string };
+
+/** Fetch analytics for the currently authenticated browser session. */
+export async function getAnalyticsData(): Promise<AnalyticsResult> {
+  const user = await getCurrentUser();
+  if (!user) {
+    return { success: false, message: "登入已失效，請重新登入。" };
+  }
+
+  return buildAnalyticsData(user.id);
+}
+
+/**
+ * Fetch analytics for the external sync API. This is intentionally separate
+ * from the browser-session helper because User.token is a sync credential.
+ */
+export async function getAnalyticsDataFromToken(token: string) {
+  const user = findUser("token", token);
+  if (!user) {
+    return { success: false as const, message: "無效的 token" };
+  }
+
+  return buildAnalyticsData(user.id);
+}
+
+async function buildAnalyticsData(userId: string): Promise<AnalyticsResult> {
+  const aggregateRow = aggregateRecords(userId);
+  const aggregate = {
+    _sum: {
+      steps: aggregateRow._sum.steps ?? 0,
+      distance: aggregateRow._sum.distance ?? 0,
+      energy: aggregateRow._sum.energy ?? 0,
+    },
+    _avg: {
+      steps: aggregateRow._avg.steps ?? 0,
+      distance: aggregateRow._avg.distance ?? 0,
+      energy: aggregateRow._avg.energy ?? 0,
+    },
+  };
+
+  // 30d by hours & week by days
+  const last30d = new Date();
+  last30d.setDate(last30d.getDate() - 30);
+  const last30dData = findRecords(userId, last30d);
+  const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
+  const hours = Array.from(
+    { length: 24 },
+    (_, i) => i.toString().padStart(2, "0") + ":00",
+  );
+  const last30dAggregate = {} as AnalyticsData["last30dAggregate"];
+
+  for (const day of weekDays) {
+    last30dAggregate[day] = {};
+    for (const hour of hours) {
+      const filteredData = last30dData.filter((record) => {
+        const recordDay = record.timestamp.getDay();
+        const recordHour = record.timestamp.getHours();
+        return weekDays[recordDay] === day && hours[recordHour] === hour;
+      });
+      const reducedData = filteredData.reduce(
+        (acc, record) => ({
+          distance: acc.distance + record.distance,
+          energy: acc.energy + record.energy,
+          steps: acc.steps + record.steps,
+        }),
+        { distance: 0, energy: 0, steps: 0 },
+      );
+      const count = filteredData.length || 1;
+      last30dAggregate[day][hour] = {
+        distance: reducedData.distance / count,
+        energy: reducedData.energy / count,
+        steps: reducedData.steps / count,
+      };
+    }
+  }
+
+  // 30d by day
+  const last30dByDay: AnalyticsData["last30dByDay"] = [];
+
+  // Group records by local calendar day. This keeps the existing Taipei-local
+  // display semantics while avoiding null/NaN values when a day has no data.
   for (let i = 0; i < 30; i++) {
-    let day = new Date();
+    const day = new Date();
     day.setDate(day.getDate() - i);
     day.setHours(0, 0, 0, 0);
-    let filteredData = last30dData.filter(
+    const filteredData = last30dData.filter(
       (record) => record.timestamp.toDateString() === day.toDateString(),
     );
-    let reducedData = filteredData.reduce(
+    const reducedData = filteredData.reduce(
       (acc, record) => ({
-        distance: (acc.distance ?? 0) + record.distance,
-        energy: (acc.energy ?? 0) + record.energy,
-        steps: (acc.steps ?? 0) + record.steps,
+        distance: acc.distance + record.distance,
+        energy: acc.energy + record.energy,
+        steps: acc.steps + record.steps,
       }),
-      {} as Record<string, number>,
+      { distance: 0, energy: 0, steps: 0 },
     );
     last30dByDay.push({
       timestamp: day,

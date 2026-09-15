@@ -1,14 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-
-type CalendarUtils = typeof import("./calendar-utils");
-let calendarUtils!: CalendarUtils;
-
-test.before(async () => {
-  calendarUtils = (await import(
-    new URL("./calendar-utils.ts", import.meta.url).href
-  )) as CalendarUtils;
-});
+import * as calendarUtils from "./calendar-utils";
 
 function localDate(year: number, month: number, day: number): Date {
   return new Date(year, month - 1, day);

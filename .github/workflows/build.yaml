@@ -4,12 +4,61 @@ on:
   push:
     branches:
       - "main"
+  pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  docker:
+  quality:
+    name: Lint, typecheck, and test
     runs-on: ubuntu-latest
+    env:
+      # These are isolated CI-only values; production secrets belong in the
+      # deployment environment and are never committed to the repository.
+      DATABASE_URL: file:./ci.db
+      JWT_SECRET: stepstep-ci-only-secret
+      INVITE_CODE: stepstep-ci-only-invite
+      NODE_ENV: test
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.4.1
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.15.x
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Test
+        run: pnpm test
+      - name: Build
+        run: pnpm build
+      - name: Verify standalone excludes local credentials
+        run: |
+          test ! -e .next/standalone/.env
+          test ! -e .next/standalone/.env.production
+          test ! -e .next/standalone/.env.local
+
+  docker:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: quality
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -24,7 +73,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          cache-from: type=registry,ref=user/app:latest
+          cache-from: type=registry,ref=ghcr.io/gnehs/stepstep:latest
           cache-to: type=inline
           tags: |
             ghcr.io/gnehs/stepstep:latest

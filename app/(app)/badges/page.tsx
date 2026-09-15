@@ -1,27 +1,20 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useLocalStorage } from "usehooks-ts";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import type { Badge } from "@/services/db";
 import { getBadgeData } from "@/services/actions/badge";
 import BadgesData from "@/data/badges";
 import Container from "@/components/Container";
-import Loader from "@/components/Loader";
-export default function Page() {
-  const [token] = useLocalStorage("token", "");
-  const [userBadges, setUserBadges] = useState<null | Badge[]>(null);
-  function getBadgeById(id: string) {
-    return BadgesData.find((badge) => badge.id === id);
-  }
-  useEffect(() => {
-    if (token === "") return;
-    async function fetchData() {
-      const data = await getBadgeData(token);
-      setUserBadges(data);
-    }
-    fetchData();
-  }, [token]);
+import { getCurrentUser } from "@/services/session";
+import { redirect } from "next/navigation";
+
+function getBadgeById(id: string) {
+  return BadgesData.find((badge) => badge.id === id);
+}
+
+export default async function Page() {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+
+  const userBadges = await getBadgeData();
 
   return (
     <Container>
@@ -35,8 +28,7 @@ export default function Page() {
         </Link>
         <div className="text-center font-semibold">獎章</div>
       </div>
-      {userBadges === null && <Loader />}
-      {userBadges !== null && userBadges.length > 0 && (
+      {userBadges.length > 0 && (
         <div className="flex flex-col gap-2">
           {userBadges.map((badge) => {
             const info = getBadgeById(badge.badgeId);

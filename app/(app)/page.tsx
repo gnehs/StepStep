@@ -1,11 +1,7 @@
-"use client";
 import Container from "@/components/Container";
 import PageTitle from "@/components/PageTitle";
 import SectionTitle from "@/components/SectionTitle";
 import { getHomeData } from "@/services/actions/home";
-import { useEffect, useState } from "react";
-import { useLocalStorage } from "usehooks-ts";
-import type { Badge, StepRecord } from "@/services/db";
 import BadgesData from "@/data/badges";
 import {
   Footprints,
@@ -19,33 +15,17 @@ import StatItem from "@/components/StatItem";
 import StepChart from "@/components/StepChart";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
-export default function Home() {
-  const [token] = useLocalStorage("token", "");
-  const [today, setToday] = useState<StepRecord[]>([]);
-  const [badges, setBadges] = useState<Badge[]>([]);
-  const [history, setHistory] = useState<
-    {
-      steps: number | null;
-      distance: number | null;
-      energy: number | null;
-      date: Date;
-    }[]
-  >([]);
+import { redirect } from "next/navigation";
+
+export default async function Home() {
+  const result = await getHomeData();
+  if (!result.success) redirect("/login");
+
+  const { todayRecords: today, badges, historyRecords: history } = result;
   const steps = today.reduce((acc, cur) => acc + cur.steps, 0);
   const distance = today.reduce((acc, cur) => acc + cur.distance, 0);
   const energy = today.reduce((acc, cur) => acc + cur.energy, 0);
-  useEffect(() => {
-    async function getData() {
-      if (token === "") return;
-      let res = await getHomeData(token);
-      if (res.success) {
-        setToday(res.todayRecords!);
-        setHistory(res.historyRecords!);
-        setBadges(res.badges!);
-      }
-    }
-    getData();
-  }, [token]);
+
   return (
     <Container>
       <div className="flex items-center justify-between gap-2">

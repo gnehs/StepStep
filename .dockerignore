@@ -6,7 +6,7 @@ public/sw.js.map
 .gitignore
 *.md
 dist
-.env
+.env*
 **/*.db
 **/*.db-*
 **/*.sqlite*

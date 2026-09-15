@@ -1,11 +1,13 @@
 "use server";
 import { findBadges, giveBadge, sumRecords } from "@/services/db";
-import { getUserFromJWT } from "@/services/actions/auth";
-export async function getBadgeData(token: string) {
-  let user = await getUserFromJWT(token);
+import { getCurrentUser } from "@/services/session";
+
+export async function getBadgeData() {
+  const user = await getCurrentUser();
   if (!user) {
     return [];
   }
+
   return findBadges(user.id);
 }
 

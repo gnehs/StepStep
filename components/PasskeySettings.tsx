@@ -42,7 +42,7 @@ function formatPasskeyDate(timestamp: number | null): string {
   }).format(new Date(timestamp));
 }
 
-export default function PasskeySettings({ token }: { token: string }) {
+export default function PasskeySettings() {
   const [passkeys, setPasskeys] = useState<Passkey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -58,17 +58,10 @@ export default function PasskeySettings({ token }: { token: string }) {
   );
 
   const loadPasskeys = useCallback(async () => {
-    if (!token) {
-      setPasskeys([]);
-      setIsLoading(false);
-      setError("無法載入 Passkey，請重新登入。");
-      return;
-    }
-
     setIsLoading(true);
     setError("");
     try {
-      const result = await listPasskeys(token);
+      const result = await listPasskeys();
       if (!result.success) {
         setError(result.message || "無法載入 Passkey，請稍後再試。");
         return;
@@ -79,22 +72,13 @@ export default function PasskeySettings({ token }: { token: string }) {
     } finally {
       setIsLoading(false);
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     let active = true;
 
     async function loadInitialPasskeys() {
-      if (!token) {
-        if (active) {
-          setPasskeys([]);
-          setIsLoading(false);
-          setError("無法載入 Passkey，請重新登入。");
-        }
-        return;
-      }
-
-      const result = await listPasskeys(token);
+      const result = await listPasskeys();
       if (!active) {
         return;
       }
@@ -118,7 +102,7 @@ export default function PasskeySettings({ token }: { token: string }) {
     return () => {
       active = false;
     };
-  }, [token]);
+  }, []);
 
   async function handleRegister(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -136,10 +120,7 @@ export default function PasskeySettings({ token }: { token: string }) {
     setError("");
     setNotice("");
     try {
-      const optionsResult = await getPasskeyRegistrationOptions(
-        token,
-        password,
-      );
+      const optionsResult = await getPasskeyRegistrationOptions(password);
       if (!optionsResult.success) {
         setError(optionsResult.message || "無法開始註冊 Passkey，請稍後再試。");
         return;
@@ -149,7 +130,6 @@ export default function PasskeySettings({ token }: { token: string }) {
         optionsJSON: optionsResult.options,
       });
       const verificationResult = await verifyPasskeyRegistration(
-        token,
         response,
         trimmedName,
       );
@@ -190,7 +170,7 @@ export default function PasskeySettings({ token }: { token: string }) {
     setError("");
     setNotice("");
     try {
-      const result = await removePasskey(token, passkey.id);
+      const result = await removePasskey(passkey.id);
       if (!result.success) {
         setError(result.message || "無法移除 Passkey，請稍後再試。");
         return;

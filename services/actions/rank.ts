@@ -9,13 +9,12 @@ export async function getRank(year?: number, month?: number) {
   const numDays = (y: number, m: number) => new Date(y, m, 0).getDate();
   let dates = Array.from({ length: numDays(year, month) }, (_, i) => i + 1);
 
-  let historyRecords = [];
-  for (let date of dates) {
-    historyRecords.push({
+  const historyRecords = await Promise.all(
+    dates.map(async (date) => ({
       date: new Date(year, month - 1, date),
       records: await getRankByDay(year, month, date),
-    });
-  }
+    })),
+  );
 
   return historyRecords;
 }

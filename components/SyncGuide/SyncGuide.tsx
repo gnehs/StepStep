@@ -119,7 +119,17 @@ function Step({
   );
 }
 
-export default function SyncGuide({ active = true }: { active?: boolean }) {
+export default function SyncGuide({
+  active = true,
+  syncEndpoint,
+  legacySyncEndpoint,
+  syncToken,
+}: {
+  active?: boolean;
+  syncEndpoint: string;
+  legacySyncEndpoint: string;
+  syncToken: string;
+}) {
   const scrollRoot = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -132,16 +142,32 @@ export default function SyncGuide({ active = true }: { active?: boolean }) {
         將餅餅踏踏記錄器安裝到您的 iPhone 或 iPad 上
       </Step>
       <Step title="1. 設定 API 網址" imgSrc="/sync-guide/change-api-url.jpg">
-        修改捷徑中的 API 網址，將其更改為此頁面上方的專屬同步網址
+        修改捷徑中的 API 網址，填入此頁的同步網址：{" "}
+        <code className="rounded bg-black/5 px-1 dark:bg-white/10">
+          {legacySyncEndpoint}
+        </code>
+        。這是舊版相容格式，既有捷徑可以繼續使用。
       </Step>
-      <Step title="2. 取得存取權限" imgSrc="/sync-guide/allow-access.jpg">
+      <Step title="2. （建議）改用 Authorization 標頭">
+        若要避免令牌出現在 URL，將網址改為{" "}
+        <code className="rounded bg-black/5 px-1 dark:bg-white/10">
+          {syncEndpoint}
+        </code>
+        ，在「取得 URL 內容」動作點選「顯示更多」→「標頭」→「加入新標頭」；
+        確認方法為 POST，鍵填入 <code>Authorization</code>，值填入{" "}
+        <code className="rounded bg-black/5 px-1 dark:bg-white/10">
+          Bearer {syncToken}
+        </code>
+        。可先按設定頁的「複製」取得令牌；如果要維持舊捷徑模式，可略過本步。
+      </Step>
+      <Step title="3. 取得存取權限" imgSrc="/sync-guide/allow-access.jpg">
         將捷徑下方三個讀取健康樣本動作都設定為允許
       </Step>
-      <Step title="3. 選擇資料來源" imgSrc="/sync-guide/change-source.jpg">
+      <Step title="4. 選擇資料來源" imgSrc="/sync-guide/change-source.jpg">
         將捷徑下方三個讀取健康樣本的來源設定為您的手錶或手機名稱
       </Step>
       <Step
-        title="4. 允許大量資料存取"
+        title="5. 允許大量資料存取"
         vidSrc="/sync-guide/allow-bulk.mp4"
         active={active}
         prefersReducedMotion={prefersReducedMotion}
@@ -149,13 +175,13 @@ export default function SyncGuide({ active = true }: { active?: boolean }) {
       >
         在設定＞捷徑＞進階＞啟用「允許分享大量資料」
       </Step>
-      <Step title="5-1. 首次同步" imgSrc="/sync-guide/sync-allow.jpg">
+      <Step title="6-1. 首次同步" imgSrc="/sync-guide/sync-allow.jpg">
         執行本捷徑開始你的首次同步，請選擇「永遠允許」 本捷徑分享你的健康樣本
       </Step>
-      <Step title="5-2. 首次同步" imgSrc="/sync-guide/sync-result.jpg">
+      <Step title="6-2. 首次同步" imgSrc="/sync-guide/sync-result.jpg">
         同步完成後，你會在最下方看到執行結果，並應該能在餅餅踏踏看到你的步步資料
       </Step>
-      <Step title="6. 設定自動執行" imgSrc="/sync-guide/automation.jpg">
+      <Step title="7. 設定自動執行" imgSrc="/sync-guide/automation.jpg">
         建議建立不少於四次的每日自動執行，讓你的步步資料能夠即時同步到餅餅踏踏
       </Step>
     </div>

@@ -2,13 +2,10 @@
 
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { useLocalStorage } from "usehooks-ts";
 import Container from "@/components/Container";
 import PasskeySettings from "@/components/PasskeySettings";
 
 export default function PasskeySettingsPage() {
-  const [token] = useLocalStorage("token", "");
-
   return (
     <Container>
       <div className="mb-3 grid grid-cols-3 items-center gap-2 py-2">
@@ -22,7 +19,7 @@ export default function PasskeySettingsPage() {
         </Link>
         <h1 className="text-center font-semibold">Passkey</h1>
       </div>
-      <PasskeySettings token={token} />
+      <PasskeySettings />
     </Container>
   );
 }

@@ -1,14 +1,21 @@
 import { getAnalyticsDataFromToken } from "@/services/actions/analytics";
-import type { NextRequest } from "next/server";
-export async function GET(request: NextRequest) {
-  const token = request.nextUrl.searchParams.get("token");
+import {
+  getBearerToken,
+  unauthorizedBearerResponse,
+} from "@/services/api-auth";
+
+export async function GET(request: Request) {
+  const token = getBearerToken(request);
   if (!token) {
-    return new Response("Invalid token", { status: 400 });
+    return unauthorizedBearerResponse();
   }
+
   const result = await getAnalyticsDataFromToken(token);
-  return new Response(JSON.stringify(result), {
-    headers: {
-      "Content-Type": "application/json",
-    },
+  if (!result.success) {
+    return unauthorizedBearerResponse("令牌無效", true);
+  }
+
+  return Response.json(result, {
+    headers: { "Cache-Control": "no-store" },
   });
 }

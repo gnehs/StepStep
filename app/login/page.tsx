@@ -17,13 +17,11 @@ import {
   subscribeToPasskeySupport,
   startAuthentication,
 } from "@/services/passkey-browser";
-import { useLocalStorage } from "usehooks-ts";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useLocalStorage("token", "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPasskeyLoggingIn, setIsPasskeyLoggingIn] = useState(false);
   const [error, setError] = useState("");
@@ -45,11 +43,6 @@ export default function LoginPage() {
         setError(res.message || "登入失敗，請確認 Email 與密碼。");
         return;
       }
-      if (!res.token) {
-        setError("登入失敗，請稍後再試。");
-        return;
-      }
-      setToken(res.token!);
       router.push("/");
     } catch {
       setError("登入失敗，請稍後再試。");
@@ -85,12 +78,6 @@ export default function LoginPage() {
         );
         return;
       }
-      if (!verificationResult.token) {
-        setError("Passkey 登入失敗，請稍後再試。");
-        return;
-      }
-
-      setToken(verificationResult.token);
       router.push("/");
     } catch (passkeyError) {
       setError(
