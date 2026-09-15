@@ -26,7 +26,7 @@
     "@simplewebauthn/server": "^14.0.2",
     "@tremor/react": "^3.18.7",
     "bcryptjs": "^3.0.3",
-    "framer-motion": "^13.3.0",
+    "framer-motion": "13.2.0",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^1.46.0",
     "next": "16.3.5",
