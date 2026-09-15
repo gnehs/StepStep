@@ -1,0 +1,50 @@
+.control,
+.day {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pinch-zoom;
+  user-select: none;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    transform 150ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.control {
+  min-height: 32px;
+  border-radius: 12px;
+}
+
+.control:focus-visible,
+.day:focus-visible {
+  outline: 2px solid var(--color-primary-500, #5482a3);
+  outline-offset: -2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .control:enabled:hover,
+  .day:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--color-primary-500, #5482a3) 8%,
+      transparent
+    );
+  }
+}
+
+.calendar[data-motion="on"] .control:enabled:active,
+.calendar[data-motion="on"] .day:active {
+  transform: scale(0.97);
+}
+
+.calendar[data-motion="off"] .control,
+.calendar[data-motion="off"] .day {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control,
+  .day {
+    transition: none;
+    transform: none !important;
+  }
+}
