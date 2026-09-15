@@ -74,7 +74,8 @@ export default function RootLayout({
         <link rel="icon" href="/logo-favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/maskable_icon.png" type="image/png" />
       </head>
-      <body className="bg-primary-50 pt-[env(safe-area-inset-top)] font-sans text-primary-950 antialiased dark:bg-primary-950 dark:text-primary-50">
+      <body className="bg-primary-50 pt-[var(--app-top-inset)] font-sans text-primary-950 antialiased dark:bg-primary-950 dark:text-primary-50">
+        <div className="pwa-status-bar-backdrop" aria-hidden="true" />
         <SerwistProvider swUrl="/sw.js">
           <LegacyStorageCleanup />
           {children}

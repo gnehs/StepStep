@@ -14,10 +14,10 @@ export default async function RootLayout({
   if (!user) redirect("/login");
 
   return (
-    <div className="flex min-h-dvh flex-col" vaul-drawer-wrapper="">
+    <div className="flex min-h-[calc(100dvh-var(--app-top-inset))] flex-col" vaul-drawer-wrapper="">
       <a
         href="#main-content"
-        className="sr-only fixed top-3 left-3 z-50 rounded-xl bg-white p-3 text-primary-950 focus:not-sr-only"
+        className="sr-only fixed top-[calc(var(--app-top-inset)+0.75rem)] left-3 z-50 rounded-xl bg-white p-3 text-primary-950 focus:not-sr-only"
       >
         跳至主要內容
       </a>

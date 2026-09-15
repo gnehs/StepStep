@@ -133,3 +133,32 @@
 @utility hoverable {
   @apply bg-white/0 transition-colors duration-150 hover:bg-white/[0.025] active:bg-white/5;
 }
+
+:root {
+  --app-top-inset: env(safe-area-inset-top, 0px);
+}
+
+.pwa-status-bar-backdrop {
+  display: none;
+}
+
+/* iOS Home Screen workaround: keep content outside the reported 16px
+   scroll-edge blur. This is a buffer, not an API to disable system blur.
+   Keep a real element at top: 0 so WebKit can sample its opaque background. */
+@supports (-webkit-touch-callout: none) {
+  @media (display-mode: standalone) {
+    :root {
+      --app-top-inset: calc(env(safe-area-inset-top, 0px) + 16px);
+    }
+
+    .pwa-status-bar-backdrop {
+      display: block;
+      position: fixed;
+      inset: 0 0 auto;
+      height: var(--app-top-inset);
+      background-color: inherit;
+      pointer-events: none;
+      z-index: 40;
+    }
+  }
+}
