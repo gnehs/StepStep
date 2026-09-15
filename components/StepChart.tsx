@@ -15,7 +15,7 @@ export default function StepChart({ data }: { data: StepRecord[] }) {
       data={chartData}
       index="time"
       categories={["步數"]}
-      colors={["blue"]}
+      colors={["orange"]}
       showYAxis={false}
       showLegend={false}
     />

@@ -1,0 +1,186 @@
+@layer base {
+  :root {
+    color-scheme: light;
+    --ios-background: #f2f2f7;
+    --ios-surface: #fff;
+    --ios-label: #1c1c1e;
+    --ios-secondary: #6c6c70;
+    --ios-separator: rgb(60 60 67 / 0.18);
+    --ios-tint: #007aff;
+    --ios-input-background: #f5f5f7;
+    --ios-input-border: #dedee3;
+  }
+  body {
+    margin: 0;
+    background: var(--ios-background);
+    color: var(--ios-label);
+    font-optical-sizing: auto;
+  }
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button,
+  a {
+    touch-action: manipulation;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ios-tint);
+    outline-offset: 3px;
+  }
+  ::selection {
+    background: #007aff30;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --ios-background: #000;
+      --ios-surface: #1c1c1e;
+      --ios-label: #f5f5f7;
+      --ios-secondary: #aeaeb2;
+      --ios-separator: rgb(84 84 88 / 0.65);
+      --ios-tint: #0a84ff;
+      --ios-input-background: #2c2c2e;
+      --ios-input-border: #48484a;
+    }
+  }
+}
+@layer components {
+  .surface-card,
+  .ios-group {
+    background: var(--ios-surface);
+    border: 0;
+    border-radius: 0.75rem;
+    box-shadow: none;
+  }
+  .ios-group {
+    overflow: hidden;
+  }
+  .ios-row {
+    position: relative;
+    min-height: 2.75rem;
+    padding: 0.75rem 1rem;
+  }
+  .ios-row + .ios-row::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 1rem;
+    height: 0.5px;
+    background: var(--ios-separator);
+    content: "";
+  }
+  .ios-title {
+    margin: 1.25rem 0;
+    font-size: 2.125rem;
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+  .ios-secondary {
+    color: var(--ios-secondary);
+  }
+  .ios-link {
+    color: var(--ios-tint);
+  }
+  .eyebrow {
+    color: var(--ios-secondary);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+  .pressable {
+    transition:
+      opacity 100ms ease,
+      background-color 100ms ease;
+  }
+  .pressable:active:not(:disabled) {
+    opacity: 0.55;
+  }
+  .pressable:focus-visible {
+    transition: none;
+  }
+  .ios-button {
+    min-height: 3.125rem;
+    border-radius: 0.75rem;
+    background: var(--ios-tint);
+    color: white;
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+  .ios-input {
+    min-height: 2.75rem;
+    border: 1px solid var(--ios-input-border);
+    border-radius: 0.625rem;
+    background: var(--ios-input-background);
+    color: var(--ios-label);
+    padding: 0.625rem 0.75rem;
+    box-shadow: none;
+    font-size: 1.0625rem;
+  }
+  .ios-input::placeholder {
+    color: var(--ios-secondary);
+    opacity: 1;
+  }
+  .ios-input:focus {
+    border-color: var(--ios-tint);
+    box-shadow: none;
+    outline: 1px solid var(--ios-tint);
+    outline-offset: 0;
+  }
+  .app-nav {
+    position: fixed;
+    z-index: 30;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgb(249 249 249 / 0.94);
+    padding-bottom: env(safe-area-inset-bottom);
+    border-top: 0.5px solid var(--ios-separator);
+    backdrop-filter: blur(20px);
+  }
+  .ios-tab {
+    display: flex;
+    flex: 1;
+    min-height: 3.25rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1875rem;
+    font-size: 0.625rem;
+    font-weight: 500;
+    color: var(--ios-secondary);
+  }
+  .ios-tab[aria-current="page"] {
+    color: var(--ios-tint);
+  }
+  @media (prefers-color-scheme: dark) {
+    .app-nav {
+      background: rgb(28 28 30 / 0.94);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pressable {
+      transition: none;
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .app-nav {
+      background: var(--ios-surface);
+      backdrop-filter: none;
+    }
+  }
+  @media (prefers-contrast: more) {
+    .surface-card,
+    .ios-group {
+      outline: 1px solid var(--ios-secondary);
+    }
+    .app-nav {
+      background: var(--ios-surface);
+      backdrop-filter: none;
+    }
+  }
+}

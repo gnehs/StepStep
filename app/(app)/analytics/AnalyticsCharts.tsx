@@ -15,25 +15,41 @@ type ChartData = {
 };
 
 function HeatMap30d({ data }: { data: AnalyticsData["last30dAggregate"] }) {
-  const parsedData = [];
+  const days = Object.keys(data);
+  const timeSlots = days.length > 0 ? Object.keys(data[days[0]] ?? {}) : [];
 
-  for (const time of Object.keys(Object.values(data)[0] as object)) {
+  if (days.length === 0 || timeSlots.length === 0) {
+    return (
+      <div
+        role="status"
+        className="flex min-h-64 items-center justify-center rounded-2xl bg-primary-50 p-6 text-center text-sm text-primary-700 dark:bg-primary-800/50 dark:text-primary-100"
+      >
+        目前尚無足夠的時段資料
+      </div>
+    );
+  }
+
+  const parsedData: Array<{
+    id: string;
+    data: Array<{ x: string; y: number }>;
+  }> = [];
+
+  for (const time of timeSlots) {
     const result = {
       id: time,
       data: [] as { x: string; y: number }[],
     };
-    for (const day of Object.keys(data)) {
+    for (const day of days) {
       result.data.push({
         x: day,
-        y: data[day][time].distance,
+        y: data[day]?.[time]?.distance ?? 0,
       });
     }
     parsedData.push(result);
   }
 
-  const maxVal = Math.max(
-    ...parsedData.map((item) => item.data.map((cell) => cell.y)).flat(99),
-  );
+  const values = parsedData.flatMap((item) => item.data.map((cell) => cell.y));
+  const maxVal = values.length > 0 ? Math.max(...values) : 0;
 
   return (
     <ResponsiveHeatMap
@@ -66,7 +82,7 @@ function HeatMap30d({ data }: { data: AnalyticsData["last30dAggregate"] }) {
       }}
       labelTextColor="#333"
       tooltip={({ cell }) => (
-        <div className="dark:glass-effect rounded-xl bg-white px-2 py-1 text-sm shadow-lg dark:bg-primary-950/50 dark:text-white">
+        <div className="surface-card px-3 py-2 text-sm dark:text-white">
           <span className="mr-1 opacity-75">
             週{cell.data.x} {cell.serieId}
           </span>
@@ -77,11 +93,17 @@ function HeatMap30d({ data }: { data: AnalyticsData["last30dAggregate"] }) {
   );
 }
 
-function AnalyticsTooltip({ payload, active }: { payload?: any[]; active?: boolean }) {
+function AnalyticsTooltip({
+  payload,
+  active,
+}: {
+  payload?: any[];
+  active?: boolean;
+}) {
   if (!active || !payload) return null;
 
   return (
-    <div className="w-30 dark:glass-effect z-10 rounded-xl bg-white text-tremor-default tabular-nums shadow-lg dark:bg-primary-950/50 dark:text-white">
+    <div className="surface-card z-10 w-30 text-tremor-default tabular-nums dark:text-white">
       {payload.map((category, index) => (
         <div key={index}>
           <div className="border-b border-tremor-border/10 p-1 px-3 font-bold">
@@ -115,7 +137,11 @@ export default function AnalyticsCharts({ data }: { data: ChartData }) {
   return (
     <>
       <SectionTitle>過去三十日步數</SectionTitle>
-      <div className="dark:glass-effect my-2 mb-4 w-full rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">
+      <div
+        className="surface-card my-3 mb-5 w-full p-3 sm:p-4"
+        role="group"
+        aria-label="過去三十日步數圖"
+      >
         <BarChart
           className="h-72"
           data={data.last30dByDay
@@ -137,7 +163,11 @@ export default function AnalyticsCharts({ data }: { data: ChartData }) {
         />
       </div>
       <SectionTitle>過去三十日踏踏時間分布圖</SectionTitle>
-      <div className="dark:glass-effect my-2 h-[730px] w-full rounded-lg bg-white p-2 shadow-sm dark:bg-black/5">
+      <div
+        className="surface-card my-3 h-[730px] w-full p-3 sm:p-4"
+        role="group"
+        aria-label="過去三十日踏踏時間分布圖"
+      >
         <HeatMap30d data={data.last30dAggregate} />
       </div>
     </>

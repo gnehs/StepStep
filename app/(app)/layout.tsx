@@ -14,10 +14,16 @@ export default async function RootLayout({
   if (!user) redirect("/login");
 
   return (
-    <div className="flex h-[100svh] flex-col" vaul-drawer-wrapper="">
-      <div className="h-full grow overflow-hidden overflow-y-scroll pb-2">
+    <div className="flex min-h-dvh flex-col" vaul-drawer-wrapper="">
+      <a
+        href="#main-content"
+        className="sr-only fixed top-3 left-3 z-50 rounded-xl bg-white p-3 text-primary-950 focus:not-sr-only"
+      >
+        跳至主要內容
+      </a>
+      <main tabIndex={-1} id="main-content" className="min-w-0 flex-1 pb-32">
         {children}
-      </div>
+      </main>
       <Nav />
     </div>
   );

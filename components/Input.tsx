@@ -6,10 +6,7 @@ export default function Input({
 }: { className?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
-      className={twMerge(
-        "border-primary-200 dark:border-primary-700 w-full rounded-lg border-2 bg-white px-4 py-2 outline-none focus:border-blue-500 dark:bg-black/5",
-        className,
-      )}
+      className={twMerge("ios-input w-full disabled:opacity-50", className)}
       {...props}
     />
   );

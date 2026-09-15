@@ -10,7 +10,6 @@ import {
 import { LoaderCircle, RefreshCw, Trash2 } from "lucide-react";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import SectionTitle from "@/components/SectionTitle";
 import {
   getPasskeyRegistrationOptions,
   listPasskeys,
@@ -193,7 +192,7 @@ export default function PasskeySettings() {
 
       {error ? (
         <p
-          className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950/30 dark:text-red-200"
+          className="mb-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-200"
           role="alert"
         >
           {error}
@@ -201,7 +200,7 @@ export default function PasskeySettings() {
       ) : null}
       {notice ? (
         <p
-          className="mb-3 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950/30 dark:text-green-200"
+          className="mb-4 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-900 dark:bg-green-950/30 dark:text-green-200"
           role="status"
         >
           {notice}
@@ -209,17 +208,20 @@ export default function PasskeySettings() {
       ) : null}
 
       {support === null ? (
-        <p className="mb-3 text-sm opacity-75">正在檢查 Passkey 支援⋯⋯</p>
+        <p className="mb-4 text-sm opacity-75">正在檢查 Passkey 支援⋯⋯</p>
       ) : support.supported ? (
-        <form
-          onSubmit={handleRegister}
-          className="dark:glass-effect mb-4 rounded-lg bg-white p-3 shadow-sm dark:bg-black/5"
-        >
-          <div className="mb-2 font-medium">新增 Passkey</div>
-          <SectionTitle className="mb-1">名稱</SectionTitle>
+        <form onSubmit={handleRegister} className="surface-card mb-5 p-5">
+          <h2 className="mb-4 text-base font-semibold tracking-tight">
+            新增 Passkey
+          </h2>
+          <label
+            htmlFor="passkey-name"
+            className="mb-1.5 block text-sm font-semibold text-primary-700 dark:text-primary-200"
+          >
+            名稱
+          </label>
           <Input
             id="passkey-name"
-            aria-label="Passkey 名稱"
             value={passkeyName}
             onChange={(event) => setPasskeyName(event.target.value)}
             placeholder="例如：我的 iPhone"
@@ -228,11 +230,16 @@ export default function PasskeySettings() {
             required
             disabled={isRegistering || Boolean(removingId)}
           />
-          <SectionTitle className="mt-2 mb-1">目前密碼</SectionTitle>
+          <label
+            htmlFor="passkey-password"
+            className="mt-4 mb-1.5 block text-sm font-semibold text-primary-700 dark:text-primary-200"
+          >
+            目前密碼
+          </label>
           <Input
             id="passkey-password"
-            aria-label="目前密碼"
             type="password"
+            placeholder="輸入目前密碼"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             autoComplete="current-password"
@@ -248,7 +255,7 @@ export default function PasskeySettings() {
               <span className="flex items-center justify-center gap-2">
                 <LoaderCircle
                   size={16}
-                  className="animate-spin"
+                  className="animate-spin motion-reduce:animate-none"
                   aria-hidden="true"
                 />
                 等待裝置確認⋯⋯
@@ -259,21 +266,29 @@ export default function PasskeySettings() {
           </Button>
         </form>
       ) : (
-        <p className="bg-primary-100 dark:bg-primary-900 mb-4 rounded-lg px-3 py-2 text-sm">
+        <p className="mb-5 rounded-2xl border border-primary-200 bg-primary-50 px-4 py-3 text-sm dark:border-primary-800 dark:bg-primary-900">
           {support.message || "目前無法使用 Passkey，請改用密碼登入。"}
         </p>
       )}
 
-      <div className="dark:glass-effect rounded-lg bg-white p-3 shadow-sm dark:bg-black/5">
-        <div className="mb-2 flex items-center justify-between gap-2">
-          <div className="font-medium">已註冊的 Passkey</div>
+      <div className="surface-card p-5">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <h2 className="font-semibold tracking-tight">已註冊的 Passkey</h2>
           <button
             type="button"
-            className="flex items-center gap-1 text-sm text-blue-500 disabled:cursor-not-allowed disabled:opacity-50 dark:text-blue-300"
+            className="pressable flex min-h-10 items-center gap-1 rounded-xl px-3 text-sm font-semibold text-primary-700 disabled:cursor-not-allowed disabled:opacity-50 dark:text-primary-200"
             onClick={() => void loadPasskeys()}
             disabled={isLoading || isRegistering || Boolean(removingId)}
           >
-            <RefreshCw size={14} aria-hidden="true" />
+            <RefreshCw
+              size={14}
+              className={
+                isLoading
+                  ? "animate-spin motion-reduce:animate-none"
+                  : undefined
+              }
+              aria-hidden="true"
+            />
             重新整理
           </button>
         </div>
@@ -281,7 +296,7 @@ export default function PasskeySettings() {
           <p className="flex items-center gap-2 text-sm opacity-75">
             <LoaderCircle
               size={16}
-              className="animate-spin"
+              className="animate-spin motion-reduce:animate-none"
               aria-hidden="true"
             />
             載入中⋯⋯
@@ -289,11 +304,11 @@ export default function PasskeySettings() {
         ) : passkeys.length === 0 ? (
           <p className="text-sm opacity-75">目前尚未新增 Passkey。</p>
         ) : (
-          <ul className="divide-primary-100 dark:divide-primary-800 divide-y">
+          <ul className="divide-y divide-primary-100 dark:divide-primary-800">
             {passkeys.map((passkey) => (
               <li
                 key={passkey.id}
-                className="flex items-start justify-between gap-3 py-3 first:pt-1 last:pb-1"
+                className="flex items-start justify-between gap-3 py-4 first:pt-1 last:pb-1"
               >
                 <div className="min-w-0">
                   <div className="truncate font-medium">{passkey.name}</div>
@@ -304,7 +319,7 @@ export default function PasskeySettings() {
                 </div>
                 <button
                   type="button"
-                  className="flex shrink-0 items-center gap-1 rounded px-1 text-sm text-red-600 disabled:cursor-not-allowed disabled:opacity-50 dark:text-red-300"
+                  className="pressable flex min-h-10 shrink-0 items-center gap-1 rounded-xl px-2 text-sm font-semibold text-red-600 disabled:cursor-not-allowed disabled:opacity-50 dark:text-red-300"
                   onClick={() => void handleRemove(passkey)}
                   disabled={Boolean(removingId) || isRegistering}
                   aria-label={`移除 ${passkey.name}`}

@@ -1,12 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Container from "@/components/Container";
-import PageTitle from "@/components/PageTitle";
-import SectionTitle from "@/components/SectionTitle";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { createUser } from "@/services/actions/user";
+
 export default function Register() {
   const router = useRouter();
 
@@ -15,6 +16,9 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     // get invite code from query string
     const urlParams = new URLSearchParams(window.location.search);
@@ -25,73 +29,164 @@ export default function Register() {
       setInviteCode(inviteCode);
     }
   }, []);
+
   async function onFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (isSubmitting) return;
+
+    setError("");
     if (password !== confirmPassword) {
-      alert("密碼不一致");
+      setError("兩次輸入的密碼不一致，請重新確認。");
       return;
     }
+
+    setIsSubmitting(true);
     try {
-      let res = await createUser({ inviteCode, name, email, password });
+      const res = await createUser({ inviteCode, name, email, password });
       if (!res.success) {
-        alert(res.message);
+        setError(res.message || "註冊失敗，請確認邀請碼與帳號資料。");
         return;
       }
       router.push("/login");
-    } catch (error) {}
+    } catch {
+      setError("註冊失敗，請稍後再試。");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
+
   return (
     <Container>
-      <PageTitle>註冊</PageTitle>
-      <form onSubmit={onFormSubmit}>
-        <SectionTitle className="mb-1 mt-2">邀請碼</SectionTitle>
-        <Input
-          id="invite-code"
-          value={inviteCode}
-          onChange={(e) => setInviteCode(e.target.value)}
-          required
-        />
-        <SectionTitle className="mb-1 mt-2">暱稱</SectionTitle>
-        <Input
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <SectionTitle className="mb-1 mt-2">Email</SectionTitle>
-        <Input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <p className="mt-1 text-balance text-xs opacity-75">
-          我們會透過 Gravatar 來顯示你的大頭貼，請確保你的 Email 是正確的。
+      <main className="mx-auto max-w-md py-8 pb-10">
+        <header className="flex items-center justify-between">
+          <Link href="/login" className="ios-link pressable text-sm">
+            登入
+          </Link>
+          <span className="ios-secondary text-sm">餅餅踏踏</span>
+        </header>
+
+        <h1 className="ios-title mt-10 text-3xl font-semibold tracking-[-0.04em] text-primary-950 dark:text-white">
+          建立帳號
+        </h1>
+
+        {error ? (
+          <p
+            className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700 dark:border-red-300/30 dark:bg-red-950/30 dark:text-red-200"
+            role="alert"
+            aria-live="polite"
+          >
+            {error}
+          </p>
+        ) : null}
+
+        <form onSubmit={onFormSubmit} className="mt-6">
+          <div className="space-y-4">
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="invite-code"
+                className="text-sm font-medium text-primary-950 dark:text-primary-50"
+              >
+                邀請碼
+              </label>
+              <Input
+                id="invite-code"
+                value={inviteCode}
+                onChange={(e) => setInviteCode(e.target.value)}
+                required
+                autoComplete="off"
+                disabled={isSubmitting}
+                className="w-full min-w-0 bg-[var(--ios-surface)]"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="name"
+                className="text-sm font-medium text-primary-950 dark:text-primary-50"
+              >
+                暱稱
+              </label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                autoComplete="nickname"
+                disabled={isSubmitting}
+                className="w-full min-w-0 bg-[var(--ios-surface)]"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-primary-950 dark:text-primary-50"
+              >
+                Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                disabled={isSubmitting}
+                aria-describedby="email-hint"
+                className="w-full min-w-0 bg-[var(--ios-surface)]"
+              />
+              <p id="email-hint" className="ios-secondary text-xs">
+                Email 會用於顯示 Gravatar 大頭貼。
+              </p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="password"
+                className="text-sm font-medium text-primary-950 dark:text-primary-50"
+              >
+                密碼
+              </label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="new-password"
+                disabled={isSubmitting}
+                className="w-full min-w-0 bg-[var(--ios-surface)]"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="confirm-password"
+                className="text-sm font-medium text-primary-950 dark:text-primary-50"
+              >
+                確認密碼
+              </label>
+              <Input
+                id="confirm-password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                autoComplete="new-password"
+                disabled={isSubmitting}
+                className="w-full min-w-0 bg-[var(--ios-surface)]"
+              />
+            </div>
+          </div>
+          <Button
+            className="pressable mt-6 w-full"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "建立中⋯⋯" : "建立帳號"}
+          </Button>
+        </form>
+
+        <p className="ios-secondary mt-5 text-center text-xs leading-5">
+          如果你弄丟了密碼，目前將無法找回你的帳號。
         </p>
-        <SectionTitle className="mb-1 mt-2">密碼</SectionTitle>
-        <Input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <SectionTitle className="mb-1 mt-2">確認密碼</SectionTitle>
-        <Input
-          id="confirm-password"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
-        <Button className="my-4 w-full" type="submit">
-          註冊
-        </Button>
-      </form>
-      <p className="text-balance text-center text-sm opacity-75">
-        如果你弄丟了密碼，你將永遠無法找回你的帳號。
-      </p>
+      </main>
     </Container>
   );
 }

@@ -7,8 +7,13 @@ export default function SectionTitle({
   className?: string;
 }) {
   return (
-    <div className={twMerge("text-sm tracking-wide opacity-75", className)}>
+    <h2
+      className={twMerge(
+        "mt-7 mb-2 px-4 text-[13px] font-normal text-primary-600 dark:text-primary-400",
+        className,
+      )}
+    >
       {children}
-    </div>
+    </h2>
   );
 }

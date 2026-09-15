@@ -14,6 +14,14 @@ pnpm install --frozen-lockfile --trust-lockfile --ignore-scripts
 pnpm dev
 ```
 
+## 介面與樣式
+
+使用 pnpm 與 Tailwind CSS v4。依照 [官方升級指南](https://tailwindcss.com/docs/upgrade-guide)，以 `app/globals.css` 的 `@theme`、`@plugin` 與 `@utility` 管理主題及擴充，不再載入 v3 的 JavaScript 設定。PostCSS 使用 `@tailwindcss/postcss`；Tremor 的來源掃描與動態色彩保留在 CSS 中。
+
+`app/design.css` 定義iOS 風格分組列表、底部分頁列與按壓回饋。介面跟隨系統深淺色，並支援減少動態效果、減少透明度與提高對比偏好。新增樣式時請保留鍵盤焦點及手機安全區域。
+
+Tailwind v4 的瀏覽器基準為 Safari 16.4+、Chrome 111+、Firefox 128+。更新樣式後執行 `pnpm typecheck`、`pnpm lint`、`pnpm test` 與 `pnpm build`，並檢查手機與桌面版面。
+
 ## 功能
 
 - [x] 新增步步紀錄

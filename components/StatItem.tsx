@@ -13,18 +13,22 @@ export default function StatItem({
   Icon: LucideIcon;
 }) {
   return (
-    <div className="dark:glass-effect relative my-2 flex flex-col rounded-lg bg-white px-3 py-2 shadow-sm dark:bg-black/5">
-      <div className="text-2xl font-light dark:text-white">
+    <div className="surface-card relative my-2 flex min-w-0 flex-col gap-2 p-4">
+      <div className="text-[28px] font-semibold tracking-tight break-words tabular-nums dark:text-white">
         {value}
-        <span className="text-xs font-normal text-gray-500 dark:text-white/50">
+        <span className="text-xs font-normal tracking-normal text-primary-600 dark:text-primary-300">
           {" "}
           {unit}
         </span>
       </div>
       {children}
-      <div className="flex items-center justify-between gap-1 text-xs text-gray-500 dark:text-white/50">
+      <div className="flex items-center justify-between gap-1 text-xs font-medium text-primary-600 dark:text-primary-300">
         {title}
-        <Icon size={16} className="opacity-20" />
+        <Icon
+          size={16}
+          aria-hidden="true"
+          className="shrink-0 text-primary-400"
+        />
       </div>
     </div>
   );

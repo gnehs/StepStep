@@ -1,58 +1,47 @@
 "use client";
-import Container from "@/components/Container";
+
 import { usePathname } from "next/navigation";
-import { Cog, Cookie, BarChart2 } from "lucide-react";
-import { LucideIcon } from "lucide-react";
+import {
+  Settings,
+  Footprints,
+  ChartNoAxesColumn,
+  type LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
-import { twMerge } from "tailwind-merge";
-function NavButton({
-  children,
-  href,
-  Icon,
-}: {
-  children: React.ReactNode;
-  href: string;
-  Icon: LucideIcon;
-}) {
-  const active = usePathname() === href;
-  return (
-    <Link
-      className={twMerge(
-        "flex flex-col items-center gap-1 p-2 text-xs",
-        active
-          ? "font-bold text-primary-500 dark:text-primary-400"
-          : "text-primary-300 hover:text-primary-400 dark:text-primary-600 dark:hover:text-primary-500",
-      )}
-      href={href}
-    >
-      <Icon
-        size={28}
-        strokeWidth={active ? 2 : 1.5}
-        className="transition-all"
-      />
-      {children}
-    </Link>
-  );
-}
+
+const items: { href: string; label: string; Icon: LucideIcon }[] = [
+  { href: "/", label: "餅餅踏踏", Icon: Footprints },
+  { href: "/rank", label: "排行榜", Icon: ChartNoAxesColumn },
+  { href: "/settings", label: "設定", Icon: Settings },
+];
+
 export default function Nav() {
+  const pathname = usePathname();
   return (
-    <div className="z-10 w-full bg-white pb-[env(safe-area-inset-bottom)] drop-shadow-2xl dark:bg-primary-900">
-      <Container>
-        <div className="flex w-full justify-around gap-2">
-          <NavButton href="/" Icon={Cookie}>
-            首頁
-          </NavButton>
-          {/* <NavButton href="/me" Icon={User}>
-            我的
-          </NavButton> */}
-          <NavButton href="/rank" Icon={BarChart2}>
-            排行榜
-          </NavButton>
-          <NavButton href="/settings" Icon={Cog}>
-            設定
-          </NavButton>
-        </div>
-      </Container>
-    </div>
+    <nav aria-label="主要導覽" className="app-nav">
+      <div className="mx-auto flex w-full max-w-3xl items-center px-4">
+        {items.map(({ href, label, Icon }) => {
+          const active =
+            href === "/"
+              ? ["/", "/analytics", "/badges", "/me"].includes(pathname)
+              : pathname === href || pathname.startsWith(`${href}/`);
+          return (
+            <Link
+              key={href}
+              href={href}
+              aria-current={active ? "page" : undefined}
+              className="ios-tab pressable"
+            >
+              <Icon
+                size={25}
+                strokeWidth={active ? 2.2 : 1.7}
+                aria-hidden="true"
+              />
+              {label}
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
   );
 }

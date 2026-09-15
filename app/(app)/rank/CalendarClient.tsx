@@ -200,7 +200,7 @@ export default function Calendar({
             aria-label="上一個月"
             className={twMerge(
               styles.control,
-              "col-span-3 flex items-center gap-1 px-2 text-left text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200",
+              "pressable col-span-3 flex items-center gap-1 px-2 text-left text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200",
             )}
           >
             <ChevronLeft size={16} />
@@ -213,7 +213,7 @@ export default function Calendar({
           >
             <button
               type="button"
-              className={twMerge(styles.control, "px-3")}
+              className={twMerge(styles.control, "pressable px-3")}
               aria-label={`${monthLabel(0)}，${pull.expanded ? "收合" : "展開"}每日冠軍`}
               aria-expanded={pull.expanded}
               aria-controls="ranking-calendar-days"
@@ -234,7 +234,7 @@ export default function Calendar({
             aria-label="下一個月"
             className={twMerge(
               styles.control,
-              "col-span-3 flex items-center justify-end gap-1 px-2 text-right text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200",
+              "pressable col-span-3 flex items-center justify-end gap-1 px-2 text-right text-sm font-light text-gray-400 hover:text-gray-800 dark:hover:text-gray-200",
             )}
           >
             {monthLabel(1)}
@@ -259,7 +259,7 @@ export default function Calendar({
               event.stopPropagation();
             }
           }}
-          className="dark:sm:glass-effect max-sm:border-primary-100 dark:max-sm:bg-primary-900/20 relative mb-2 grid overflow-hidden bg-white max-sm:-mx-2 max-sm:border-y sm:rounded-lg sm:shadow-sm dark:bg-transparent max-sm:dark:border-white/5"
+          className="surface-card relative mb-4 grid overflow-hidden max-sm:-mx-2 max-sm:rounded-none max-sm:border-x-0 max-sm:border-y sm:rounded-3xl"
         >
           <AnimatePresence initial={false} custom={navigation}>
             <SwipePanel
@@ -291,13 +291,13 @@ export default function Calendar({
                     aria-current={today ? "date" : undefined}
                     className={twMerge(
                       styles.day,
-                      "relative min-w-0 rounded-2xl",
+                      "pressable relative min-w-0 rounded-2xl",
                       champion
-                        ? "dark:text-primary-300 text-gray-800"
+                        ? "text-gray-800 dark:text-primary-300"
                         : "text-gray-300 dark:text-gray-600",
                       !item.current && "opacity-40",
                       selected &&
-                        "text-primary-600 dark:text-primary-50 font-semibold",
+                        "font-semibold text-primary-600 dark:text-primary-50",
                     )}
                   >
                     {selected && (
@@ -309,7 +309,7 @@ export default function Calendar({
                           duration: navigation.animate ? 0.2 : 0,
                           ease,
                         }}
-                        className="dark:glass-effect bg-primary-500/10 absolute top-0 left-1/2 -ml-4 size-8 rounded-full"
+                        className="absolute top-0 left-1/2 -ml-4 size-8 rounded-full bg-primary-500/10"
                       />
                     )}
                     <span className="absolute inset-x-0 top-0 flex h-8 items-center justify-center">
@@ -380,7 +380,7 @@ export default function Calendar({
                     type="button"
                     className={twMerge(
                       styles.control,
-                      "text-primary-600 dark:text-primary-300 px-3",
+                      "pressable px-3 text-primary-600 dark:text-primary-300",
                     )}
                     onClick={() => {
                       setResult(null);
@@ -398,7 +398,7 @@ export default function Calendar({
                   這天尚無紀錄
                 </div>
               ) : (
-                <div className="dark:glass-effect rounded-lg bg-white p-2 shadow-sm dark:bg-black/20">
+                <div className="surface-card p-4">
                   {records.map((item, index) => (
                     <div
                       key={item.user.id}
@@ -427,7 +427,7 @@ export default function Calendar({
                       {index < 3 && (
                         <div
                           className={twMerge(
-                            "dark:glass-effect rounded-full border border-gray-200 bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:border-0 dark:bg-gray-800/20 dark:text-white/75",
+                            "rounded-full border border-primary-200 bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary-700 dark:border-primary-700 dark:bg-primary-800/70 dark:text-primary-100",
                             index === 0 &&
                               "border-yellow-300 bg-yellow-100 text-yellow-600 dark:bg-yellow-800/20 dark:text-yellow-200/80",
                           )}

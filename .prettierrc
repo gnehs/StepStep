@@ -1,4 +1,5 @@
 {
   "plugins": ["prettier-plugin-tailwindcss"],
-  "tailwindFunctions": ["twMerge"]
+  "tailwindFunctions": ["twMerge"],
+  "tailwindStylesheet": "./app/globals.css"
 }

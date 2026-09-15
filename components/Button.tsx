@@ -11,7 +11,7 @@ export default function Button({
   return (
     <button
       className={twMerge(
-        `rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600`,
+        `ios-button pressable inline-flex w-auto items-center justify-center gap-2 px-5 py-3 disabled:cursor-not-allowed disabled:opacity-40`,
         className,
       )}
       {...props}

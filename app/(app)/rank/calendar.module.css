@@ -1,7 +1,7 @@
 .control,
 .day {
   -webkit-tap-highlight-color: transparent;
-  touch-action: pinch-zoom;
+  touch-action: manipulation;
   user-select: none;
   transition:
     background-color 150ms ease,
@@ -10,7 +10,7 @@
 }
 
 .control {
-  min-height: 32px;
+  min-height: 44px;
   border-radius: 12px;
 }
 

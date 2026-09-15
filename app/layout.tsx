@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./design.css";
 import DevBadge from "@/components/DevBadge";
 import { SerwistProvider } from "@serwist/next/react";
 import LegacyStorageCleanup from "@/components/LegacyStorageCleanup";
@@ -54,8 +55,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#202D3A" },
-    { media: "(prefers-color-scheme: light)", color: "#f5f8fa" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+    { media: "(prefers-color-scheme: light)", color: "#f2f2f7" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -69,24 +70,11 @@ export default function RootLayout({
   return (
     <html lang="zh-TW">
       <head>
-        {/* font */}
-        <link rel="preconnect" href="https://rsms.me/" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Noto+Emoji:wght@300..700&display=swap"
-          rel="stylesheet"
-        />
         {/* icon */}
         <link rel="icon" href="/logo-favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/maskable_icon.png" type="image/png" />
       </head>
-      <body className="bg-primary-50 pt-[env(safe-area-inset-top)] text-[#111] dark:bg-primary-950 dark:text-primary-50">
+      <body className="bg-primary-50 pt-[env(safe-area-inset-top)] font-sans text-primary-950 antialiased dark:bg-primary-950 dark:text-primary-50">
         <SerwistProvider swUrl="/sw.js">
           <LegacyStorageCleanup />
           {children}

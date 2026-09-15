@@ -1,9 +1,9 @@
 "use client";
+
 import { useState, useSyncExternalStore } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Container from "@/components/Container";
-import PageTitle from "@/components/PageTitle";
-import SectionTitle from "@/components/SectionTitle";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { login } from "@/services/actions/auth";
@@ -88,71 +88,105 @@ export default function LoginPage() {
     }
   }
 
+  const isBusy = isSubmitting || isPasskeyLoggingIn;
+
   return (
     <Container>
-      <PageTitle>登入</PageTitle>
-      {error ? (
-        <p
-          className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950/30 dark:text-red-200"
-          role="alert"
-        >
-          {error}
-        </p>
-      ) : null}
-      <form onSubmit={onSubmit}>
-        <SectionTitle className="mt-2 mb-1">Email</SectionTitle>
-        <Input
-          id="email"
-          aria-label="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="username"
-          disabled={isSubmitting || isPasskeyLoggingIn}
-        />
-        <SectionTitle className="mt-2 mb-1">密碼</SectionTitle>
-        <Input
-          id="password"
-          aria-label="密碼"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          autoComplete="current-password"
-          disabled={isSubmitting || isPasskeyLoggingIn}
-        />
-        <Button
-          className="mt-4 w-full disabled:cursor-not-allowed disabled:opacity-50"
-          type="submit"
-          disabled={isSubmitting || isPasskeyLoggingIn}
-        >
-          {isSubmitting ? "登入中⋯⋯" : "使用密碼登入"}
-        </Button>
-      </form>
-      <div className="my-4 flex items-center gap-3 text-sm opacity-60">
-        <div className="h-px grow bg-current" />
-        <span>或</span>
-        <div className="h-px grow bg-current" />
-      </div>
-      {passkeySupport === null ? (
-        <p className="text-center text-sm opacity-75">
-          正在檢查 Passkey 支援⋯⋯
-        </p>
-      ) : passkeySupport.supported ? (
-        <Button
-          className="bg-primary-700 hover:bg-primary-800 dark:bg-primary-500 dark:hover:bg-primary-400 w-full disabled:cursor-not-allowed disabled:opacity-50"
-          type="button"
-          onClick={() => void onPasskeyLogin()}
-          disabled={isSubmitting || isPasskeyLoggingIn}
-        >
-          {isPasskeyLoggingIn ? "等待裝置確認⋯⋯" : "使用 Passkey 登入"}
-        </Button>
-      ) : (
-        <p className="text-center text-sm opacity-75">
-          {passkeySupport.message || "目前無法使用 Passkey，請改用密碼登入。"}
-        </p>
-      )}
+      <main className="mx-auto max-w-md py-8 pb-10">
+        <header className="flex items-center justify-between">
+          <Link href="/" className="ios-link pressable text-sm font-medium">
+            餅餅踏踏
+          </Link>
+          <Link href="/register" className="ios-link pressable text-sm">
+            註冊
+          </Link>
+        </header>
+
+        <h1 className="ios-title mt-10 text-3xl font-semibold tracking-[-0.04em] text-primary-950 dark:text-white">
+          登入
+        </h1>
+
+        {error ? (
+          <p
+            className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700 dark:border-red-300/30 dark:bg-red-950/30 dark:text-red-200"
+            role="alert"
+            aria-live="polite"
+          >
+            {error}
+          </p>
+        ) : null}
+
+        <form onSubmit={onSubmit} className="mt-6">
+          <div className="space-y-4">
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-primary-950 dark:text-primary-50"
+              >
+                Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="username"
+                disabled={isBusy}
+                className="w-full min-w-0 bg-[var(--ios-surface)]"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="password"
+                className="text-sm font-medium text-primary-950 dark:text-primary-50"
+              >
+                密碼
+              </label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                disabled={isBusy}
+                className="w-full min-w-0 bg-[var(--ios-surface)]"
+              />
+            </div>
+          </div>
+          <Button
+            className="pressable mt-6 w-full"
+            type="submit"
+            disabled={isBusy}
+          >
+            {isSubmitting ? "登入中⋯⋯" : "使用密碼登入"}
+          </Button>
+        </form>
+
+        <div className="mt-6">
+          <p className="ios-secondary mb-3 text-center text-sm">或</p>
+          {passkeySupport === null ? (
+            <p className="ios-secondary text-center text-sm">
+              正在檢查 Passkey 支援⋯⋯
+            </p>
+          ) : passkeySupport.supported ? (
+            <Button
+              className="pressable w-full border border-primary-300 bg-transparent text-primary-800 hover:bg-primary-100 dark:border-primary-700 dark:text-primary-100 dark:hover:bg-primary-800"
+              type="button"
+              onClick={() => void onPasskeyLogin()}
+              disabled={isBusy}
+            >
+              {isPasskeyLoggingIn ? "等待裝置確認⋯⋯" : "使用 Passkey 登入"}
+            </Button>
+          ) : (
+            <p className="ios-secondary text-center text-sm leading-6">
+              {passkeySupport.message ||
+                "目前無法使用 Passkey，請改用密碼登入。"}
+            </p>
+          )}
+        </div>
+      </main>
     </Container>
   );
 }

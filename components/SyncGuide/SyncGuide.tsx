@@ -87,16 +87,16 @@ function Step({
   }, [active, isCardVisible, prefersReducedMotion]);
 
   return (
-    <div className="flex w-[80%] shrink-0 snap-center snap-always flex-col rounded-lg bg-white p-2 dark:bg-black/5">
+    <article className="surface-card flex w-[82%] shrink-0 snap-center snap-always flex-col p-3">
       {imgSrc && (
         <img
           src={imgSrc}
-          alt=""
+          alt={`${title}示意圖`}
           width={1}
           height={1}
           loading="lazy"
           decoding="async"
-          className="aspect-square w-full rounded bg-gray-50 object-contain"
+          className="aspect-square w-full rounded-2xl bg-primary-50 object-contain dark:bg-primary-800/50"
         />
       )}
       {vidSrc && (
@@ -108,14 +108,15 @@ function Step({
           muted
           playsInline
           preload="metadata"
-          className="aspect-square w-full rounded bg-gray-50 object-cover"
+          aria-label={`${title}教學影片`}
+          className="aspect-square w-full rounded-2xl bg-primary-50 object-cover dark:bg-primary-800/50"
         />
       )}
-      <div className="mt-2">
-        <h2 className="font-bold">{title}</h2>
-        <div className="text-sm opacity-75">{children}</div>
+      <div className="mt-3">
+        <h2 className="font-semibold tracking-tight">{title}</h2>
+        <div className="mt-1 text-sm leading-6 opacity-75">{children}</div>
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -136,26 +137,29 @@ export default function SyncGuide({
   return (
     <div
       ref={scrollRoot}
-      className="mt-1 flex snap-x snap-mandatory flex-nowrap gap-2 overflow-x-auto rounded-sm px-4"
+      role="region"
+      aria-label="同步工具設定步驟"
+      tabIndex={0}
+      className="mt-2 flex snap-x snap-mandatory flex-nowrap gap-3 overflow-x-auto overscroll-x-contain rounded-2xl px-4 pb-2"
     >
       <Step title="0. 安裝捷徑" imgSrc="/sync-guide/install-shortcut.jpg">
         將餅餅踏踏記錄器安裝到您的 iPhone 或 iPad 上
       </Step>
       <Step title="1. 設定 API 網址" imgSrc="/sync-guide/change-api-url.jpg">
         修改捷徑中的 API 網址，填入此頁的同步網址：{" "}
-        <code className="rounded bg-black/5 px-1 dark:bg-white/10">
+        <code className="rounded-md bg-primary-50 px-1.5 py-0.5 font-mono text-xs dark:bg-primary-800/70">
           {legacySyncEndpoint}
         </code>
         。這是舊版相容格式，既有捷徑可以繼續使用。
       </Step>
       <Step title="2. （建議）改用 Authorization 標頭">
         若要避免令牌出現在 URL，將網址改為{" "}
-        <code className="rounded bg-black/5 px-1 dark:bg-white/10">
+        <code className="rounded-md bg-primary-50 px-1.5 py-0.5 font-mono text-xs dark:bg-primary-800/70">
           {syncEndpoint}
         </code>
         ，在「取得 URL 內容」動作點選「顯示更多」→「標頭」→「加入新標頭」；
         確認方法為 POST，鍵填入 <code>Authorization</code>，值填入{" "}
-        <code className="rounded bg-black/5 px-1 dark:bg-white/10">
+        <code className="rounded-md bg-primary-50 px-1.5 py-0.5 font-mono text-xs dark:bg-primary-800/70">
           Bearer {syncToken}
         </code>
         。可先按設定頁的「複製」取得令牌；如果要維持舊捷徑模式，可略過本步。
