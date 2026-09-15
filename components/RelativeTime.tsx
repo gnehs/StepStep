@@ -26,16 +26,15 @@ export default function RelativeTime({ time }: { time: Date }) {
       return "剛剛";
     }
   }
-  const [result, setResult] = useState("計算中⋯⋯");
+  const [result, setResult] = useState(() => calcRelativeTime(time));
 
   useEffect(() => {
-    setResult(calcRelativeTime(time));
     const interval = setInterval(() => {
       setResult(calcRelativeTime(time));
     }, 1000);
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [time]);
   return <span suppressHydrationWarning>{result}</span>;
 }

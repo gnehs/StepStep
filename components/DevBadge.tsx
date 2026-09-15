@@ -4,6 +4,8 @@ export default function DevBadge() {
   const [show, setShow] = useState(false);
   useEffect(() => {
     if (location.hostname !== "localhost") return;
+    // The hostname is only available after the client has mounted.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setShow(true);
   }, []);
   if (!show) return null;

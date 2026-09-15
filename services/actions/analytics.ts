@@ -1,5 +1,5 @@
 "use server";
-import prisma from "@/services/prisma";
+import { aggregateRecords, findRecords, findUser } from "@/services/db";
 import { getUserFromJWT } from "@/services/actions/auth";
 
 export async function getAnalyticsDataFromJWT(token: string) {
@@ -10,11 +10,7 @@ export async function getAnalyticsDataFromJWT(token: string) {
   return await getAnalyticsData(user.id);
 }
 export async function getAnalyticsDataFromToken(token: string) {
-  let user = await prisma.user.findFirst({
-    where: {
-      token: token,
-    },
-  });
+  let user = findUser("token", token);
   if (!user) {
     return { success: false, message: "無效的 token" };
   }
@@ -22,22 +18,11 @@ export async function getAnalyticsDataFromToken(token: string) {
 }
 
 export async function getAnalyticsData(userId: string) {
-  let aggregate = await prisma.record.aggregate({
-    where: { userId: userId },
-    _sum: { distance: true, energy: true, steps: true },
-    _avg: { distance: true, energy: true, steps: true },
-  });
+  let aggregate = aggregateRecords(userId);
   // 30d by hours & week by days
   let last30d = new Date();
   last30d.setDate(last30d.getDate() - 30);
-  let last30dData = await prisma.record.findMany({
-    where: {
-      userId: userId,
-      timestamp: {
-        gte: last30d,
-      },
-    },
-  });
+  let last30dData = findRecords(userId, last30d);
   let weekDays = ["日", "一", "二", "三", "四", "五", "六"];
   let hours = Array.from(
     { length: 24 },

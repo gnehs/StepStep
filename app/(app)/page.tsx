@@ -5,7 +5,7 @@ import SectionTitle from "@/components/SectionTitle";
 import { getHomeData } from "@/services/actions/home";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import type { Record, Badge } from "@prisma/client";
+import type { Badge, StepRecord } from "@/services/db";
 import BadgesData from "@/data/badges";
 import {
   Footprints,
@@ -21,7 +21,7 @@ import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 export default function Home() {
   const [token] = useLocalStorage("token", "");
-  const [today, setToday] = useState<Record[]>([]);
+  const [today, setToday] = useState<StepRecord[]>([]);
   const [badges, setBadges] = useState<Badge[]>([]);
   const [history, setHistory] = useState<
     {

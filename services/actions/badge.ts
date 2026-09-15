@@ -1,16 +1,12 @@
 "use server";
-import prisma from "@/services/prisma";
+import { findBadges, giveBadge, sumRecords } from "@/services/db";
 import { getUserFromJWT } from "@/services/actions/auth";
 export async function getBadgeData(token: string) {
   let user = await getUserFromJWT(token);
   if (!user) {
     return [];
   }
-  let badgeData = await prisma.badge.findMany({
-    where: { userId: user.id },
-    orderBy: [{ updated: "desc" }, { created: "desc" }],
-  });
-  return badgeData;
+  return findBadges(user.id);
 }
 
 async function giveUserBadge(
@@ -18,62 +14,25 @@ async function giveUserBadge(
   badgeId: string,
   allowMultiple = false,
 ) {
-  let badgeData = await prisma.badge.findMany({
-    where: {
-      userId,
-    },
-  });
-  if (badgeData.some((badge) => badge.badgeId === badgeId)) {
-    if (allowMultiple) {
-      // update count
-      let badge = badgeData.find((badge) => badge.badgeId === badgeId);
-      if (badge) {
-        await prisma.badge.update({
-          where: {
-            id: badge.id,
-          },
-          data: {
-            count: badge.count + 1,
-          },
-        });
-      }
-    }
-  } else {
-    await prisma.badge.create({
-      data: {
-        userId,
-        badgeId,
-      },
-    });
-  }
+  giveBadge(userId, badgeId, allowMultiple);
 }
 
 export async function checkAndGiveBadge({ id }: { id: string }) {
-  let records = await prisma.record.groupBy({
-    by: ["userId"],
-    _sum: {
-      steps: true,
-      distance: true,
-      energy: true,
-    },
-    where: {
-      userId: id,
-    },
-  });
+  const sums = sumRecords(null, null, id);
 
-  if ((records[0]._sum.steps ?? 0) >= 1) {
+  if ((sums.steps ?? 0) >= 1) {
     await giveUserBadge(id, "first-step");
   }
-  if ((records[0]._sum.steps ?? 0) >= 100_000) {
+  if ((sums.steps ?? 0) >= 100_000) {
     await giveUserBadge(id, "first-100000-steps");
   }
-  if ((records[0]._sum.distance ?? 0) >= 352.3) {
+  if ((sums.distance ?? 0) >= 352.3) {
     await giveUserBadge(id, "tpe-to-khh");
   }
-  if ((records[0]._sum.distance ?? 0) >= 100_000) {
+  if ((sums.distance ?? 0) >= 100_000) {
     await giveUserBadge(id, "first-100000-km");
   }
-  if ((records[0]._sum.distance ?? 0) >= 384400) {
+  if ((sums.distance ?? 0) >= 384400) {
     await giveUserBadge(id, "to-the-moon");
   }
 }

@@ -79,6 +79,8 @@ export default function Calendar() {
     (item) => item.date.getDate() === currentDate,
   );
   useEffect(() => {
+    // Clear the previous month while the new ranking is loading.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRank([]);
     getRank(currentYear, currentMonth).then((res) => {
       setRank(res as any);

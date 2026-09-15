@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import type { Badge } from "@prisma/client";
+import type { Badge } from "@/services/db";
 import { getBadgeData } from "@/services/actions/badge";
 import BadgesData from "@/data/badges";
 import Container from "@/components/Container";

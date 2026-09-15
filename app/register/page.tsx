@@ -20,6 +20,8 @@ export default function Register() {
     const urlParams = new URLSearchParams(window.location.search);
     const inviteCode = urlParams.get("rel");
     if (inviteCode) {
+      // The query string is only available after the client has mounted.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInviteCode(inviteCode);
     }
   }, []);

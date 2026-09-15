@@ -1,5 +1,5 @@
 "use server";
-import prisma from "@/services/prisma";
+import { rankRecords } from "@/services/db";
 export async function getRank(year?: number, month?: number) {
   if (!year) year = new Date().getFullYear();
   if (!month) month = new Date().getMonth() + 1;
@@ -22,39 +22,7 @@ export async function getRank(year?: number, month?: number) {
 export async function getRankByDay(year: number, month: number, date: number) {
   let gte = new Date(year, month - 1, date);
   let lt = new Date(year, month - 1, date + 1);
-  let records = await prisma.record.groupBy({
-    by: ["userId"],
-    _sum: {
-      steps: true,
-      distance: true,
-      energy: true,
-    },
-    where: {
-      timestamp: {
-        gte,
-        lt,
-      },
-    },
-  });
-  records = records.sort((a, b) => (b._sum.steps ?? 0) - (a._sum.steps ?? 0));
-  records = records.slice(0, 10);
-
-  let parsedRecords = await Promise.all(
-    records.map(async (record) => {
-      let user = await prisma.user.findUnique({
-        where: {
-          id: record.userId,
-        },
-        select: {
-          id: true,
-          name: true,
-        },
-      });
-      return {
-        ...record._sum,
-        user,
-      };
-    }),
-  );
-  return parsedRecords;
+  return rankRecords(gte, lt).map(({ steps, distance, energy, id, name }) => ({
+    steps, distance, energy, user: { id, name },
+  }));
 }

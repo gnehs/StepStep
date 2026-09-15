@@ -1,7 +1,10 @@
 node_modules
+.next
 .git
 .gitignore
 *.md
 dist
 .env
-**/.db
+**/*.db
+**/*.db-*
+**/*.sqlite*

@@ -1,6 +1,6 @@
-import type { Record } from "@prisma/client";
+import type { StepRecord } from "@/services/db";
 import { BarChart } from "@tremor/react";
-export default function StepChart({ data }: { data: Record[] }) {
+export default function StepChart({ data }: { data: StepRecord[] }) {
   const chartData = data.map((record) => ({
     time: new Date(record.timestamp).toLocaleTimeString("zh-TW", {
       hour12: false,

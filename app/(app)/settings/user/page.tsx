@@ -18,15 +18,15 @@ export default function SettingsUser() {
     lastLogin: Date | null;
   } | null>("user", null);
   const [token, setToken] = useLocalStorage("token", "");
-  useEffect(() => {
-    fetchData();
-  }, []);
   async function fetchData(force = false) {
     if (!user || force) {
       let res = await getSyncStatus(token);
       if (res.success) setUser(res.user!);
     }
   }
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <Container>
       <div className="mb-3 grid grid-cols-3 items-center gap-2 py-2">

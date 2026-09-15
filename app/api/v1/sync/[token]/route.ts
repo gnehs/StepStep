@@ -1,6 +1,6 @@
 import { getUserBySyncToken } from "@/services/actions/auth";
 import { checkAndGiveBadge } from "@/services/actions/badge";
-import prisma from "@/services/prisma";
+import { transaction, updateUserRow, upsertRecord } from "@/services/db";
 export async function POST(request: Request) {
   const id = request.url.split("/").pop();
   const user = await getUserBySyncToken(id!);
@@ -18,38 +18,26 @@ export async function POST(request: Request) {
     distance: string[];
     energy: string[];
   };
-  // print peak data
-  console.log("[Sync]", new Date().toLocaleString());
-  console.log("time", data.time.slice(0, 5));
-  console.log("step", data.step.slice(0, 5));
-  console.log("distance", data.distance.slice(0, 5));
-  console.log("energy", data.energy.slice(0, 5));
-  console.log("user", user);
-  console.log("=====================================");
-  for (let i = 0; i < data.time.length; i++) {
-    let time = new Date(data.time[i]);
-    // set minutes and seconds to 0
-    time.setMinutes(0, 0, 0);
-    await prisma.record.upsert({
-      where: { userId_timestamp: { userId: user.id, timestamp: time } },
-      create: {
-        timestamp: time,
-        steps: parseInt(data.step[i]),
-        distance: parseFloat(data.distance[i]),
-        energy: parseFloat(data.energy[i] ?? "0"),
-        userId: user.id,
-      },
-      update: {
-        steps: parseInt(data.step[i]),
-        distance: parseFloat(data.distance[i]),
-        energy: parseFloat(data.energy[i] ?? "0"),
-      },
-    });
+  if (!Array.isArray(data.time) || !Array.isArray(data.step) || !Array.isArray(data.distance) ||
+      data.time.length !== data.step.length || data.time.length !== data.distance.length ||
+      (data.energy && (!Array.isArray(data.energy) || data.energy.length !== data.time.length))) {
+    return Response.json({ success: false, message: "資料格式無效" }, { status: 400 });
   }
-  // update user's last sync time
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { lastSync: new Date() },
+  const records = data.time.map((value, i) => {
+    const time = new Date(value);
+    time.setMinutes(0, 0, 0);
+    const steps = Number.parseInt(data.step[i], 10);
+    const distance = Number.parseFloat(data.distance[i]);
+    const energy = Number.parseFloat(data.energy?.[i] ?? "0");
+    return { time, steps, distance, energy };
+  });
+  if (records.some(({ time, steps, distance, energy }) => Number.isNaN(time.getTime()) ||
+      !Number.isFinite(steps) || !Number.isFinite(distance) || !Number.isFinite(energy))) {
+    return Response.json({ success: false, message: "資料格式無效" }, { status: 400 });
+  }
+  transaction(() => {
+    for (const record of records) upsertRecord(user.id, record.time, record.steps, record.distance, record.energy);
+    updateUserRow(user.id, "lastSync", new Date());
   });
   await checkAndGiveBadge({ id: user.id });
   if (data.time.length > 0) {

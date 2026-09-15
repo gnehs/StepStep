@@ -11,14 +11,6 @@ export default function RootLayout({
 }>) {
   const router = useRouter();
   const [token, setToken] = useLocalStorage("token", "");
-  // refresh token
-  useEffect(() => {
-    if (token !== "") {
-      refresh();
-    } else {
-      router.push("/login");
-    }
-  }, [token]);
   async function refresh() {
     try {
       let res = await refreshToken(token);
@@ -29,6 +21,14 @@ export default function RootLayout({
       setToken(res.token!);
     } catch (error) {}
   }
+  // refresh token
+  useEffect(() => {
+    if (token !== "") {
+      refresh();
+    } else {
+      router.push("/login");
+    }
+  }, [token]);
   return (
     <div className="flex h-[100svh] flex-col" vaul-drawer-wrapper="">
       <div className="h-full grow overflow-hidden overflow-y-scroll pb-2">

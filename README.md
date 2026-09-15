@@ -7,8 +7,7 @@
 ## 開發
 
 ```bash
-pnpm install
-pnpm dlx prisma migrate deploy
+pnpm install --frozen-lockfile --trust-lockfile --ignore-scripts
 pnpm dev
 ```
 
@@ -29,7 +28,7 @@ pnpm dev
 
 ## 部署
 
-餅餅踏踏使用 SQLite 作為資料庫，因此需要將資料庫檔案掛載到容器中。
+餅餅踏踏使用 Node.js 24 內建的 `node:sqlite`，首次使用時會自動建立資料表。舊版 Prisma SQLite 資料庫可直接沿用（日期欄位仍使用毫秒 Unix 時間戳）。開發環境預設資料庫位置為 `prisma/dev.db`；可用 `SQLITE_PATH` 指定絕對路徑，既有的 `DATABASE_URL=file:./dev.db` 也仍可使用。部署時請將資料庫檔案掛載到容器中，並在切換前備份。
 
 ```bash
 touch stepstep.db

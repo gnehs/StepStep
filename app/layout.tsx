@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import DevBadge from "@/components/DevBadge";
+import { SerwistProvider } from "@serwist/next/react";
 
 const APP_NAME = "餅餅踏踏";
 const APP_TITLE_TEMPLATE = "%s - 餅餅踏踏";
@@ -85,8 +86,10 @@ export default function RootLayout({
         <link rel="icon" href="/maskable_icon.png" type="image/png" />
       </head>
       <body className="bg-primary-50 pt-[env(safe-area-inset-top)] text-[#111] dark:bg-primary-950 dark:text-primary-50">
-        {children}
-        <DevBadge />
+        <SerwistProvider swUrl="/sw.js">
+          {children}
+          <DevBadge />
+        </SerwistProvider>
       </body>
     </html>
   );

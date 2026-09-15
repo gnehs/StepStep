@@ -1,5 +1,5 @@
 "use server";
-import prisma from "@/services/prisma";
+import { findUser, updateUserRow } from "@/services/db";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 export async function login({
@@ -9,19 +9,12 @@ export async function login({
   email: string;
   password: string;
 }) {
-  let user = await prisma.user.findFirst({
-    where: {
-      email,
-    },
-  });
+  let user = findUser("email", email);
   const passwordMatch =
     user && (await bcrypt.compare(password, user?.password || ""));
   if (user && passwordMatch) {
     // update user's last sync login time
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { lastLogin: new Date() },
-    });
+    user = updateUserRow(user.id, "lastLogin", new Date());
     let token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
       expiresIn: "30d",
     });
@@ -34,11 +27,7 @@ export async function refreshToken(token: string) {
     let decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
       userId: string;
     };
-    let user = await prisma.user.findUnique({
-      where: {
-        id: decoded.userId,
-      },
-    });
+    let user = findUser("id", decoded.userId);
     if (user) {
       let newToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
         expiresIn: "7d",
@@ -53,11 +42,7 @@ export async function getUserFromJWT(token: string) {
     let decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
       userId: string;
     };
-    let user = await prisma.user.findUnique({
-      where: {
-        id: decoded.userId,
-      },
-    });
+    let user = findUser("id", decoded.userId);
     return user;
   } catch (error) {
     return null;
@@ -65,11 +50,7 @@ export async function getUserFromJWT(token: string) {
 }
 export async function getUserBySyncToken(token: string) {
   try {
-    let user = await prisma.user.findFirst({
-      where: {
-        token,
-      },
-    });
+    let user = findUser("token", token);
     return user;
   } catch (error) {
     return null;
@@ -77,11 +58,7 @@ export async function getUserBySyncToken(token: string) {
 }
 export async function getUserById(id: string) {
   try {
-    let user = await prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
+    let user = findUser("id", id);
     return user;
   } catch (error) {
     return null;
