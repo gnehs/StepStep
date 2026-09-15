@@ -259,7 +259,7 @@ export default function Calendar({
               event.stopPropagation();
             }
           }}
-          className="surface-card relative mb-4 grid overflow-hidden max-sm:-mx-2 max-sm:rounded-none max-sm:border-x-0 max-sm:border-y sm:rounded-3xl"
+          className="surface-card relative mb-4 grid overflow-hidden max-sm:-mx-2 max-sm:rounded-none sm:rounded-3xl"
         >
           <AnimatePresence initial={false} custom={navigation}>
             <SwipePanel
