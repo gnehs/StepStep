@@ -1,5 +1,6 @@
 "use server";
-import { findBadges, giveBadge, sumRecords } from "@/services/db";
+import { findBadges, findRecords, giveBadge, sumRecords } from "@/services/db";
+import { getEarnedCookieBadgeIds } from "@/services/badge-rules";
 import { getCurrentUser } from "@/services/session";
 
 export async function getBadgeData() {
@@ -21,6 +22,10 @@ async function giveUserBadge(
 
 export async function checkAndGiveBadge({ id }: { id: string }) {
   const sums = sumRecords(null, null, id);
+
+  for (const badgeId of getEarnedCookieBadgeIds(findRecords(id))) {
+    await giveUserBadge(id, badgeId);
+  }
 
   if ((sums.steps ?? 0) >= 1) {
     await giveUserBadge(id, "first-step");
