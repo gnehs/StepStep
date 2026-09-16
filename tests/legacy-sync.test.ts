@@ -4,7 +4,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { createUserRow, findRecords, getDb } from "../services/db";
+import { createUserRow, findRecords, findUser, getDb } from "../services/db";
 import { POST as legacyPost } from "../app/api/v1/sync/[token]/route";
 import { POST as headerPost } from "../app/api/v1/sync/route";
 
@@ -15,7 +15,7 @@ type SyncPayload = {
   time?: string[];
   step?: string[];
   distance?: string[];
-  energy?: string[];
+  energy?: unknown;
 };
 const payload: SyncPayload & {
   time: string[];
@@ -146,3 +146,91 @@ test("new sync API accepts the header credential and rejects query-only credenti
     message: "需要 Authorization: Bearer <同步令牌>",
   });
 });
+
+for (const endpoint of ["legacy", "header"] as const) {
+  function sync(body: SyncPayload, token: string) {
+    return endpoint === "legacy"
+      ? legacyPost(
+          request(`https://steps.example.test/api/v1/sync/${token}`, body),
+          { params: Promise.resolve({ token }) },
+        )
+      : headerPost(
+          request("https://steps.example.test/api/v1/sync", body, token),
+        );
+  }
+
+  test(`${endpoint} sync preserves pre-SQLite optional energy compatibility`, async (t) => {
+    const cases = [
+      { name: "omitted", energy: undefined, expected: [0, 0] },
+      { name: "null", energy: null, expected: [0, 0] },
+      { name: "empty scalar", energy: "", expected: [0, 0] },
+      { name: "empty array", energy: [], expected: [0, 0] },
+      { name: "short array", energy: ["42"], expected: [42, 0] },
+      { name: "null sample", energy: [null, "42"], expected: [0, 42] },
+      { name: "extra samples", energy: ["42", "12", "99"], expected: [42, 12] },
+    ];
+
+    for (const { name, energy, expected } of cases) {
+      await t.test(name, async () => {
+        const testUser = createUserRow(
+          "Optional Energy Test",
+          `${randomBytes(16).toString("hex")}@example.invalid`,
+          "unused",
+        );
+        const response = await sync(
+          {
+            time: ["2026-09-15T08:34:56.000Z", "2026-09-15T09:34:56.000Z"],
+            step: ["1234", "567"],
+            distance: ["1.5", "0.6"],
+            energy,
+          },
+          testUser.token,
+        );
+
+        assert.equal(response.status, 200);
+        assert.equal(await response.text(), `${testUser.name}，已同步 2 筆資料`);
+        assert.deepEqual(
+          findRecords(testUser.id).map(({ steps, distance, energy }) => ({
+            steps,
+            distance,
+            energy,
+          })),
+          [
+            { steps: 1234, distance: 1.5, energy: expected[0] },
+            { steps: 567, distance: 0.6, energy: expected[1] },
+          ],
+        );
+        assert.ok(findUser("id", testUser.id)?.lastSync);
+      });
+    }
+  });
+
+  test(`${endpoint} sync rejects invalid energy without writing partial data`, async (t) => {
+    for (const energy of ["42", {}, ["42", "invalid"], ["42", "Infinity"]]) {
+      await t.test(JSON.stringify(energy), async () => {
+        const testUser = createUserRow(
+          "Invalid Energy Test",
+          `${randomBytes(16).toString("hex")}@example.invalid`,
+          "unused",
+        );
+        const response = await sync(
+          {
+            time: ["2026-09-15T08:34:56.000Z", "2026-09-15T09:34:56.000Z"],
+            step: ["1234", "567"],
+            distance: ["1.5", "0.6"],
+            energy,
+          },
+          testUser.token,
+        );
+
+        assert.equal(response.status, 400);
+        assert.deepEqual(await response.json(), {
+          success: false,
+          message: "資料格式無效",
+        });
+        assert.deepEqual(findRecords(testUser.id), []);
+        assert.equal(findUser("id", testUser.id)?.lastSync, null);
+      });
+    }
+  });
+}

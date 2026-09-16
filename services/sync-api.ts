@@ -77,10 +77,10 @@ export async function syncHealthData(
     !isArray(time) ||
     !isArray(step) ||
     !isArray(distance) ||
-    // Keep the legacy truthiness check: omitted/null/empty scalar energy was
-    // treated as zero by the original endpoint, while a supplied array must
-    // still line up with the required samples.
-    (energy && (!isArray(energy) || energy.length !== time.length)) ||
+    // Before the SQLite migration, energy arrays could be empty or shorter
+    // than time: missing samples defaulted to zero and extras were ignored.
+    // Preserve that behavior, including omitted/null/empty scalar energy.
+    (energy && !isArray(energy)) ||
     time.length !== step.length ||
     time.length !== distance.length
   ) {

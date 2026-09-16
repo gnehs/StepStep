@@ -83,6 +83,7 @@ pnpm test:passkey
 
 - 使用同步令牌寫入步步資料。
 - 令牌必須放在 `Authorization` 標頭，不是網址。
+- `time`、`step`、`distance` 必須是長度相同的陣列；`energy` 為選填陣列，可省略或傳入空陣列，缺少的熱量值會補 `0`，超出時間筆數的值會忽略。
 - 舊版同步網址格式 `/api/v1/sync/{TOKEN}` 仍完整支援，既有 iOS 捷徑不必立即修改；但這種網址會留下 URL 記錄風險。強烈建議依設定頁的可選遷移步驟，把網址改成 `/api/v1/sync`，並在「取得 URL 內容」動作的標頭加入 `Authorization: Bearer <TOKEN>`。
 
 ```bash
